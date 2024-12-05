@@ -1,0 +1,193 @@
+/* NAVBAR STYLE */
+.logo {
+  font-size: clamp(20px, 5vw, 25px);
+  font-weight: 500;
+}
+.logo-span {
+  color: #78be20;
+  font-weight: 700;
+}
+.navLinks,
+.profUl {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  margin-right: 50px;
+}
+
+.profUl {
+  flex-direction: column;
+  align-items: start;
+  gap: 25px;
+  margin: 25px 0;
+}
+.profLi {
+  font-size: 17px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-weight: 400;
+  transition: all 0.7s;
+}
+.profLi:hover {
+  color: rgb(212, 208, 208);
+}
+.profIcon {
+  margin-right: 4px;
+}
+
+.homePageBtn {
+  background: #78be10;
+  padding: 5px 10px;
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  transition: all 0.7s;
+}
+.homePageBtn:hover {
+  cursor: pointer;
+  background: gray;
+}
+.navLink {
+  list-style: none;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.navLink NavLink {
+  color: black;
+  font-size: 25px;
+}
+
+.authBtn,
+.defaultBtn {
+  font-size: 20px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid #785af9;
+  background: #785af9;
+  color: white;
+  transition: all 0.5s;
+}
+.authBtn:hover,
+.defaultBtn:hover {
+  background: #5d3fbb;
+}
+.parentBox {
+  min-height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.flexBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.userCard {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: clamp(200px, 50vw, 800px);
+  padding: 20px 0;
+  background: linear-gradient(to right, #393f4d, #6b707a);
+  color: rgb(223, 214, 214);
+}
+/* HOME PAGE STYLE */
+.homeFoot {
+  position: absolute;
+  width: 100%;
+  padding: 13px 0;
+  background: #78be20;
+  color: white;
+  bottom: -22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.homeFoot h1 {
+  font-size: 25px;
+  font-weight: 500;
+}
+.homeFoot h1 span {
+  font-size: 35px;
+  font-style: italic;
+  margin-right: 20px;
+  font-weight: 700;
+}
+.footerLink {
+  font-size: 30px;
+  transition: all 0.3s;
+}
+.fb:hover {
+  color: #0d8af0;
+}
+.insta:hover {
+  color: #ff00d3;
+}
+.linkdin:hover {
+  color: #2a7adb;
+}
+
+.profBtn:hover {
+  transform: translateY(5px);
+  color: rgb(31, 28, 28);
+}
+.hoverBox {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.profMain:hover .hoverBox {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+/* ADMIN SIDEBAR STYLE */
+.adminIcon {
+  color: white;
+}
+.active-link {
+  color: #c7c8c4; /* Your desired active color */
+  font-weight: 500;
+}
+.reqButtons {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
+.reqButtons button {
+  font-size: 20px;
+  transition: all 0.06s;
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: 100px;
+}
+.acceptBtn {
+  background: #40b242;
+  color: white;
+}
+.rejectBtn {
+  background: #df4041;
+  color: white;
+}
+.reqButtons button:hover {
+  transform: translateY(1px);
+}
+.no-item-text {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 3vw;
+}
