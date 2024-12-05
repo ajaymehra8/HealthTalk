@@ -19,7 +19,7 @@ const Review = () => {
   // submit feedback to backend
   const handleFeedback=async()=>{
     const token = user?.jwt;
-    const url=`http://localhost:8000/api/v1/review/${doctor?._id}`;
+    const url=`${process.env.REACT_APP_API_URL}/api/v1/review/${doctor?._id}`;
     const {data} = await axios.post(
       url,
       {text,rating},

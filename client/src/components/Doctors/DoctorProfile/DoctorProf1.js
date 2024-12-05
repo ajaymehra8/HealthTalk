@@ -16,7 +16,7 @@ const DoctorProf1 = ({ doctor }) => {
       authorization: `Bearer ${token}`,
     };
     const { data } = await axios.post(
-      `http://localhost:8000/api/v1/booking/create-booking`,
+      `${process.env.REACT_APP_API_URL}/api/v1/booking/create-booking`,
       body,
       { headers }
     );

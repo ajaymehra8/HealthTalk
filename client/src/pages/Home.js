@@ -14,7 +14,7 @@ const Home = () => {
   const { user } = useAuthState();
   const [doctors, setDoctors] = useState([]);
   const fetchDoctors = async () => {
-    const { data } = await axios("http://localhost:8000/api/v1/user");
+    const { data } = await axios(`${process.env.REACT_APP_API_URL}/api/v1/user`);
     setDoctors(data.doctors);
   };
   useEffect(() => {

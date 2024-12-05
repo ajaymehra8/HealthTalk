@@ -75,7 +75,7 @@ const DoctorInfo = ({ image }) => {
       return;
     }
     const token = user?.jwt;
-    const url = `http://localhost:8000/api/v1/user/update-doctor`;
+    const url = `${process.env.REACT_APP_API_URL}/api/v1/user/update-doctor`;
     const form = new FormData();
     // here do all work
     if (name) form.append("name", name);
