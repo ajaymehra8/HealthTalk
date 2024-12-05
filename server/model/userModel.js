@@ -72,7 +72,6 @@ const userSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["Accepted", "Rejected", "In process"],
-    
   },
   education: {
     type: String,
@@ -89,7 +88,7 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
     default:
-      "https://firebasestorage.googleapis.com/v0/b/natours-21ccd.appspot.com/o/users%2Fdefault.jpeg?alt=media&token=84a84cbe-1e3e-4713-8729-50ea090b3143",
+      "https://firebasestorage.googleapis.com/v0/b/learning-63a18.appspot.com/o/users%2F21bed273-2706-4708-a35b-7d9bd0b8140e-1733399052578.jpeg?alt=media&token=b235cc0c-d341-4216-9e33-e95bded48224",
   },
   patientCount: {
     type: String,

@@ -15,6 +15,7 @@ const UserAppoinments = () => {
   };
 
   const getAppoinments = useCallback(async () => {
+    if (!token) return;
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/booking/get-user-appoinments`,
       { headers }

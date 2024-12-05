@@ -191,3 +191,22 @@
   letter-spacing: 1px;
   font-size: 3vw;
 }
+
+.rectangle-img{
+  width:clamp(30px,100%,150px);
+  border-radius: 5px;
+}
+.date-picker-input{
+  border: 1px solid #000;
+  padding: 2px 10px;
+  cursor: pointer;
+  margin-top: 15px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+.page-head{
+  font-size: 2.2vw;
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}

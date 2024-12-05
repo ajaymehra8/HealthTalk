@@ -18,6 +18,11 @@ const bookingSchema = new mongoose.Schema({
     type: Date,
     default: null, // Use null if no date is set
   },
-});
+  mode:{
+    type:String,
+    enum:["Online","Offline"],
+    default:"Offline"
+  }
+},{timestamps:true});
 
 module.exports = mongoose.model("Appointments", bookingSchema);

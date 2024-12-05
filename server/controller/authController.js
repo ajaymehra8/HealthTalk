@@ -63,7 +63,10 @@ exports.login = async (req, res) => {
             path: "reqs",
             populate: { path: "user" }, // This will populate the user inside each req
           });
-      } else user = await User.findById(user._id).select("-password ");
+      }else if(user.role==="doctor"){
+        
+      }
+       else user = await User.findById(user._id).select("-password ");
       return res.status(200).json({
         success: true,
         message: "User logged in successfully",
@@ -99,7 +102,7 @@ exports.isProtect = async (req, res, next) => {
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
-
+console.log(token,"token");
   if (!token) {
     res.status(401).json({
       success: false,

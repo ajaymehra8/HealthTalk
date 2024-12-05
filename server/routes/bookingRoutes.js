@@ -8,5 +8,6 @@ Router.post("/create-checkout-session",bookingController.createCheckout);
 Router.post("/cancel-appoinment",bookingController.cancelAppoinment);
 
 Router.get("/get-user-appoinments",bookingController.getAppoinmentsForUser);
+Router.get("/get-doctor-appoinments",bookingController.getAppoinmentsForDoctor);
 
 module.exports=Router; 
