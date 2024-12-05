@@ -10,7 +10,7 @@ require("dotenv").config();
 const app=express();
 // Enable CORS for localhost:8000
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
 }));
 
 

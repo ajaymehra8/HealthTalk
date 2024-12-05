@@ -10,9 +10,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
   const navigate = useNavigate();
   const toast = useToast();
   const handlePayment = async () => {
-    const stripe = await loadStripe(
-      "pk_test_51QKM6JIu0DlivGoxIbEC0QON85mvDvjOLi1RB932paqnvBvWALpan0ZVhIzRHsFVg6S43HHQg7FFLsmzmRtS1qWW00V9RB4lFc"
-    );
+    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
     const body = {
       doctor: appoinment.doctor,
       appoinmentId: appoinment._id,
@@ -113,7 +111,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
         <Tooltip label="See details" placement="bottom">
           <button
             onClick={() => {
-              console.log(appoinment)
+              console.log(appoinment);
               const doctor = { ...appoinment.doctor };
               navigate("/doctor-profile", { state: { user: doctor } });
             }}
