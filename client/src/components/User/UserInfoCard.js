@@ -85,6 +85,7 @@ const UserInfoCard = ({ image }) => {
     }
 
     const token = user?.jwt;
+    if(!token) return;
     const url = `${process.env.REACT_APP_API_URL}/api/v1/user`;
     const form = new FormData();
 

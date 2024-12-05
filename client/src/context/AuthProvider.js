@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [headers, setHeaders] = useState(null);
   const navigate = useNavigate();
 
   const loadUserFromLocalStorage = () => {
@@ -12,9 +13,13 @@ const AuthProvider = ({ children }) => {
     if (userInfo) {
       try {
         const parsedInfo = JSON.parse(userInfo);
-        
-          setUser(parsedInfo);
-        
+        const token = parsedInfo?.jwt;
+        if(!token) return;
+        setHeaders({
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${token}`,
+        });
+        setUser(parsedInfo);
       } catch (err) {
         console.error("Failed to parse user info:", err);
         localStorage.removeItem("userInfo");
@@ -29,9 +34,10 @@ const AuthProvider = ({ children }) => {
     loadUserFromLocalStorage();
   }, []);
 
-
-
-  const value = useMemo(() => ({ user, setUser }), [user]);
+  const value = useMemo(
+    () => ({ user, setUser, headers, setHeaders }),
+    [user, headers]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

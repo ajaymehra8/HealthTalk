@@ -218,7 +218,7 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
 
                 <li className="profLi">
                   <NavLink
-                    to="approvals"
+                    to="appoinments"
                     className={({ isActive }) =>
                       isActive ? "active-link profLi" : "profLi"
                     }

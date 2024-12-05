@@ -31,6 +31,21 @@ exports.getAppoinmentsForUser = async (req, res, next) => {
     next(err);
   }
 };
+exports.getAppoinmentsForDoctor=async (req, res, next) => {
+  const userId = req.user._id;
+  try {
+    const bookings = await BookingModel.find({ doctor:userId }).populate({
+      path: "user",
+      select: "-password",
+    });
+    res.status(200).json({
+      success: true,
+      bookings,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 // FUNCTION FOR CREATING CHECKOUT SESSION
 exports.createCheckout = async (req, res, next) => {
     const { doctor, appoinmentId } = req.body;

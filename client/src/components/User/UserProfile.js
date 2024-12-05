@@ -8,6 +8,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Approvals from "../Admin/Approvals";
 import DoctorInfo from "../Doctors/DoctorInfo";
 import UserAppoinments from "./UserAppoinments";
+import Appoinments from "../Doctors/Appoinments/Appoinments";
 
 const UserInfo = () => {
   const { user } = useAuthState();
@@ -55,7 +56,7 @@ const UserInfo = () => {
             />
             <Route path="approvals" element={<Approvals />} />
             <Route path="your-appoinment" element={<UserAppoinments />} />
-
+            <Route path="appoinments" element={<Appoinments />} />
             <Route path="/" element={<Navigate to="my-info" replace />} />{" "}
             {/* Default option */}
           </Routes>
