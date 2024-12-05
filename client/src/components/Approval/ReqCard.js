@@ -10,7 +10,7 @@ const ReqCard = ({ req }) => {
   const handleAccept=async()=>{
     const token = user?.jwt;
     const { data } = await axios.post(
-      "http://localhost:8000/api/v1/user/update-status",
+      `${process.env.REACT_APP_API_URL}/api/v1/user/update-status`,
       {userId:req.user?._id,status:"Accepted",reqId:req._id},
       {
         headers: {
@@ -27,7 +27,7 @@ const ReqCard = ({ req }) => {
   const handleReject=async()=>{
     const token = user?.jwt;
     const { data } = await axios.post(
-      "http://localhost:8000/api/v1/user/update-status",
+      `${process.env.REACT_APP_API_URL}/api/v1/user/update-status`,
       {userId:req.user?._id,status:"Rejected",reqId:req._id},
       {
         headers: {

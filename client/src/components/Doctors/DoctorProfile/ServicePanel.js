@@ -23,7 +23,7 @@ const toast=useToast();
       "Content-Type":"application/json",
       "authorization": `Bearer ${token}`,
     }
-    const {data}=await axios.post(`http://localhost:8000/api/v1/booking/create-booking`,body,{headers});
+    const {data}=await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/booking/create-booking`,body,{headers});
 if(data.success){
   toast({
     title: data.message,

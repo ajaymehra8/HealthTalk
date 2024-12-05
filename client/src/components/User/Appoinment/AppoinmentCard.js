@@ -24,7 +24,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
       authorization: `Bearer ${token}`,
     };
     const { data } = await axios.post(
-      `http://localhost:8000/api/v1/booking/create-checkout-session`,
+      `${process.env.REACT_APP_API_URL}/api/v1/booking/create-checkout-session`,
       body,
       { headers }
     );
@@ -54,7 +54,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
       authorization: `Bearer ${token}`,
     };
     const { data } = await axios.post(
-      `http://localhost:8000/api/v1/booking/cancel-appoinment`,
+      `${process.env.REACT_APP_API_URL}/api/v1/booking/cancel-appoinment`,
       body,
       { headers }
     );

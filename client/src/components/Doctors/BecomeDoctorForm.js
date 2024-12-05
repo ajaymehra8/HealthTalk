@@ -70,7 +70,7 @@ const BecomeDoctorForm = () => {
     try{
     const token = user?.jwt;
     const { data } = await axios.post(
-      "http://localhost:8000/api/v1/user/requestToBecomeDoctor",
+      `${process.env.REACT_APP_API_URL}/api/v1/user/requestToBecomeDoctor`,
       formData,
       {
         headers: {

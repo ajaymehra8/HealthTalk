@@ -6,11 +6,11 @@ import DoctorCard from "../components/Doctors/DoctorCard";
 const Doctors = ({id}) => {
   const [doctors, setDoctors] = useState(null);
   const getDoctor = async () => {
-    const { data } = await axios.get("http://localhost:8000/api/v1/user");
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user`);
     setDoctors(data.doctors);
   };
   const getSingleDoctor = async (id) => {
-    const { data } = await axios.get(`http://localhost:8000/api/v1/user/${id}`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user/${id}`);
     return data.doctor;
   };
   useEffect(() => {
