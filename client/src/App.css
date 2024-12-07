@@ -28,7 +28,7 @@
   cursor: pointer;
   letter-spacing: 1px;
   font-weight: 400;
-  transition: all 0.7s;
+  transition: all .2s;
 }
 .profLi:hover {
   color: rgb(212, 208, 208);
@@ -159,6 +159,8 @@
 .active-link {
   color: #c7c8c4; /* Your desired active color */
   font-weight: 500;
+border-bottom: 2px solid #c7c8c4;
+padding-bottom: 3px;
 }
 .reqButtons {
   display: flex;

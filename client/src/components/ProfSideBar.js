@@ -124,7 +124,14 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                   <i className="bi bi-people-fill profIcon"></i> Joined Camps
                 </li>
                 <li className="profLi">
-                  <i className="bi bi-star-fill profIcon"></i> Your Ratings
+                <NavLink
+                    to="your-reviews"
+                    className={({ isActive }) =>
+                      isActive ? "active-link profLi" : "profLi"
+                    }
+                  >
+                  <i className="bi bi-star-fill profIcon"></i> Reviews
+                  </NavLink>
                 </li>
                 <li className="profLi">
                   <NavLink
@@ -229,14 +236,25 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                 </li>
 
                 <li className="profLi">
+                <NavLink
+                    to="your-reviews"
+                    className={({ isActive }) =>
+                      isActive ? "active-link profLi" : "profLi"
+                    }
+                  >
                   <i class="bi bi-star-fill"></i> My Reviews
-                </li>
-                <li className="profLi">
-                  <i class="bi bi-clock-fill"></i> Upcoming Appoinments
+                  </NavLink>
                 </li>
 
                 <li className="profLi">
+                <NavLink
+                    to="earning"
+                    className={({ isActive }) =>
+                      isActive ? "active-link profLi" : "profLi"
+                    }
+                  >
                   <i className="fas fa-user-md profIcon"></i> Earning
+                  </NavLink>
                 </li>
               </ul>
             </>

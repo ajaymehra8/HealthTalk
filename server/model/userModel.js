@@ -139,7 +139,7 @@ userSchema.post("findOne", async function (doc) {
     doc.avgRating =
       doc.reviews.reduce((acc, review) => acc + review.rating, 0) /
       doc.reviews.length;
-  } else {
+  } else if(doc) {
     doc.nRating = 0;
     doc.avgRating = 0;
   }
@@ -153,7 +153,7 @@ userSchema.post("find", async function (docs) {
       doc.avgRating =
         doc.reviews.reduce((acc, review) => acc + review.rating, 0) /
         doc.reviews.length;
-    } else {
+    } else if(doc){
       doc.nRating = 0;
       doc.avgRating = 0;
     }

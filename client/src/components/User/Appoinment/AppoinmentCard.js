@@ -125,14 +125,14 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
           className="reqButtons"
           style={{ width: "100%", gap: "15px", marginTop: "20px",justifyContent:'start' }}
         >
-          <button className="acceptBtn" onClick={handlePayment}>
+          <button className="acceptBtn" onClick={!appoinment?.payment?handlePayment:undefined}>
             {!appoinment?.payment
               ? `Pay $${appoinment.doctor?.onlineFee || "1000"}`
-              : "Paid"}
+              : "Payment Done"}
           </button>
-          <button className="rejectBtn" onClick={handleDelete}>
+         {!appoinment?.payment&& <button className="rejectBtn" onClick={handleDelete}>
             Cancel
-          </button>
+          </button>}
         </div>
       </Box>
     </Box>
