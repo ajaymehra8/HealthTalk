@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Avatar, Tooltip, useToast } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
   const { user } = useAuthState();
+  const [selectedDate, setSelectedDate] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
+  console.log(appoinment?.doctor);
+
   const handlePayment = async () => {
     const stripe = await loadStripe(
       "pk_test_51QKM6JIu0DlivGoxIbEC0QON85mvDvjOLi1RB932paqnvBvWALpan0ZVhIzRHsFVg6S43HHQg7FFLsmzmRtS1qWW00V9RB4lFc"
@@ -48,7 +53,6 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
       appoinmentId: appoinment._id,
     };
     const token = user?.jwt;
-
     const headers = {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
@@ -75,9 +79,9 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
     <Box
       display={"flex"}
       width={"100%"}
-      gap={"10px"}
-      justifyContent={"space-between"}
-      alignItems={"center"}
+      gap={"7%"}
+      justifyContent={"start"}
+      alignItems={"start"}
       border={"1px solid #d3d3d3"}
       borderRadius={"20px"}
       cursor={"pointer"}
@@ -90,38 +94,47 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
     >
       <Box
         display={"flex"}
-        width={"40%"}
-        justifyContent={"start"}
+        flexDir={"column"}
+        justifyContent={"center"}
+        width={"25%"}
         alignItems={"center"}
-        gap={"40px"}
-        zIndex="10"
       >
-        <Avatar
-          size="md"
-          name={appoinment.doctor?.name}
-          src={appoinment.doctor?.image}
-        />
-        <h2 style={{ fontSize: "20px" }}>Dr. {appoinment.doctor?.name}</h2>
+        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" />
+        <h4 style={{ alignSelf: "center" }}>
+          Mr. {appoinment?.doctor?.name || "Unknown User"}
+        </h4>
       </Box>
-      <div className="reqButtons">
-        <button className="acceptBtn" onClick={handlePayment}>
-          Pay ₹{appoinment.doctor?.onlineFee || 1000}
-        </button>
-        <button className="rejectBtn" onClick={handleDelete}>
-          Cancel
-        </button>
-        <Tooltip label="See details" placement="bottom">
-          <button
-            onClick={() => {
-              console.log(appoinment)
-              const doctor = { ...appoinment.doctor };
-              navigate("/doctor-profile", { state: { user: doctor } });
-            }}
-          >
-            <i class="bi bi-eye"></i>
+      <Box>
+        <h2>Mode: {appoinment?.mode || "Offline"}</h2>
+        <h2>Location: {appoinment?.doctor?.clinicLocation||"Delhi"}</h2>
+        <Box>
+          <h2>Time of Appoinment:</h2>
+          <DatePicker
+            selected={appoinment?.time?new Date(appoinment?.time):null} // Updated state for the date picker
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="MM/dd/yyyy h:mm aa"
+            placeholderText="Appointment Not Settled."
+            className="date-picker-input"
+            disabled={true} // Disable if appointment already has a time
+            style={{ marginTop: "80px" }} // Inline style for margin
+          />
+        </Box>
+        <div
+          className="reqButtons"
+          style={{ width: "100%", gap: "15px", marginTop: "20px",justifyContent:'start' }}
+        >
+          <button className="acceptBtn" onClick={handlePayment}>
+            {!appoinment?.payment
+              ? `Pay $${appoinment.doctor?.onlineFee || "1000"}`
+              : "Paid"}
           </button>
-        </Tooltip>
-      </div>
+          <button className="rejectBtn" onClick={handleDelete}>
+            Cancel
+          </button>
+        </div>
+      </Box>
     </Box>
   );
 };

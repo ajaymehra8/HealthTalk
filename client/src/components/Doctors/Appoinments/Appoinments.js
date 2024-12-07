@@ -5,9 +5,8 @@ import { Box } from "@chakra-ui/react";
 import AppoinmentCard from "./AppoinmentCard";
 
 const Appoinments = () => {
-  const { user,headers } = useAuthState();
+  const { user, headers } = useAuthState();
   const [appoinments, setAppoinments] = useState([]);
-  
 
   const fetchAppoinments = useCallback(async () => {
     if (!headers) return; // Ensure token is available before making the API call
@@ -15,7 +14,7 @@ const Appoinments = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/v1/booking/get-doctor-appoinments`,
         {
-          headers
+          headers,
         }
       );
       if (data.success) {
@@ -47,11 +46,18 @@ const Appoinments = () => {
       boxShadow={"1px 1px 10px 4px #686d77"}
       overflowY={"auto"}
     >
-            <h1 className="page-head">Your All Appoinments</h1>
+      {appoinments.length > 0 && (
+        <h1 className="page-head">Your All Appoinments</h1>
+      )}
 
       {appoinments.length > 0 ? (
         appoinments.map((appoinment) => (
-          <AppoinmentCard key={appoinment.id} appoinment={appoinment} />
+          <AppoinmentCard
+            key={appoinment.id}
+            appoinment={appoinment}
+            appoinments={appoinments}
+            setAppoinments={setAppoinments}
+          />
         ))
       ) : (
         <h1 className="no-item-text">No appointments</h1>
