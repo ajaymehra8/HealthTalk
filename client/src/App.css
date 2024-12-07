@@ -163,7 +163,7 @@
 .reqButtons {
   display: flex;
   justify-content: space-between;
-  width: 40%;
+  width: 30%;
 }
 .reqButtons button {
   font-size: 20px;
@@ -200,7 +200,7 @@
   border: 1px solid #000;
   padding: 2px 10px;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 5px;
   background-color: #f0f0f0;
   border-radius: 10px;
 }
