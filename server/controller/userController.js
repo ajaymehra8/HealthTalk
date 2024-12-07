@@ -42,10 +42,16 @@ exports.getSingleDoctor = async (req, res, next) => {
 // }
 
 exports.updateDoctor = async (req, res) => {
-  const { name, description,education,clinicFee,onlineFee } = req.body;
+  const { name, description, education, clinicFee, onlineFee } = req.body;
 
   const field = Object.fromEntries(
-    Object.entries({ name, description,education,clinicFee,onlineFee }).filter(
+    Object.entries({
+      name,
+      description,
+      education,
+      clinicFee,
+      onlineFee,
+    }).filter(
       ([_, value]) => value !== undefined && value !== null && value !== ""
     )
   );
@@ -62,7 +68,6 @@ exports.updateDoctor = async (req, res) => {
     user: updatedUser,
   });
 };
-
 
 exports.updateUser = async (req, res) => {
   const { name, bloodGroup, age, height, weight } = req.body;

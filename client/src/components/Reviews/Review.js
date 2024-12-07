@@ -32,6 +32,8 @@ const Review = () => {
     if(data.success){
       alert("Review submitted");
       navigate('/');
+    }else{
+      alert(data.message)
     }
   }
   return (

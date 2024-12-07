@@ -9,13 +9,16 @@ import Approvals from "../Admin/Approvals";
 import DoctorInfo from "../Doctors/DoctorInfo";
 import UserAppoinments from "./UserAppoinments";
 import Appoinments from "../Doctors/Appoinments/Appoinments";
+import Reviews from "./Reviews/Reviews";
+import DoctorReviews from "../Doctors/Reviews/DoctorReviews";
+import Earning from "../Doctors/Earning/Earning";
 
 const UserInfo = () => {
   const { user } = useAuthState();
 
   const [imageSrc, setImageSrc] = useState(user?.image);
   const [imageFile, setImageFile] = useState(null);
-
+console.log(user?.role)
   return (
     <>
       <Navbar />
@@ -57,6 +60,8 @@ const UserInfo = () => {
             <Route path="approvals" element={<Approvals />} />
             <Route path="your-appoinment" element={<UserAppoinments />} />
             <Route path="appoinments" element={<Appoinments />} />
+            <Route path="your-reviews" element={!(user?.role==="doctor")?<Reviews/>:<DoctorReviews/>}/>
+<Route path="earning" element={<Earning/>}/>
             <Route path="/" element={<Navigate to="my-info" replace />} />{" "}
             {/* Default option */}
           </Routes>
