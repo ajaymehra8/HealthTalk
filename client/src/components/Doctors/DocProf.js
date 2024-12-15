@@ -174,14 +174,14 @@ const DocProf = () => {
                 mt={"10px"}
               >
                 <p>
-                  {doctor.clinicLocation? doctor.clinicLocation:
+                  {doctor?.clinicLocation? doctor?.clinicLocation:
                     "No-157, Bhagya Lakshmi, Sir Balchandra Road, Raja Shivaji Vidyalaya, Landmark : Near Podar College of Commerce."}
                 </p>
               </Box>
             </Box>
           </Box>
 
-          {doctor.role === "doctor" ? (
+          {doctor?.role === "doctor" ? (
             <Box
               bg={"white"}
               w="50%"

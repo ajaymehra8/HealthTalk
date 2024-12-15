@@ -36,7 +36,7 @@ const UserAppoinments = () => {
       minH={"80vh"}
       maxH={"80vh"}
       p={"20px"}
-      pt={"40px"}
+      pt={"15px"}
       bg={"white"}
       borderRadius={"10px"}
       pb={"30px"}
@@ -44,7 +44,10 @@ const UserAppoinments = () => {
       overflowY={"auto"}
       gap={"20px"}
     >
-      {appoinments.length>0 ? (
+      {appoinments.length > 0 && (
+        <h1 style={{fontSize:"clamp(20px,3vw,30px)" ,fontWeight:"500",alignSelf:"center"}}>Your All Appoinments</h1>
+      )}
+      {appoinments.length > 0 ? (
         appoinments.map((appoinment) => (
           <AppoinmentCard
             appoinment={appoinment}

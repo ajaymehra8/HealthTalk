@@ -38,7 +38,7 @@ const Reviews = () => {
       minH={"80vh"}
       maxH={"80vh"}
       p={"20px"}
-      pt={"40px"}
+      pt={"15px"}
       bg={"white"}
       borderRadius={"10px"}
       pb={"30px"}
@@ -46,6 +46,7 @@ const Reviews = () => {
       overflowY={"auto"}
       gap={"20px"}
     >
+      {reviews.length > 0 &&<h1 className="page-head" style={{marginBottom:"5px"}}>Your Reviews</h1>}
       {reviews.length > 0 ? (
         reviews.map((review) => (
           <ReviewCard

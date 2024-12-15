@@ -1,11 +1,29 @@
 import React from "react";
-import { Box, Avatar, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Avatar,
+  Tooltip,
+  useToast,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 import axios from "axios";
+import ReportModal from "../../Report/ReportModal";
 const DoctorProf1 = ({ doctor }) => {
   const { user } = useAuthState();
+  console.log(doctor?._id);
   const toast = useToast();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const bookAppoinment = async () => {
+    if(!user){
+      return toast({
+        title:"You are not logged in",
+        status: "error",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      })
+    }
     const body = {
       doctor,
     };
@@ -85,20 +103,19 @@ const DoctorProf1 = ({ doctor }) => {
           }}
         >
           <p>
-            ₹ <b>{doctor.clinicFee ? doctor.clinicFee : "2,000"}</b> at clinic
+            ₹ <b>{doctor?.clinicFee ? doctor?.clinicFee : "2,000"}</b> at clinic
           </p>
           <p>
-            ₹ <b>{doctor.onlineFee ? doctor.onlineFee : "300"}</b> online
+            ₹ <b>{doctor?.onlineFee ? doctor?.onlineFee : "300"}</b> online
           </p>
-        
         </div>
         <button
-            className="homePageBtn"
-            style={{ marginTop: "0", borderRadius: "10px" }}
-            onClick={bookAppoinment}
-          >
-            Book Appointment
-          </button>
+          className="homePageBtn"
+          style={{ marginTop: "0", borderRadius: "10px" }}
+          onClick={bookAppoinment}
+        >
+          Book Appointment
+        </button>
         <div
           style={{
             display: "flex",
@@ -112,11 +129,12 @@ const DoctorProf1 = ({ doctor }) => {
         >
           {user?.role === "user" && (
             <Tooltip label="Report" aria-label="A tooltip" placement="top">
-              <button>
+              <button onClick={onOpen}>
                 <i class="bi bi-flag-fill"></i>
               </button>
             </Tooltip>
           )}
+          <ReportModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} doctorId={doctor?._id}/>
         </div>
       </Box>
     </Box>

@@ -210,5 +210,6 @@ padding-bottom: 3px;
   font-size: 2.2vw;
   font-weight: 500;
   letter-spacing: 2px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  align-self: center;
 }

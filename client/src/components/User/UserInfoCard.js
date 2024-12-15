@@ -144,10 +144,11 @@ const UserInfoCard = ({ image }) => {
     >
       <h1
         style={{
-          fontSize: "25px",
+          fontSize: "clamp(20px,3vw,30px)",
           marginBottom: "25px",
-          fontWeight: "400",
+          fontWeight: "500",
           letterSpacing: "1px",
+
         }}
       >
         Your Info
