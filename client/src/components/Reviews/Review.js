@@ -70,7 +70,7 @@ const Review = () => {
                 letterSpacing: "1px",
               }}
             >
-              Submit Feedback for Dr. {doctor.name}
+              Submit Feedback for Dr. {doctor?.name}
             </h3>
           </Box>
           <Box pl={"5px"} pb={"4px"}>

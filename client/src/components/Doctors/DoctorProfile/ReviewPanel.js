@@ -1,10 +1,13 @@
-import { Input, InputGroup, Box } from "@chakra-ui/react";
+import { Input, InputGroup, Box, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewCard from "../../Reviews/ReviewCard";
+import { useAuthState } from "../../../context/AuthProvider";
 
 const ReviewPanel = ({ doctor }) => {
   const navigate = useNavigate();
+  const {user}=useAuthState();
+  const toast=useToast();
   return (
     <Box
       background={"#f1f1f1"}
@@ -41,6 +44,15 @@ const ReviewPanel = ({ doctor }) => {
           className="homePageBtn"
           style={{ marginTop: "0", borderRadius: "10px" }}
           onClick={() => {
+            if(!user){
+              return toast({
+                title:"You are not logged in",
+                status: "error",
+                isClosable: true,
+                duration: 5000,
+                position: "top",
+              })
+            }
             navigate("/doctor/review", { state: { user: doctor } });
           }}
         >

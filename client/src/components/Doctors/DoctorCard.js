@@ -22,15 +22,15 @@ const DoctorCard = ({ doctor, handleFunction }) => {
     navigate("/doctor-profile", { state: { user: doctorProf } }); // Pass the profile data using `state`
   };
   return (
-    <Card maxW="sm" cursor={"pointer"}>
+    <Card maxW="290px" cursor={"pointer"}>
       <CardBody>
         <Image
-          src={doctor.image}
+          src={doctor?.image}
           alt="Green double couch with wooden legs"
           borderRadius="lg"
         />
         <Stack mt="3" spacing=".2">
-          <Heading size="md">Dr. {doctor.name}</Heading>
+          <Heading size="md">Dr. {doctor?.name}</Heading>
 
           <div
             style={{
@@ -42,20 +42,20 @@ const DoctorCard = ({ doctor, handleFunction }) => {
             }}
           >
             <p>
-              ₹ <b>{doctor.clinicFee ? doctor.clinicFee : "2,000"}</b> at clinic
+              ₹ <b>{doctor?.clinicFee ? doctor?.clinicFee : "2,000"}</b> at clinic
             </p>
             <p>
-              ₹ <b>{doctor.onlineFee ? doctor.onlineFee : "300"}</b> online
+              ₹ <b>{doctor?.onlineFee ? doctor?.onlineFee : "300"}</b> online
             </p>
           </div>
           <p style={{ fontSize: "17px", fontWeight: "500" }}>
             <i class="bi bi-geo-alt"></i>{" "}
-            {doctor?.clinicLocation ? doctor.clinicLocation : "Delhi, India"}
+            {doctor?.clinicLocation ? doctor?.clinicLocation : "Delhi, India"}
           </p>
         </Stack>
       </CardBody>
       <CardFooter mt={"-10px"}>
-        <ButtonGroup spacing="140">
+        <ButtonGroup spacing="10">
           <Button
             variant="solid"
             background={"#78be20"}
@@ -83,7 +83,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
           </HStack>
         </ButtonGroup>
         <p style={{ marginTop: "4px", fontSize: "20px", marginLeft: "5px" }}>
-          ({doctor.nRating})
+          ({doctor?.nRating})
         </p>
       </CardFooter>
     </Card>

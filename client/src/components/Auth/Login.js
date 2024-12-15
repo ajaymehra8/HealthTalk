@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import { Box, Input, InputGroup, useToast,InputRightElement } from "@chakra-ui/react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Input,
+  InputGroup,
+  useToast,
+  InputRightElement,
+} from "@chakra-ui/react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../Api/Auth";
 import { useAuthState } from "../../context/AuthProvider";
 
 const Login = () => {
-  const {user,setUser}=useAuthState();
+  const { user, setUser } = useAuthState();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [showPass,setShowPass]=useState(false);
+  const [showPass, setShowPass] = useState(false);
   const toast = useToast();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  window.onpopstate = () => {
+    navigate("/");
+  }
+  
   const handleSubmit = async () => {
     try {
       const data = await login({ email, password });
@@ -86,36 +98,35 @@ const Login = () => {
           }}
           bg={"white"}
         />
-       <InputGroup w={"90%"}
-          minW={"80px"}>
-  <Input
-    type={!showPass ? "password" : "text"}
-    placeholder="Enter your password"
-    p={"10px"}
-    borderRadius={"10px"}
-    border={"none"}
-    outline={"none"}
-    w={"100%"}
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    fontSize={"20px"}
-    bg={"white"}
-  />
-  <InputRightElement width="4.5rem">
-    <button 
-      style={{
-        background: "transparent",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "14px",
-        color: "blue",
-      }}
-      onClick={() => setShowPass(!showPass)}
-    >
-      {!showPass ? "Show" : "Hide"}
-    </button>
-  </InputRightElement>
-</InputGroup>
+        <InputGroup w={"90%"} minW={"80px"}>
+          <Input
+            type={!showPass ? "password" : "text"}
+            placeholder="Enter your password"
+            p={"10px"}
+            borderRadius={"10px"}
+            border={"none"}
+            outline={"none"}
+            w={"100%"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fontSize={"20px"}
+            bg={"white"}
+          />
+          <InputRightElement width="4.5rem">
+            <button
+              style={{
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "blue",
+              }}
+              onClick={() => setShowPass(!showPass)}
+            >
+              {!showPass ? "Show" : "Hide"}
+            </button>
+          </InputRightElement>
+        </InputGroup>
 
         <button className="authBtn" onClick={handleSubmit}>
           Log in

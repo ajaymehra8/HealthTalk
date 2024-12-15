@@ -1,39 +1,37 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import {
-  InputGroup,
-  Box,
-  useToast
-} from "@chakra-ui/react";
+import axios from "axios";
+import { InputGroup, Box, useToast } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 
 const ServicePanel = ({ doctor }) => {
   const navigate = useNavigate();
   const { user } = useAuthState();
-const toast=useToast();
+  const toast = useToast();
   const bookAppoinment = async () => {
-   
-    const body={
-    doctor
-    }
+    const body = {
+      doctor,
+    };
     const token = user?.jwt;
 
-    const headers={
-      "Content-Type":"application/json",
-      "authorization": `Bearer ${token}`,
+    const headers = {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    };
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/v1/booking/create-booking`,
+      body,
+      { headers }
+    );
+    if (data.success) {
+      toast({
+        title: data.message,
+        status: "success",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      });
     }
-    const {data}=await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/booking/create-booking`,body,{headers});
-if(data.success){
-  toast({
-    title: data.message,
-    status: "success",
-    isClosable: true,
-    duration: 5000,
-    position: "top",
-  });
-}
-    
   };
 
   return (
@@ -64,11 +62,9 @@ if(data.success){
         >
           Book Appointment
         </button>
-       
       </InputGroup>
     </Box>
   );
 };
 
 export default ServicePanel;
-

@@ -5,6 +5,7 @@ const reviewRoute=require("./routes/reviewRoutes");
 const cors=require('cors');
 const errorMiddleware = require("./middlewares/error-middleware");
 const bookingRouter=require("./routes/bookingRoutes");
+const reportRouter=require("./routes/reportRoutes");
 require("dotenv").config();
 
 const app=express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/review",reviewRoute);
 app.use("/api/v1/booking",bookingRouter);
+app.use("/api/v1/report",reportRouter);
 
 app.get("/",(req,res)=>{
     res.send("Working");

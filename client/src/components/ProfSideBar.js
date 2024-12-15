@@ -120,9 +120,7 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                     Info
                   </NavLink>
                 </li>
-                <li className="profLi">
-                  <i className="bi bi-people-fill profIcon"></i> Joined Camps
-                </li>
+                
                 <li className="profLi">
                 <NavLink
                     to="your-reviews"

@@ -48,8 +48,8 @@ const Doctors = ({id}) => {
         With Popular Doctors
       </h5>
       <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 3 }} // Defines the number of columns for different screen sizes
-        spacing="80px" // Space between the cards
+        columns={{ sm: 2, md: 3, lg: 4 }} // Defines the number of columns for different screen sizes
+        spacing="40px" // Space between the cards
         p={"20px 0"}
       >
         {doctors &&

@@ -1,15 +1,45 @@
 const User = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 const DoctorInfo = require("../model/doctorModel");
+const crypto = require("crypto");
+const Email = require("../utils/email");
+
+/* SOME HELPER FUNCTIONS USED IN CONTROLLER */
+const dns = require("dns");
+
+async function validateEmailDomain(req, res, email) {
+  const domain = email.split("@")[1]; // Get the domain part
+  if (!domain) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide a valid email",
+    });
+  }
+
+  try {
+    const addresses = await dns.promises.resolveMx(domain); // Use promises to await
+    if (!addresses || addresses.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid email",
+      });
+    } else {
+      console.log(`Valid email domain: ${domain}`);
+    }
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide a valid email",
+    });
+  }
+}
 
 // jsonwebtoken code
 const createToken = async (id) => {
   try {
-    const token = jwt.sign(
-      { id },
-      process.env.JWT_SECRET,
-      { expiresIn: "10d" }
-    );
+    const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+      expiresIn: "10d",
+    });
     return token;
   } catch (error) {
     console.error("Error creating JWT:", error);
@@ -17,6 +47,95 @@ const createToken = async (id) => {
   }
 };
 
+// GENERATE AN AUTHORIZED OTP
+let otpStore = {};
+
+// Function to generate a secure OTP (6 digits)
+function generateOTP() {
+  let otp = "";
+  for (let i = 0; i < 4; i++) {
+    const randomByte = crypto.randomBytes(1)[0];
+    const digit = randomByte % 10;
+    otp += digit.toString();
+  }
+  return otp;
+}
+
+// Function to create an OTP and store it with expiration time
+function createOTP(email) {
+  const otpS = generateOTP();
+  const expiryTime = Date.now() + 5 * 60 * 1000; // 5 minutes expiration
+  otpStore[email] = { otpS, expiryTime };
+  return otpS;
+}
+
+/* END OF HELPER FUNCTIONS USED IN CONTROLLER */
+
+// send otp to user
+exports.sendOtp = async (req, res, next) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+    const user = await User.findOne({ email });
+    if (user) {
+     return res.status(400).json({
+        success: false,
+        message: "User with this email already exist",
+      });
+    }
+    await validateEmailDomain(req, res, email);
+    const otp = createOTP(email);
+    const emailP = new Email({ email });
+    emailP.sendOtp(otp);
+    res.status(200).json({
+      success: true,
+      message: "OTP send successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+//verify otp
+exports.verifyOtp = async (req, res, next) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provid all credentials",
+      });
+    }
+    const storedOtpData = otpStore[email];
+    if (!storedOtpData) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP not found for this email",
+      });
+    }
+    const { otpS, expiryTime } = storedOtpData;
+
+    if (Date.now() > expiryTime) {
+      delete otpStore[email]; // Remove expired OTP
+      return res
+        .status(400)
+        .json({ success: false, message: "OTP has expired" });
+    }
+    if (otp !== otpS) {
+      return res.status(400).json({ success: false, message: "Invalid OTP, Please try again" });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "OTP verified successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // signup controller
 
@@ -29,7 +148,11 @@ exports.signup = async (req, res, next) => {
         message: "Please provide all credentials",
       });
     }
+    await validateEmailDomain(req, res, email);
     const user = await User.create(req.body);
+    const emailP = new Email(user);
+    emailP.sendWelcome().then(() => console.log("Welcome email sent!"));
+
     res.status(201).json({
       success: true,
       token: await createToken(user._id),
@@ -63,10 +186,8 @@ exports.login = async (req, res) => {
             path: "reqs",
             populate: { path: "user" }, // This will populate the user inside each req
           });
-      }else if(user.role==="doctor"){
-        
-      }
-       else user = await User.findById(user._id).select("-password ");
+      } else if (user.role === "doctor") {
+      } else user = await User.findById(user._id).select("-password ");
       return res.status(200).json({
         success: true,
         message: "User logged in successfully",
@@ -102,7 +223,7 @@ exports.isProtect = async (req, res, next) => {
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
-console.log(token,"token");
+  console.log(token, "token");
   if (!token) {
     res.status(401).json({
       success: false,

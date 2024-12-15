@@ -16,9 +16,12 @@
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "firebase": "^10.12.3",
+    "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.5",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
+    "pug": "^3.0.3",
     "sharp": "^0.33.4",
     "stripe": "^17.3.1",
     "uuid": "^10.0.0"

@@ -11,6 +11,7 @@ const {
 } = require("../middlewares/file");
 const router = express.Router();
 
+router.route("/otp-verification").get(authController.sendOtp).post(authController.verifyOtp);
 router.route("/signup").post(authController.signup);
 router.route("/login").post(authController.login);
 
