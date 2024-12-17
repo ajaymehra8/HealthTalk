@@ -17,6 +17,8 @@ module.exports = class Email {
         user: process.env.Email_Username,
         pass: process.env.Email_Password,
       },
+      logger: true, 
+      debug: true,
     });
   }
 
