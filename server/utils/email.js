@@ -17,7 +17,7 @@ module.exports = class Email {
         user: process.env.Email_Username,
         pass: process.env.Email_Password,
       },
-      logger: true, 
+      logger: true,
       debug: true,
     });
   }
@@ -36,8 +36,18 @@ module.exports = class Email {
     // 2) Create a transport and send the email
     try {
       console.log("message in process");
-      await this.newTransport().sendMail(mailOptions);
-      console.log("message is sended");
+      await new Promise((resolve, reject) => {
+        this.newTransport().sendMail(mailOptions, (err, info) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            console.log(info);
+            resolve(info);
+          }
+        });
+        console.log("message is sended");
+      });
     } catch (err) {
       console.error("Error sending email:", err);
       throw new Error("Failed to send email.");
@@ -75,7 +85,7 @@ module.exports = class Email {
     );
   }
   async report(doctor, user) {
-    console.log(user.email,doctor?.email);
+    console.log(user.email, doctor?.email);
     const messageForAdmin = `
     <h4>Doctor  Dr. <b>${doctor?.name}</b> is reported by the <b>${user.name}</b></h4>
   `;
