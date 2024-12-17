@@ -33,7 +33,9 @@ module.exports = class Email {
 
     // 2) Create a transport and send the email
     try {
+      console.log("message in process");
       await this.newTransport().sendMail(mailOptions);
+      console.log("message is sended");
     } catch (err) {
       console.error("Error sending email:", err);
       throw new Error("Failed to send email.");
