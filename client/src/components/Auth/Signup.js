@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../Api/Auth";
 import axios from "axios";
+import Sidebar from "./Sidebar";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -14,8 +15,12 @@ const Signup = () => {
   const toast = useToast();
   const navigate = useNavigate();
   window.onpopstate = () => {
-    navigate("/");
-  }
+    if (btnState > 1) {
+      setBtnState(btnState - 1);
+    } else {
+      navigate("/");
+    }
+  };
   const handleSubmit = async (e) => {
     // FOR GET OTP
     if (e.target.innerText === "Next") {
@@ -132,31 +137,100 @@ const Signup = () => {
     <Box
       h={"100vh"}
       w={"100vw"}
-      background={"#785af9"}
+      background={"#ffffff"}
       display={"flex"}
-      flexDir={"column"}
       alignItems={"center"}
       justifyContent={"center"}
     >
       <Box
-        p={"30px 0"}
         boxSizing="border-box"
-        w={"30%"}
+        w={{sm:"100%",md:"50%",lg:"30%"}}
         display={"flex"}
         flexDir={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        gap={"25px"}
-        bg={"#d9caff"}
-        minW={"250px"}
+        alignItems={"start"}
+        justifyContent={"start"}
+        gap={"15px"}
+        bg={"#ffffff"}
+        minW={"50px"}
         borderRadius={"10px"}
+        paddingLeft={"40px"}
       >
+        <h1
+          className="logo"
+          style={{
+            cursor: "pointer",
+            marginBottom: "20px",
+            fontSize: "clamp(30px, 5vw, 30px)",
+          }}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <span className="logo-span">H</span>ealth
+          <span className="logo-span">T</span>alk
+        </h1>
+
+        <h2
+          style={{
+            fontSize: "30px",
+            letterSpacing: "1px",
+            fontWeight: "400",
+          }}
+        >
+          Create your account
+        </h2>
+        <NavLink
+          to={"/login"}
+          style={{
+            fontSize: "20px",
+            fontWeight: "500",
+            marginBottom: "20px",
+            marginTop: "-20px",
+          }}
+        >
+          Have an Account? <span style={{ color: "blue" }}>Log in</span>
+        </NavLink>
+        <Button
+          p={"10px"}
+          borderRadius={"10px"}
+          border={"1px solid black"}
+          w={"90%"}
+          minW={"80px"}
+          onClick={() => console.log("clicked")}
+          fontSize={"20px"}
+          bg={"white"}
+        >
+          {" "}
+          <img
+            src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+            alt=""
+            style={{ width: "25px", marginRight: "5px" }}
+          />{" "}
+          Google
+        </Button>
+        <Button
+          p={"10px"}
+          borderRadius={"10px"}
+          border={"1px solid black"}
+          w={"90%"}
+          minW={"80px"}
+          onClick={() => console.log("clicked")}
+          fontSize={"20px"}
+          bg={"white"}
+        >
+          <i
+            className="bi bi-facebook"
+            style={{ color: "#0c69ff", marginRight: "5px" }}
+          ></i>{" "}
+          Facebook
+        </Button>
+        <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
         <Input
           type="email"
           placeholder="Enter your email"
           p={"10px"}
           borderRadius={"10px"}
-          border={"none"}
+          border={"1px solid black"}
           outline={"none"}
           w={"90%"}
           minW={"80px"}
@@ -165,9 +239,16 @@ const Signup = () => {
           fontSize={"20px"}
           bg={"white"}
           disabled={btnState > 1}
+          _hover={{
+            border: "1px solid black",
+          }}
+          _focus={{
+            border: "1px solid black !important",
+            boxShadow: "none !important",
+          }}
           _disabled={{
             backgroundColor: "white", // Light red background
-            border: "none", // Dashed border
+            border: "1px solid black", // Dashed border
             borderRadius: "10px",
             cursor: "not-allowed", // Not allowed cursor
             opacity: 1, // Full opacity
@@ -180,13 +261,20 @@ const Signup = () => {
             placeholder="Enter your otp"
             onChange={(e) => setOtp(e.target.value)}
             borderRadius={"10px"}
-            border={"none"}
+            border={"1px solid black"}
             outline={"none"}
             w={"90%"}
             minW={"80px"}
             fontSize={"20px"}
             bg={"white"}
             value={otp}
+            _hover={{
+              border: "1px solid black",
+            }}
+            _focus={{
+              border: "1px solid black !important",
+              boxShadow: "none !important",
+            }}
             css={{
               "&::-webkit-inner-spin-button": {
                 WebkitAppearance: "none",
@@ -207,7 +295,7 @@ const Signup = () => {
               placeholder="Enter your name"
               p="10px"
               borderRadius="10px"
-              border="none"
+              border={"1px solid black"}
               outline="none"
               bg="white"
               w="90%"
@@ -215,13 +303,20 @@ const Signup = () => {
               value={name}
               minW="80px"
               fontSize="20px"
+              _hover={{
+                border: "1px solid black",
+              }}
+              _focus={{
+                border: "1px solid black !important",
+                boxShadow: "none !important",
+              }}
             />
             <Input
               type="password"
               placeholder="Enter your password"
               p="10px"
               borderRadius="10px"
-              border="none"
+              border={"1px solid black"}
               outline="none"
               w="90%"
               onChange={(e) => setPassword(e.target.value)}
@@ -229,17 +324,32 @@ const Signup = () => {
               minW="80px"
               bg="white"
               fontSize="20px"
+              _hover={{
+                border: "1px solid black",
+              }}
+              _focus={{
+                border: "1px solid black !important",
+                boxShadow: "none !important",
+              }}
             />
           </>
         )}
 
-        <button className="authBtn" onClick={handleSubmit}>
+        <button
+          className="authBtn"
+          onClick={handleSubmit}
+          style={{
+            alignSelf: "flex-start",
+            minWidth: "80px",
+            marginTop: "30px",
+          }}
+        >
           {btnState === 1 && "Next"}
           {btnState === 2 && "Verify OTP"}
           {btnState === 3 && "Sign up"}
         </button>
-        <NavLink to={"/login"}>Have an Account? Log in.</NavLink>
       </Box>
+      <Sidebar />
     </Box>
   );
 };
