@@ -1,4 +1,4 @@
-import { Box, Button, Input, useToast } from "@chakra-ui/react";
+import { Box, Button, Input, useToast,useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../Api/Auth";
@@ -21,6 +21,31 @@ const Signup = () => {
       navigate("/");
     }
   };
+const emailPlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your email",
+      md: "Enter your email",
+      sm: "Email",
+    }) || "Email";
+  const passwordPlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your password",
+      md: "Enter your password",
+      sm: "Password",
+    }) || "Password";
+    const namePlaceholderText =
+        useBreakpointValue({
+          lg: "Enter your name",
+          md: "Enter your name",
+          sm: "Name",
+        }) || "Name";
+      const otpPlaceholderText =
+        useBreakpointValue({
+          lg: "Enter your otp",
+          md: "Enter your otp",
+          sm: "Enter OTP",
+        }) || "Enter OTP";
+
   const handleSubmit = async (e) => {
     // FOR GET OTP
     if (e.target.innerText === "Next") {
@@ -141,12 +166,14 @@ const Signup = () => {
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}
+      className="loginBox"
     >
       <Box
         boxSizing="border-box"
         w={{sm:"100%",md:"50%",lg:"30%"}}
         display={"flex"}
         flexDir={"column"}
+        className="loginModal"
         alignItems={"start"}
         justifyContent={"start"}
         gap={"15px"}
@@ -170,73 +197,71 @@ const Signup = () => {
           <span className="logo-span">T</span>alk
         </h1>
 
-        <h2
-          style={{
-            fontSize: "30px",
-            letterSpacing: "1px",
-            fontWeight: "400",
-          }}
-        >
-          Create your account
-        </h2>
-        <NavLink
-          to={"/login"}
-          style={{
-            fontSize: "20px",
-            fontWeight: "500",
-            marginBottom: "20px",
-            marginTop: "-20px",
-          }}
-        >
-          Have an Account? <span style={{ color: "blue" }}>Log in</span>
-        </NavLink>
-        <Button
-          p={"10px"}
-          borderRadius={"10px"}
-          border={"1px solid black"}
-          w={"90%"}
-          minW={"80px"}
-          onClick={() => console.log("clicked")}
-          fontSize={"20px"}
-          bg={"white"}
-        >
-          {" "}
-          <img
-            src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
-            alt=""
-            style={{ width: "25px", marginRight: "5px" }}
-          />{" "}
-          Google
-        </Button>
-        <Button
-          p={"10px"}
-          borderRadius={"10px"}
-          border={"1px solid black"}
-          w={"90%"}
-          minW={"80px"}
-          onClick={() => console.log("clicked")}
-          fontSize={"20px"}
-          bg={"white"}
-        >
-          <i
-            className="bi bi-facebook"
-            style={{ color: "#0c69ff", marginRight: "5px" }}
-          ></i>{" "}
-          Facebook
-        </Button>
-        <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
+         <h2
+                  style={{
+                    fontSize: "clamp(20px,3vw,30px)",
+                    letterSpacing: "1px",
+                    fontWeight: "400",
+                  }}
+                >
+                  Create your account
+                </h2>
+                <NavLink
+                  to={"/login"}
+                  style={{
+                    fontSize: "clamp(16px,1.5vw,20px)",
+                    fontWeight: "500",
+                    marginBottom: "20px",
+                    marginTop: "-20px",
+                  }}
+                >
+                   Have an Account? <span style={{ color: "blue" }}>Log in</span>
+                </NavLink>
+                <Button
+                  p={"10px"}
+                  borderRadius={"10px"}
+                  border={"1px solid black"}
+                  width={"clamp(150px,90%,1000px)"}
+                  onClick={() => console.log("clicked")}
+                  fontSize={"clamp(15px,3vw,20px)"}
+                  bg={"white"}
+                >
+                  {" "}
+                  <img
+                    src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+                    alt=""
+                    style={{ width: "25px", marginRight: "5px" }}
+                  />{" "}
+                  Google
+                </Button>
+                <Button
+                  p={"10px"}
+                  borderRadius={"10px"}
+                  border={"1px solid black"}
+                  width={"clamp(150px,90%,1000px)"}
+                  onClick={() => console.log("clicked")}
+                  fontSize={"clamp(15px,3vw,20px)"}
+                  bg={"white"}
+                >
+                  <i
+                    className="bi bi-facebook"
+                    style={{ color: "#0c69ff", marginRight: "5px" }}
+                  ></i>{" "}
+                  Facebook
+                </Button>
+                <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
         <Input
           type="email"
-          placeholder="Enter your email"
+          placeholder={emailPlaceholderText}
           p={"10px"}
           borderRadius={"10px"}
           border={"1px solid black"}
           outline={"none"}
-          w={"90%"}
+          width={"clamp(150px,90%,1000px)"}
           minW={"80px"}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
-          fontSize={"20px"}
+          fontSize={"clamp(15px,3vw,20px)"}
           bg={"white"}
           disabled={btnState > 1}
           _hover={{
@@ -258,14 +283,14 @@ const Signup = () => {
         {btnState === 2 && (
           <Input
             type="number"
-            placeholder="Enter your otp"
+            placeholder={otpPlaceholderText}
             onChange={(e) => setOtp(e.target.value)}
             borderRadius={"10px"}
             border={"1px solid black"}
             outline={"none"}
-            w={"90%"}
+            width={"clamp(150px,90%,1000px)"}
             minW={"80px"}
-            fontSize={"20px"}
+            fontSize={"clamp(15px,3vw,20px)"}
             bg={"white"}
             value={otp}
             _hover={{
@@ -292,13 +317,13 @@ const Signup = () => {
           <>
             <Input
               type="text"
-              placeholder="Enter your name"
+              placeholder={namePlaceholderText}
               p="10px"
               borderRadius="10px"
               border={"1px solid black"}
               outline="none"
               bg="white"
-              w="90%"
+              width={"clamp(150px,90%,1000px)"}
               onChange={(e) => setName(e.target.value)}
               value={name}
               minW="80px"
@@ -313,12 +338,12 @@ const Signup = () => {
             />
             <Input
               type="password"
-              placeholder="Enter your password"
+              placeholder={passwordPlaceholderText}
               p="10px"
               borderRadius="10px"
               border={"1px solid black"}
               outline="none"
-              w="90%"
+              width={"clamp(150px,90%,1000px)"}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               minW="80px"

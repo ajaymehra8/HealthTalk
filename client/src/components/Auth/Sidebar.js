@@ -1,24 +1,26 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <Box
       bg={"linear-gradient(to right, #393f4d, #6b707a)"}
-      w={{ sm: "0", md: "50%", lg: "70%" }}
+      width={{  md: "50%", lg: "70%" }}
       h={"100vh"}
-      display={"flex"}
+      display={{lg:"flex",md:"flex",sm:"none"}}
       justifyContent={"start"}
       alignItems={"start"}
+      flexDir={{lg:"row",md:"column-reverse"}}
+      className="test"
     >
       <Box
-        width={"35%"}
+        width={{lg:"35%"}}
         height={"100%"}
-        display={"flex"}
+        display={{lg:"flex",md:"flex"}}
         flexDirection={"column"}
         justifyContent={"start"}
         alignItems={"start"}
-        p={"80px 20px 0"}
+        p={{lg:"80px 20px 0",md:"50px 20px 0"}}
       >
         <h1
           style={{
@@ -56,21 +58,21 @@ const Sidebar = () => {
         </Box>
       </Box>
       <Box
-        width={"65%"}
+        width={{lg:"65%",md:"100%"}}
         height={"100%"}
         display={"flex"}
         justifyContent={"center"}
         alignItems={"start"}
         pt={"80px"}
       >
-        <img
+        <Image
           src="https://static.vecteezy.com/system/resources/previews/012/140/570/non_2x/group-of-medical-staff-at-hospital-handsome-doctor-in-front-of-team-free-photo.jpg"
           alt=""
           style={{
-            width: "95%",
-            height:"80%",
+            width:"90%",
             borderRadius:"100px 0 100px 0"
           }}
+          height={{lg:"80%",md:"100%"}}
         />
       </Box>
     </Box>

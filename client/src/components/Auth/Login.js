@@ -6,6 +6,7 @@ import {
   useToast,
   InputRightElement,
   Button,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../Api/Auth";
@@ -24,6 +25,19 @@ const Login = () => {
   window.onpopstate = () => {
     navigate("/");
   };
+
+  const emailPlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your email",
+      md: "Enter your email",
+      sm: "Email",
+    }) || "Email";
+  const passwordPlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your password",
+      md: "Enter your password",
+      sm: "Password",
+    }) || "Password";
 
   const handleSubmit = async () => {
     try {
@@ -63,8 +77,9 @@ const Login = () => {
   };
   return (
     <Box
-      h={"100vh"}
-      w={"100vw"}
+    height={"100vh"}
+    className="loginBox"
+    w={"100vw"}
       background={"#fff"}
       display={"flex"}
       alignItems={"center"}
@@ -82,6 +97,7 @@ const Login = () => {
         minW={"50px"}
         borderRadius={"10px"}
         paddingLeft={"40px"}
+        className="loginModal"
       >
         <h1
           className="logo"
@@ -100,32 +116,31 @@ const Login = () => {
 
         <h2
           style={{
-            fontSize: "30px",
+            fontSize: "clamp(20px,3vw,30px)",
             letterSpacing: "1px",
             fontWeight: "400",
           }}
         >
-          Create your account
+          Login to your account
         </h2>
         <NavLink
           to={"/signup"}
           style={{
-            fontSize: "20px",
+            fontSize: "clamp(16px,1.5vw,20px)",
             fontWeight: "500",
             marginBottom: "20px",
             marginTop: "-20px",
           }}
         >
-          Not Have an Account? <span style={{ color: "blue" }}>Create one</span>
+          Have an Account. <span style={{ color: "blue" }}>Create one</span>
         </NavLink>
         <Button
           p={"10px"}
           borderRadius={"10px"}
           border={"1px solid black"}
-          w={"90%"}
-          minW={"80px"}
+          width={"clamp(150px,90%,1000px)"}
           onClick={() => console.log("clicked")}
-          fontSize={"20px"}
+          fontSize={"clamp(15px,3vw,20px)"}
           bg={"white"}
         >
           {" "}
@@ -140,10 +155,9 @@ const Login = () => {
           p={"10px"}
           borderRadius={"10px"}
           border={"1px solid black"}
-          w={"90%"}
-          minW={"80px"}
+          width={"clamp(150px,90%,1000px)"}
           onClick={() => console.log("clicked")}
-          fontSize={"20px"}
+          fontSize={"clamp(15px,3vw,20px)"}
           bg={"white"}
         >
           <i
@@ -155,14 +169,14 @@ const Login = () => {
         <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
         <Input
           type="email"
-          placeholder="Enter your email"
+          placeholder={emailPlaceholderText}
           p={"10px "}
           borderRadius={"10px"}
           border={"1px solid black"}
           outline={"none"}
-          w={"90%"}
+          width={"clamp(150px,90%,1000px)"}
           minW={"80px"}
-          fontSize={"20px"}
+          fontSize={"clamp(15px,3vw,20px)"}
           value={email}
           _hover={{
             border: "1px solid black",
@@ -176,18 +190,18 @@ const Login = () => {
           }}
           bg={"white"}
         />
-        <InputGroup w={"90%"} minW={"80px"}>
+        <InputGroup width={"clamp(150px,90%,1000px)"}>
           <Input
             type={!showPass ? "password" : "text"}
-            placeholder="Enter your password"
+            placeholder={passwordPlaceholderText}
             p={"10px"}
             borderRadius={"10px"}
             border={"1px solid black"}
             outline={"none"}
-            w={"100%"}
+            width={"100%"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            fontSize={"20px"}
+            fontSize={"clamp(15px,3vw,20px)"}
             bg={"white"}
             _hover={{
               border: "1px solid black",

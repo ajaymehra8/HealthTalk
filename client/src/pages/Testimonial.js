@@ -9,8 +9,20 @@ const Testimonial = () => {
       alignItems={"center"}
       justifyContent={"space-evenly"}
       p={"10px 0"}
+      className="testimonials"
+      sx={{
+        '@media (max-width: 900px)': {
+          flexDirection: 'column-reverse',
+          gap:"50px"
+        },
+      }}
     >
-      <Box w={"42%"}>
+      <Box width={"42%"} sx={{
+        '@media (max-width: 900px)': {
+          width: "clamp(400px,90vw,900px)!important"
+
+        },
+      }}>
         <h1 style={{ fontSize: "25px", fontWeight: "700", lineHeight: "1" }}>
           Finest Client Care & Amenities Service
         </h1>
@@ -101,6 +113,7 @@ const Testimonial = () => {
         style={{ width: "42%",borderRadius:'10px' }}
         src="https://st4.depositphotos.com/8846918/40660/i/450/depositphotos_406604956-stock-photo-blood-pressure-meter-medical-equipment.jpg"
         alt=""
+        className="testimonialImg"
       />
     </Box>
   );

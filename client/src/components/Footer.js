@@ -21,11 +21,11 @@ const Footer = () => {
         justifyContent={"space-between"}
         alignItems={"center"}
       >
-        <h1 className="logo" style={{ cursor: "pointer", marginLeft: "50px" }}>
+        <h1 className="logo footerLogo" style={{ cursor: "pointer", marginLeft: "50px" }}>
           <span className="logo-span">H</span>ealth
           <span className="logo-span">T</span>alk
         </h1>
-        <ul className="navLinks">
+        <ul className="navLinks footerLinks">
           <li
             className="navLink"
             style={{
