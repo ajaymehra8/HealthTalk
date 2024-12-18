@@ -18,7 +18,7 @@ const Doctors = ({id}) => {
   }, []);
   return (
     <Box
-      pt={"50px"}
+      p={"50px 10px"}
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}

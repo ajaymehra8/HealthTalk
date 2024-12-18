@@ -24,7 +24,7 @@ const Home = () => {
     <>
       <Navbar />
       <Box
-        minH={"95vh"}
+        height={"95vh"}
         w={"100vw"}
         background={"linear-gradient(to right, #393f4d, #6b707a)"}
         display={"flex"}
@@ -33,12 +33,13 @@ const Home = () => {
         pb={"50px"}
         pt={"60px"}
         position={"relative"}
+        className="homePageMain"
       >
-        <Box width={"40%"}>
+        <Box width="40%" className="homeTextBox">
           <h1
             style={{
               color: "white",
-              fontSize: "40px",
+              fontSize: "clamp(30px,4vw,40px)",
               fontWeight: "700",
               letterSpacing: "1px",
             }}
@@ -61,6 +62,7 @@ const Home = () => {
           src="../images/doctorHomeImg.png"
           alt=""
           style={{ width: "42vw" }}
+          className="homeImg"
         />
         <div className="homeFoot">
           <h1>

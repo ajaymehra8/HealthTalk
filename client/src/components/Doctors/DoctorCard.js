@@ -36,8 +36,9 @@ const DoctorCard = ({ doctor, handleFunction }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              width: "210px",
+              justifyContent: "start",
+              gap:"3%",
+              width: "100%",
               padding: "10px 0",
             }}
           >
@@ -55,11 +56,12 @@ const DoctorCard = ({ doctor, handleFunction }) => {
         </Stack>
       </CardBody>
       <CardFooter mt={"-10px"}>
-        <ButtonGroup spacing="10">
+        <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
           <Button
             variant="solid"
             background={"#78be20"}
             color={"white"}
+            w={"clamp(100px,20%,200px)"}
             onClick={handleViewProfile}
             letterSpacing={"1px"}
             _hover={{
@@ -81,7 +83,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
               </Box>
             ))}
           </HStack>
-        </ButtonGroup>
+        </Box>
         <p style={{ marginTop: "4px", fontSize: "20px", marginLeft: "5px" }}>
           ({doctor?.nRating})
         </p>
