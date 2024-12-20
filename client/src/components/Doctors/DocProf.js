@@ -59,10 +59,11 @@ const DocProf = () => {
           w={"90%"}
           display={"flex"}
           justifyContent={"space-between"}
+          flexDirection={{base:"column",md:"column",lg:"row"}}
           alignItems={"start"}
           padding={"10px 0"}
         >
-          <Box w={"40%"}>
+          <Box w={{lg:"40%",base:"clamp(300px,100%,2000px)",md:"clamp(410px,100%,2000px)"}}>
             <Box>
               <h4 style={{ fontSize: "20px", fontWeight: "bold" }}>
                 Personal Statement
@@ -184,12 +185,13 @@ const DocProf = () => {
           {doctor?.role === "doctor" ? (
             <Box
               bg={"white"}
-              w="50%"
+              w={{sm:"clamp(360px,100%,2000px)",md:"clamp(360px,100%,2000px)",lg:"50%"}}
               p={4}
               borderRadius={"lg"}
               borderWidth={"1px"}
               color="black"
               border={"1px solid gray"}
+              mt={{base:"50px",md:"50px",lg:"0"}}
             >
               <Tabs variant={"line"}>
                 <TabList mb={"1em"}>

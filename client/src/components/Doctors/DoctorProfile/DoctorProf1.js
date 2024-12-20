@@ -50,14 +50,14 @@ const DoctorProf1 = ({ doctor }) => {
   };
   return (
     <Box
-      w={"90%"}
+      width={"clamp(400px,90%,2000px)"}
       minH={"150px"}
       border={".5px solid gray"}
       borderRadius={"20px"}
       display={"flex"}
       alignItems={"center"}
       justifyContent={"start"}
-      gap={"30px"}
+      gap={"clamp(5px,5%,500px)"}
       p={"10px 15px"}
       bg={"#ffffff"}
       position={"relative"}
@@ -65,12 +65,12 @@ const DoctorProf1 = ({ doctor }) => {
       <img
         src={doctor?.image}
         alt=""
-        style={{ width: "18%", borderRadius: "20px" }}
+        style={{ width: "clamp(150px,18%,500px)", borderRadius: "20px" }}
       />
       <Box>
         <h1
           style={{
-            fontSize: "25px",
+            fontSize: "clamp(16px,5vw,25px)",
             letterSpacing: "1px",
             fontWeight: "500",
           }}
@@ -85,7 +85,7 @@ const DoctorProf1 = ({ doctor }) => {
         <h3
           style={{
             color: "gray",
-            width: "400px",
+            width: "40%",
             fontSize: "16px",
             letterSpacing: "1px",
           }}
@@ -120,7 +120,7 @@ const DoctorProf1 = ({ doctor }) => {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
             width: "50px",
             position: "absolute",
             top: "10px",
@@ -129,7 +129,7 @@ const DoctorProf1 = ({ doctor }) => {
         >
           {user?.role === "user" && (
             <Tooltip label="Report" aria-label="A tooltip" placement="top">
-              <button onClick={onOpen}>
+              <button onClick={onOpen} style={{fontSize:"clamp(16px,5vw,25px)"}}>
                 <i class="bi bi-flag-fill"></i>
               </button>
             </Tooltip>

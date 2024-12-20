@@ -56,7 +56,7 @@ const ReviewPanel = ({ doctor }) => {
             navigate("/doctor/review", { state: { user: doctor } });
           }}
         >
-          Write A Review
+          Review
         </button>
       </InputGroup>
     </Box>

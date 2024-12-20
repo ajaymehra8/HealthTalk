@@ -51,7 +51,8 @@ const Review = () => {
         gap={"15%"}
       >
         <Box
-          w={"50%"}
+          w={{md:"50%",base:"clamp(250px,100vw,1000px)"
+}}
           border={"1px solid gray"}
           borderRadius={"10px"}
           pb={"10px"}
@@ -65,7 +66,7 @@ const Review = () => {
           >
             <h3
               style={{
-                fontSize: "20px",
+                fontSize: "clamp(15px,4vw,20px)",
                 fontWeight: "400",
                 letterSpacing: "1px",
               }}
@@ -73,9 +74,9 @@ const Review = () => {
               Submit Feedback for Dr. {doctor?.name}
             </h3>
           </Box>
-          <Box pl={"5px"} pb={"4px"}>
+          <Box pl={"5px"} pb={"4px"} pr={"2px"}>
             <p style={{ marginBottom: "10px" }}>
-              How would you rate your overall experience at the clinic
+              How would you rate your overall experience at the clinic.
             </p>
             <Box display={"flex"} gap={"8px"} mb={"20px"}>
               {[1, 2, 3, 4, 5].map((ele) => (
@@ -103,8 +104,8 @@ const Review = () => {
                 outline: "none",
                 padding: "5px",
                 fontSize: "15px",
+                width:"clamp(180px,95%,1000px)"
               }}
-              cols={"64"}
               value={text}
               onChange={(e)=>setText(e.target.value)}
             />
@@ -122,7 +123,7 @@ const Review = () => {
             </button>
           </Box>
         </Box>
-        <Box w={"30%"}>
+        <Box w={"clamp(300px,30%,1000px)"} display={{base:"none",md:"grid"}}>
           <img
             src="https://assets.lybrate.com/f_auto,c_limit,w_640,q_auto/imgs/tic/icon/Are-you-a-doctor_Banner_web%201.png"
             alt=""

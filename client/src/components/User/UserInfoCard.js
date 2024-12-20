@@ -134,7 +134,7 @@ const UserInfoCard = ({ image }) => {
       flexDir={"column"}
       alignItems={"start"}
       justifyContent={"start"}
-      w={"80%"}
+      w={"clamp(400px,80%,1000px)"}
       minH={"20vh"}
       p={"20px 20px"}
       bg={"white"}

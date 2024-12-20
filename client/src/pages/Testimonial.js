@@ -19,7 +19,7 @@ const Testimonial = () => {
     >
       <Box width={"42%"} sx={{
         '@media (max-width: 900px)': {
-          width: "clamp(400px,90vw,900px)!important"
+          width: "clamp(300px,90vw,900px)!important"
 
         },
       }}>

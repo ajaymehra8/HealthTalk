@@ -56,7 +56,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
         display={"flex"}
         flexDir={"column"}
         justifyContent={"center"}
-        width={"25%"}
+        width={"clamp(190px,25%,1000px)"}
         alignItems={"center"}
       >
         <img src={review?.doctor?.image} alt="" className="rectangle-img" />
@@ -65,18 +65,16 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
         </h4>
       </Box>
       <Box width={'70%'}>
-        <h2 style={{ fontSize: "20px" }}>
+        <h2 style={{ fontSize: "clamp(15px,4vw,20px)" }}>
           <b>Review:</b> {review?.text}
         </h2>
-        <h2 style={{ fontSize: "20px" }}>
+        <h2 style={{ fontSize: "clamp(15px,4vw,20px)" }}>
           <b>Time:</b> {timeAgo ? timeAgo : "Unknown"}
         </h2>
 
-        <div className="reqButtons" style={{ marginTop: "30px" }}>
-          <button className="rejectBtn" onClick={handleDelete}>
+          <button className="rejectBtn rounded-btn" onClick={handleDelete} style={{marginTop:"40px"}}>
             Delete
           </button>
-        </div>
       </Box>
     </Box>
   );

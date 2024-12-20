@@ -44,7 +44,7 @@ const Footer = () => {
               fontWeight: "400",
             }}
           >
-            <NavLink>Be a part of our team</NavLink>
+            <NavLink>Join us</NavLink>
           </li>
         </ul>
       </Box>
