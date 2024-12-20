@@ -87,16 +87,13 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
       cursor={"pointer"}
       p={"5px 20px"}
       bg={"#f0f0f0"}
-      transition={"transform .06s"}
-      _hover={{
-        transform: "scale(1.02)",
-      }}
+      
     >
       <Box
         display={"flex"}
         flexDir={"column"}
         justifyContent={"center"}
-        width={"25%"}
+        width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
         <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" />
@@ -115,10 +112,11 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
             timeFormat="HH:mm"
             timeIntervals={15}
             dateFormat="MM/dd/yyyy h:mm aa"
-            placeholderText="Appointment Not Settled."
+            placeholderText="Not Settled."
             className="date-picker-input"
             disabled={true} // Disable if appointment already has a time
             style={{ marginTop: "80px" }} // Inline style for margin
+            
           />
         </Box>
         <div

@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [show,setShow]=useState(false);
   const [headers, setHeaders] = useState(null);
   const navigate = useNavigate();
 
@@ -35,8 +36,8 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ user, setUser, headers, setHeaders }),
-    [user, headers]
+    () => ({ user, setUser, headers, setHeaders,show,setShow }),
+    [user, headers,show]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

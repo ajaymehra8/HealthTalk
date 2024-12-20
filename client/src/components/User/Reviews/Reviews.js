@@ -7,9 +7,9 @@ import ReviewCard from "./ReviewCard";
 const Reviews = () => {
   const { user } = useAuthState();
   const [reviews, setReviews] = useState([]);
+  let token = user?.jwt;
+
   const fetchReviews =useCallback( async () => {
-    const token = user?.jwt;
-    console.log(token);
     if(!token) return;
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/review`,
@@ -24,19 +24,19 @@ const Reviews = () => {
       setReviews(data?.reviews);
       console.log(data.reviews);
     }
-  },[reviews]);
+  },[reviews,token]);
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [fetchReviews]);
   return (
     <Box
       display={"flex"}
       flexDir={"column"}
       alignItems={"start"}
       justifyContent={"start"}
-      w={"70%"}
-      minH={"80vh"}
-      maxH={"80vh"}
+      w={"clamp(400px,80%,1000px)"}
+      minH={"85vh"}
+      maxH={"85vh"}
       p={"20px"}
       pt={"15px"}
       bg={"white"}
@@ -45,6 +45,12 @@ const Reviews = () => {
       boxShadow={"1px 1px 10px 4px #686d77"}
       overflowY={"auto"}
       gap={"20px"}
+      sx={{
+        "@media(max-width:500px)":{
+          maxHeight:"63vh",
+          minHeight:"63vh"
+        }
+      }}
     >
       {reviews.length > 0 &&<h1 className="page-head" style={{marginBottom:"5px"}}>Your Reviews</h1>}
       {reviews.length > 0 ? (

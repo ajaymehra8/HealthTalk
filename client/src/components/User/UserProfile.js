@@ -28,8 +28,9 @@ console.log(user?.role)
         alignItems={"center"}
         justifyContent={"center"}
         w={"100%"}
-        h={"80vh"}
-        mt={"87px"}
+        height={{ base: "auto", md: "80vh" }}
+        mt={{lg:"87px",base:"0"}}
+        
       >
         <ProfSideBar
           imageSrc={imageSrc}
@@ -45,7 +46,12 @@ console.log(user?.role)
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
-        >
+          sx={{
+            '@media (max-width: 950px)': {
+              width: "100%"
+    
+            },
+          }}        >
           <Routes>
             <Route
               path="my-info"

@@ -21,7 +21,7 @@ const UserAppoinments = () => {
       { headers }
     );
     setAppoinments(data.bookings);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     getAppoinments();
@@ -32,10 +32,10 @@ const UserAppoinments = () => {
       flexDir={"column"}
       alignItems={"start"}
       justifyContent={"start"}
-      w={"70%"}
-      minH={"80vh"}
-      maxH={"80vh"}
-      p={"20px"}
+      w={"clamp(400px,80%,1000px)"}
+      minH={"85vh"}
+      maxH={"85vh"}
+      p={"25px"}
       pt={"15px"}
       bg={"white"}
       borderRadius={"10px"}
@@ -43,9 +43,15 @@ const UserAppoinments = () => {
       boxShadow={"1px 1px 10px 4px #686d77"}
       overflowY={"auto"}
       gap={"20px"}
+      sx={{
+        "@media(max-width:500px)":{
+          maxHeight:"63vh",
+          minHeight:"63vh"
+        }
+      }}
     >
       {appoinments.length > 0 && (
-        <h1 style={{fontSize:"clamp(20px,3vw,30px)" ,fontWeight:"500",alignSelf:"center"}}>Your All Appoinments</h1>
+        <h1 className="page-head">Your All Appoinments</h1>
       )}
       {appoinments.length > 0 ? (
         appoinments.map((appoinment) => (
