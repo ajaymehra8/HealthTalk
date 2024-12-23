@@ -85,7 +85,7 @@ const DoctorProf1 = ({ doctor }) => {
         <h3
           style={{
             color: "gray",
-            width: "40%",
+            width: "90%",
             fontSize: "16px",
             letterSpacing: "1px",
           }}

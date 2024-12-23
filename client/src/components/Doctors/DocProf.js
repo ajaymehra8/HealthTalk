@@ -219,7 +219,7 @@ const DocProf = () => {
                   </Tab>
                 </TabList>
 
-                <TabPanels>
+                <TabPanels flex={1} overflow={"auto"}>
                   <TabPanel>
                     <ReviewPanel doctor={doctor} />
                   </TabPanel>

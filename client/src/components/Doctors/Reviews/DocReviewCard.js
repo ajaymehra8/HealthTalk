@@ -69,11 +69,9 @@ const DocReviewCard = ({ review, setReviews, reviews }) => {
           <b>Time:</b> {timeAgo ? timeAgo : "Unknown"}
         </h2>
 
-        <div className="reqButtons" style={{ marginTop: "30px" }}>
-          <button className="rejectBtn" onClick={handleDelete}>
+          <button className="rejectBtn rounded-btn" onClick={handleDelete} style={{marginTop:"40px"}}>
             Delete
           </button>
-        </div>
       </Box>
     </Box>
   );
