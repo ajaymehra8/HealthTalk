@@ -10,9 +10,9 @@ const Approvals = () => {
       flexDir={"column"}
       alignItems={"start"}
       justifyContent={"start"}
-      w={"70%"}
-      minH={"80vh"}
-      maxH={"80vh"}
+      w={"clamp(400px,80%,1000px)"}
+      minH={"84vh"}
+      maxH={"85vh"}
       p={"20px"}
       pt={"40px"}
       bg={"white"}
@@ -20,6 +20,13 @@ const Approvals = () => {
       pb={"30px"}
       boxShadow={"1px 1px 10px 4px #686d77"}
       overflowY={"auto"}
+      gap={"20px"}
+      sx={{
+        "@media(max-width:500px)": {
+          maxHeight: "63vh",
+          minHeight: "63vh",
+        },
+      }}
     >
       {user?.reqs.length > 0 ? (
         user?.reqs.map((req) => <ReqCard req={req} />)

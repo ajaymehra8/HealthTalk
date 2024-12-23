@@ -8,7 +8,7 @@ import axios from "axios";
 
 const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [appoinmentf,setAppoinment]=useState(appoinment);
+  const [appoinmentf, setAppoinment] = useState(appoinment);
   const createdAt = appoinmentf?.createdAt; // ISO string from DB
   const toast = useToast();
   const { user } = useAuthState();
@@ -35,7 +35,12 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
       const { data } = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/booking/cancel-appoinment`,
         body,
-        { headers: { "Content-Type": "application/json", authorization: `Bearer ${user?.jwt}` } }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${user?.jwt}`,
+          },
+        }
       );
 
       if (data.success) {
@@ -100,7 +105,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
       if (data.success) {
         // Update `selectedDate` with the updated appointment time
         setSelectedDate(new Date(data.appoinment.time));
-setAppoinment(data?.appoinment);
+        setAppoinment(data?.appoinment);
         toast({
           title: "Appointment updated successfully",
           status: "success",
@@ -131,25 +136,24 @@ setAppoinment(data?.appoinment);
   };
 
   return (
-    <div
-      style={{
-        padding: "10px",
-        margin: "10px",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        display: "flex",
-        justifyContent: "start",
-        alignItems: "start",
-        width: "97%",
-        gap: "7%",
-        background: "#f0f0f0",
-      }}
+    <Box
+      display={"flex"}
+      width={"100%"}
+      gap={"7%"}
+      justifyContent={"start"}
+      alignItems={"start"}
+      border={"1px solid #d3d3d3"}
+      borderRadius={"20px"}
+      cursor={"pointer"}
+      p={"5px 20px"}
+      bg={"#f0f0f0"}
     >
+      {" "}
       <Box
         display={"flex"}
         flexDir={"column"}
         justifyContent={"center"}
-        width={"25%"}
+        width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
         <img src={appoinmentf?.user?.image} alt="" className="rectangle-img" />
@@ -171,25 +175,26 @@ setAppoinment(data?.appoinment);
           placeholderText="Select date and time"
           className="date-picker-input"
           disabled={appoinmentf?.time} // Disable if appointment already has a time
-
         />
         <div
           className="reqButtons"
           style={{ width: "100%", gap: "10px", marginTop: "20px" }}
         >
-          <button 
-  className="acceptBtn" 
-  onClick={!appoinmentf?.time ? setAppoinmentByDoc : undefined}
->
-  {!appoinmentf?.time ? "Set Appointment" : "Appointment Scheduled"}
-</button>
+          <button
+            className="acceptBtn"
+            onClick={!appoinmentf?.time ? setAppoinmentByDoc : undefined}
+          >
+            {!appoinmentf?.time ? "Set" : "Scheduled"}
+          </button>
 
-          {!appoinmentf?.time&&<button className="rejectBtn" onClick={cancelAppoinment}>
-            Cancel Appointment
-          </button>}
+          {!appoinmentf?.time && (
+            <button className="rejectBtn" onClick={cancelAppoinment}>
+              Cancel
+            </button>
+          )}
         </div>
       </Box>
-    </div>
+    </Box>
   );
 };
 
