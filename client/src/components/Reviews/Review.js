@@ -11,6 +11,7 @@ const Review = () => {
   const [rating,setRating]=useState(0);
   const [text,setText]=useState("");
   const {user}=useAuthState();
+  const [loading,setLoading]=useState(false);
   const doctor = state?.user; // Access the user data from the state
   const navigate=useNavigate();
   const handleApplication=()=>{
@@ -20,6 +21,7 @@ const Review = () => {
   const handleFeedback=async()=>{
     const token = user?.jwt;
     const url=`${process.env.REACT_APP_API_URL}/api/v1/review/${doctor?._id}`;
+    setLoading(true);
     const {data} = await axios.post(
       url,
       {text,rating},
@@ -35,6 +37,7 @@ const Review = () => {
     }else{
       alert(data.message)
     }
+    setLoading(false);
   }
   return (
     <>
@@ -116,10 +119,13 @@ const Review = () => {
                 display: "block",
                 marginTop: "20px",
                 width: "98%",
+                background:loading&&"gray",
+                cursor:loading&&"not-allowed"
               }}
+              disabled={loading}
               onClick={handleFeedback}
             >
-              Submit Feedback
+              {!loading?"Submit Feedback":"Wait..."}
             </button>
           </Box>
         </Box>

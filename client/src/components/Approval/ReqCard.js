@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Avatar, Tooltip } from "@chakra-ui/react";
 import {useAuthState} from "../../context/AuthProvider"
@@ -6,9 +6,16 @@ import axios from "axios";
 
 const ReqCard = ({ req }) => {
   const {user}=useAuthState();
+  const [acceptLoading,setAcceptLoading]=useState(false);
+  const [rejectLoading,setRejectLoading]=useState(false);
+
   const navigate=useNavigate();
   const handleAccept=async()=>{
     const token = user?.jwt;
+    if(!token){
+      return;
+    }
+    setAcceptLoading(true);
     const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/user/update-status`,
       {userId:req.user?._id,status:"Accepted",reqId:req._id},
@@ -23,9 +30,11 @@ const ReqCard = ({ req }) => {
     }else{
       alert("bawal");
     }
+    setAcceptLoading(false);
   }
   const handleReject=async()=>{
     const token = user?.jwt;
+    setRejectLoading(true);
     const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/user/update-status`,
       {userId:req.user?._id,status:"Rejected",reqId:req._id},
@@ -40,6 +49,7 @@ const ReqCard = ({ req }) => {
     }else{
       alert("bawal");
     }
+    setRejectLoading(false);
   }
   return (
     <Box
@@ -68,8 +78,8 @@ const ReqCard = ({ req }) => {
         <h2 style={{ fontSize: "20px" }}>{req.user?.name}</h2>
       </Box>
       <div className="reqButtons">
-        <button className="acceptBtn" onClick={handleAccept}>Accept</button>
-        <button className="rejectBtn" onClick={handleReject}>Reject</button>
+        <button className="acceptBtn" onClick={handleAccept}>{!acceptLoading?"Accept":"Accepting"}</button>
+        <button className="rejectBtn" onClick={handleReject}>{!rejectLoading? "Reject":"Rejecting"}</button>
         <Tooltip label="View Profile" placement="bottom">
           <button
             onClick={() => {

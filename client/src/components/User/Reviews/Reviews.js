@@ -8,9 +8,11 @@ const Reviews = () => {
   const { user } = useAuthState();
   const [reviews, setReviews] = useState([]);
   let token = user?.jwt;
+  const [loading, setLoading] = useState(false);
 
-  const fetchReviews =useCallback( async () => {
-    if(!token) return;
+  const fetchReviews = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/review`,
       {
@@ -24,7 +26,8 @@ const Reviews = () => {
       setReviews(data?.reviews);
       console.log(data.reviews);
     }
-  },[reviews,token]);
+    setLoading(false);
+  }, [ token]);
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
@@ -46,23 +49,31 @@ const Reviews = () => {
       overflowY={"auto"}
       gap={"20px"}
       sx={{
-        "@media(max-width:500px)":{
-          maxHeight:"63vh",
-          minHeight:"63vh"
-        }
+        "@media(max-width:500px)": {
+          maxHeight: "63vh",
+          minHeight: "63vh",
+        },
       }}
     >
-      {reviews.length > 0 &&<h1 className="page-head" style={{marginBottom:"5px"}}>Your Reviews</h1>}
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <ReviewCard
-            review={review}
-            setReviews={setReviews}
-            reviews={reviews}
-          />
-        ))
+      {reviews.length > 0 && (
+        <h1 className="page-head" style={{ marginBottom: "5px" }}>
+          Your Reviews
+        </h1>
+      )}
+      {!loading ? (
+        reviews.length > 0 ? (
+          reviews.map((review) => (
+            <ReviewCard
+              review={review}
+              setReviews={setReviews}
+              reviews={reviews}
+            />
+          ))
+        ) : (
+          <h1 className="no-item-text">No reviews</h1>
+        )
       ) : (
-        <h1 className="no-item-text">No reviews</h1>
+        <h1 className="no-item-text">Loading...</h1>
       )}
     </Box>
   );

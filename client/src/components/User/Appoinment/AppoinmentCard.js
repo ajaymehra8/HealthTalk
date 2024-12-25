@@ -12,6 +12,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
+  
   console.log(appoinment?.doctor);
 
   const handlePayment = async () => {

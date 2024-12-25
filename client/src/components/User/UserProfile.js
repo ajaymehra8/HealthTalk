@@ -41,7 +41,7 @@ console.log(user?.role)
         <Box
           w={"80%"}
           background={"linear-gradient(to right,#6b707a, #393f4d)"}
-          height={"92.8vh"}
+          height={{md:"92.8vh",base:"93.5vh"}}
           display={"flex"}
           flexDir={"column"}
           alignItems={"center"}

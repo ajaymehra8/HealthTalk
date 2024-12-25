@@ -12,7 +12,7 @@ const UserInfoCard = ({ image }) => {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [showBtn, setShowBtn] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   // Sync user from localStorage during initialization
@@ -85,7 +85,7 @@ const UserInfoCard = ({ image }) => {
     }
 
     const token = user?.jwt;
-    if(!token) return;
+    if (!token) return;
     const url = `${process.env.REACT_APP_API_URL}/api/v1/user`;
     const form = new FormData();
 
@@ -95,7 +95,7 @@ const UserInfoCard = ({ image }) => {
     if (bloodGroup) form.append("bloodGroup", bloodGroup);
     if (height) form.append("height", height);
     if (image) form.append("image", image);
-
+    setLoading(true);
     try {
       const { data } = await axios.patch(url, form, {
         headers: {
@@ -126,6 +126,7 @@ const UserInfoCard = ({ image }) => {
         position: "top",
       });
     }
+    setLoading(false);
   };
 
   return (
@@ -148,7 +149,6 @@ const UserInfoCard = ({ image }) => {
           marginBottom: "25px",
           fontWeight: "500",
           letterSpacing: "1px",
-
         }}
       >
         Your Info
@@ -167,10 +167,17 @@ const UserInfoCard = ({ image }) => {
       </Box>
       <button
         className="defaultBtn"
-        style={{ alignSelf: "center", marginTop: "20px" }}
+        style={{
+          alignSelf: "center",
+          marginTop: "20px",
+          cursor: loading && "not-allowed",
+          background: loading && "gray",
+          borderColor:loading && "gray"
+        }}
         onClick={handleChanges}
+        disabled={loading}
       >
-        Apply Changes
+        {!loading ? "Apply Changes" : "Updating..."}
       </button>
     </Box>
   );
