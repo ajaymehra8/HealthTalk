@@ -18,6 +18,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [loading,setLoading]=useState(false);
   const toast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +42,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const data = await login({ email, password });
 
       if (!data.success) {
@@ -74,6 +76,8 @@ const Login = () => {
         position: "top",
       });
     }
+    setLoading(false);
+
   };
   return (
     <Box
@@ -233,9 +237,13 @@ const Login = () => {
           style={{
             minWidth: "80px",
             marginTop: "30px",
+            background:loading&&"gray",
+            disabled:{loading},
+            cursor:loading&&"not-allowed",
+            borderColor:loading&&"gray"
           }}
         >
-          Log in
+         {!loading?"Log in":"Wait..."}
         </button>
       </Box>
       <Sidebar />

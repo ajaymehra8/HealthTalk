@@ -9,17 +9,32 @@ import Doctors from "./Doctors";
 import Testimonial from "./Testimonial";
 import Footer from "../components/Footer";
 import { Link } from "react-scroll";
+import Loading from "../components/Loading";
 
 const Home = () => {
-  const { user } = useAuthState();
-  const [doctors, setDoctors] = useState([]);
-  const fetchDoctors = async () => {
-    const { data } = await axios(`${process.env.REACT_APP_API_URL}/api/v1/user`);
-    setDoctors(data.doctors);
+const {mainLoading,setMainLoading}=useAuthState();
+  const [doctors, setDoctors] = useState(null);
+
+ const getDoctor = async () => {
+    try {
+      setMainLoading(true); // Set main loading to true
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user`
+      );
+      setDoctors(data.doctors);
+    } catch (error) {
+      console.error("Failed to fetch doctors:", error);
+    } finally {
+      setMainLoading(false); // Set main loading to false in the end
+    }
   };
+
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    getDoctor(); // Fetch data on component mount
+  }, []); // Dependency array ensures it runs only once
+if(mainLoading){
+  return <Loading/>;
+}
   return (
     <>
       <Navbar />
@@ -70,7 +85,7 @@ const Home = () => {
           </h1>
         </div>
       </Box>
-      <Doctors id="doctors" />
+      <Doctors id="doctors" doctors={doctors}/>
       <Testimonial />
       <Footer />
     </>

@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/react";
 
 const UserAppoinments = () => {
   const [appoinments, setAppoinments] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuthState();
   const token = user?.jwt;
 
@@ -16,11 +17,13 @@ const UserAppoinments = () => {
 
   const getAppoinments = useCallback(async () => {
     if (!token) return;
+    setLoading(true);
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/booking/get-user-appoinments`,
       { headers }
     );
     setAppoinments(data.bookings);
+    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -44,25 +47,29 @@ const UserAppoinments = () => {
       overflowY={"auto"}
       gap={"20px"}
       sx={{
-        "@media(max-width:500px)":{
-          maxHeight:"63vh",
-          minHeight:"63vh"
-        }
+        "@media(max-width:500px)": {
+          maxHeight: "63vh",
+          minHeight: "63vh",
+        },
       }}
     >
       {appoinments.length > 0 && (
         <h1 className="page-head">Your All Appoinments</h1>
       )}
-      {appoinments.length > 0 ? (
-        appoinments.map((appoinment) => (
-          <AppoinmentCard
-            appoinment={appoinment}
-            setAppoinments={setAppoinments}
-            appoinments={appoinments}
-          />
-        ))
+      {!loading ? (
+        appoinments.length > 0 ? (
+          appoinments.map((appoinment) => (
+            <AppoinmentCard
+              appoinment={appoinment}
+              setAppoinments={setAppoinments}
+              appoinments={appoinments}
+            />
+          ))
+        ) : (
+          <h1 className="no-item-text">No appoinments</h1>
+        )
       ) : (
-        <h1 className="no-item-text">No appoinments</h1>
+        <h1 className="no-item-text">Loading...</h1>
       )}
     </Box>
   );

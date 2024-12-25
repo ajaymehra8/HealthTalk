@@ -12,6 +12,8 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
   const createdAt = appoinmentf?.createdAt; // ISO string from DB
   const toast = useToast();
   const { user } = useAuthState();
+  const [acceptLoading, setAcceptLoading] = useState(false);
+  const [rejectLoading, setRejectLoading] = useState(false);
   const timeAgo = createdAt ? moment(createdAt).fromNow() : "Unknown";
 
   // Initialize `selectedDate` when the component mounts
@@ -30,7 +32,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
     const body = {
       appoinmentId: appoinment._id,
     };
-
+    setRejectLoading(true);
     try {
       const { data } = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/booking/cancel-appoinment`,
@@ -66,6 +68,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
         position: "top",
       });
     }
+    setRejectLoading(false);
   };
 
   const setAppoinmentByDoc = async () => {
@@ -79,7 +82,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
       });
       return;
     }
-
+    setAcceptLoading(true);
     try {
       const token = user?.jwt;
       if (!token) return;
@@ -88,8 +91,6 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
         appoinmentId: appoinment._id,
         time: selectedDate, // Send the selectedDate directly
       };
-
-      console.log("Request Body:", body);
 
       const { data } = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/booking/set-appoinment`,
@@ -133,6 +134,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
         position: "top",
       });
     }
+    setAcceptLoading(false);
   };
 
   return (
@@ -184,12 +186,16 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
             className="acceptBtn"
             onClick={!appoinmentf?.time ? setAppoinmentByDoc : undefined}
           >
-            {!appoinmentf?.time ? "Set" : "Scheduled"}
+            {!acceptLoading
+              ? !appoinmentf?.time
+                ? "Set"
+                : "Scheduled"
+              : "Wait..."}
           </button>
 
           {!appoinmentf?.time && (
             <button className="rejectBtn" onClick={cancelAppoinment}>
-              Cancel
+              {!rejectLoading ? "Cancel" : "Wait..."}
             </button>
           )}
         </div>

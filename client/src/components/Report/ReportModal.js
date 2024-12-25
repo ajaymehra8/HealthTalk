@@ -16,41 +16,42 @@ import axios from "axios";
 function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
   const { user } = useAuthState();
   const [report, setReport] = useState("");
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const handleReport = async () => {
-   
     const token = user?.jwt;
     if (!token) {
       return;
     }
-    try{
-    const headers = {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${token}`,
-    };
-    const body = {
-      report,
-      doctorId: doctorId,
-    };
-    console.log(body);
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/report`,
-      body,
-      { headers }
-    );
-    if (data.success) {
-      toast({
-        title: data.message,
-        status: "success",
-        isClosable: true,
-        duration: 5000,
-        position: "top",
-      });
-      setReport("");
-      onClose();
-    } else {
-      console.log(data);
-    }}catch(err){
+    setLoading(true);
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      };
+      const body = {
+        report,
+        doctorId: doctorId,
+      };
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/report`,
+        body,
+        { headers }
+      );
+      if (data.success) {
+        toast({
+          title: data.message,
+          status: "success",
+          isClosable: true,
+          duration: 5000,
+          position: "top",
+        });
+        setReport("");
+        onClose();
+      } else {
+        console.log(data);
+      }
+    } catch (err) {
       toast({
         title: err.response.data.message,
         status: "error",
@@ -59,6 +60,7 @@ function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
         position: "top",
       });
     }
+    setLoading(false);
   };
   return (
     <>
@@ -87,8 +89,14 @@ function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
             ></textarea>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleReport}>
-              Report
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleReport}
+              background={loading && "gray"}
+              disabled={loading}
+            >
+              {!loading ? "Report" : "Wait..."}
             </Button>
           </ModalFooter>
         </ModalContent>

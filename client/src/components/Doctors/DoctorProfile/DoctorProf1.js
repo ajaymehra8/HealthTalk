@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Avatar,
@@ -14,25 +14,27 @@ const DoctorProf1 = ({ doctor }) => {
   console.log(doctor?._id);
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const [loading, setLoading] = useState(false);
   const bookAppoinment = async () => {
-    if(!user){
+    if (!user) {
       return toast({
-        title:"You are not logged in",
+        title: "You are not logged in",
         status: "error",
         isClosable: true,
         duration: 5000,
         position: "top",
-      })
+      });
     }
     const body = {
       doctor,
     };
     const token = user?.jwt;
-
+    setLoading(true);
     const headers = {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     };
+
     const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/booking/create-booking`,
       body,
@@ -47,6 +49,7 @@ const DoctorProf1 = ({ doctor }) => {
         position: "top",
       });
     }
+    setLoading(false);
   };
   return (
     <Box
@@ -111,10 +114,10 @@ const DoctorProf1 = ({ doctor }) => {
         </div>
         <button
           className="homePageBtn"
-          style={{ marginTop: "0", borderRadius: "10px" }}
+          style={{ marginTop: "0", borderRadius: "10px",background:loading&&"gray",cursor:loading&&"not-allowed" }}
           onClick={bookAppoinment}
         >
-          Book Appointment
+          {!loading?"Book Appointment":"Wait..."}
         </button>
         <div
           style={{
@@ -129,12 +132,20 @@ const DoctorProf1 = ({ doctor }) => {
         >
           {user?.role === "user" && (
             <Tooltip label="Report" aria-label="A tooltip" placement="top">
-              <button onClick={onOpen} style={{fontSize:"clamp(16px,5vw,25px)"}}>
+              <button
+                onClick={onOpen}
+                style={{ fontSize: "clamp(16px,5vw,25px)" }}
+              >
                 <i class="bi bi-flag-fill"></i>
               </button>
             </Tooltip>
           )}
-          <ReportModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} doctorId={doctor?._id}/>
+          <ReportModal
+            isOpen={isOpen}
+            onClose={onClose}
+            onOpen={onOpen}
+            doctorId={doctor?._id}
+          />
         </div>
       </Box>
     </Box>

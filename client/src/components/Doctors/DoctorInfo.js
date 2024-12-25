@@ -12,6 +12,7 @@ const DoctorInfo = ({ image }) => {
   const [onlineFee, setonlineFee] = useState();
   const [education, seteducation] = useState();
   const [showBtn, setShowBtn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const setUserInLocalStorage = useCallback(async () => {
     const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -64,7 +65,14 @@ const DoctorInfo = ({ image }) => {
   ];
   const toast = useToast();
   const handleChanges = async () => {
-    if (!name && !clinicFee&& !education && !description && !onlineFee && !image) {
+    if (
+      !name &&
+      !clinicFee &&
+      !education &&
+      !description &&
+      !onlineFee &&
+      !image
+    ) {
       toast({
         title: "No field are change for update",
         status: "error",
@@ -87,7 +95,7 @@ const DoctorInfo = ({ image }) => {
       form.append("image", image); // Add the image to the form data
     }
 
-    
+    setLoading(true);
     const { data } = await axios.patch(url, form, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -107,20 +115,21 @@ const DoctorInfo = ({ image }) => {
       setUser(user);
       localStorage.setItem("userInfo", user);
     }
+    setLoading(false);
   };
   return (
     <Box
-    display={"flex"}
-    flexDir={"column"}
-    alignItems={"start"}
-    justifyContent={"start"}
-    w={"clamp(400px,80%,1000px)"}
-    minH={"20vh"}
-    p={"20px 20px"}
-    bg={"white"}
-    borderRadius={"10px"}
-    pb={"30px"}
-    boxShadow={"1px 1px 10px 4px #686d77"}
+      display={"flex"}
+      flexDir={"column"}
+      alignItems={"start"}
+      justifyContent={"start"}
+      w={"clamp(400px,80%,1000px)"}
+      minH={"20vh"}
+      p={"20px 20px"}
+      bg={"white"}
+      borderRadius={"10px"}
+      pb={"30px"}
+      boxShadow={"1px 1px 10px 4px #686d77"}
     >
       <h1
         style={{
@@ -146,10 +155,15 @@ const DoctorInfo = ({ image }) => {
       </Box>
       <button
         className="defaultBtn"
-        style={{ alignSelf: "center", marginTop: "20px" }}
+        style={{
+          alignSelf: "center",
+          marginTop: "20px",
+          background: loading && "gray",
+          borderColor: loading && "gray",
+        }}
         onClick={handleChanges}
       >
-        Apply Changes
+        {!loading ? "Apply Changes" : "Updating..."}
       </button>
     </Box>
   );

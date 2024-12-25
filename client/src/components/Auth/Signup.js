@@ -49,6 +49,8 @@ const emailPlaceholderText =
   const handleSubmit = async (e) => {
     // FOR GET OTP
     if (e.target.innerText === "Next") {
+      setLoading(true);
+
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/v1/user/otp-verification/?email=${email}`
@@ -82,9 +84,13 @@ const emailPlaceholderText =
           position: "top",
         });
       }
+      setLoading(false);
+
     }
     // TO VERIFY OTP
     if (e.target.innerText === "Verify OTP") {
+      setLoading(true);
+
       try {
         const { data } = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/v1/user/otp-verification`,
@@ -117,9 +123,13 @@ const emailPlaceholderText =
           position: "top",
         });
       }
+      setLoading(false);
+
     }
     // when user in at SIGN UP STEP
     if (e.target.innerText === "Sign up") {
+      setLoading(true);
+
       try {
         const data = await signup({ name, email, password });
         if (!data.success) {
@@ -130,7 +140,6 @@ const emailPlaceholderText =
             duration: 5000,
             position: "top",
           });
-          setEmail("");
         } else {
           const obj = { ...data.user, jwt: data.token };
           const user = JSON.stringify(obj);
@@ -153,8 +162,9 @@ const emailPlaceholderText =
           duration: 5000,
           position: "top",
         });
-        setEmail("");
       }
+      setLoading(false);
+
     }
   };
 
@@ -363,15 +373,20 @@ const emailPlaceholderText =
         <button
           className="authBtn"
           onClick={handleSubmit}
+          disabled={loading}
           style={{
             alignSelf: "flex-start",
             minWidth: "80px",
             marginTop: "30px",
+            background:loading&&"gray",
+            borderColor:loading&&"gray",
+            cursor:loading&&"not-allowed"
+
           }}
         >
-          {btnState === 1 && "Next"}
-          {btnState === 2 && "Verify OTP"}
-          {btnState === 3 && "Sign up"}
+          {btnState === 1 && (!loading?"Next":"Wait...")}
+          {btnState === 2 && (!loading?"Verify OTP":"Verifying...")}
+          {btnState === 3 && (!loading?"Sign up":"Signing...")}
         </button>
       </Box>
       <Sidebar />

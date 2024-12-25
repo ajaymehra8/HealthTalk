@@ -6,10 +6,12 @@ import DocReviewCard from "./DocReviewCard";
 const DoctorReviews = () => {
   const { user } = useAuthState();
   const [reviews, setReviews] = useState([]);
-  const fetchReviews =useCallback( async () => {
+  const [loading, setLoading] = useState(false);
+  const fetchReviews = useCallback(async () => {
     const token = user?.jwt;
     console.log(token);
-    if(!token) return;
+    if (!token) return;
+    setLoading(true);
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/review`,
       {
@@ -23,10 +25,11 @@ const DoctorReviews = () => {
       setReviews(data?.reviews);
       console.log(data.reviews);
     }
-  },[reviews]);
+    setLoading(false);
+  }, [reviews]);
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [fetchReviews]);
   return (
     <Box
       display={"flex"}
@@ -45,22 +48,26 @@ const DoctorReviews = () => {
       overflowY={"auto"}
       gap={"20px"}
       sx={{
-        "@media(max-width:500px)":{
-          maxHeight:"63vh",
-          minHeight:"63vh"
-        }
+        "@media(max-width:500px)": {
+          maxHeight: "63vh",
+          minHeight: "63vh",
+        },
       }}
     >
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <DocReviewCard
-            review={review}
-            setReviews={setReviews}
-            reviews={reviews}
-          />
-        ))
+      {!loading ? (
+        reviews.length > 0 ? (
+          reviews.map((review) => (
+            <DocReviewCard
+              review={review}
+              setReviews={setReviews}
+              reviews={reviews}
+            />
+          ))
+        ) : (
+          <h1 className="no-item-text">No reviews</h1>
+        )
       ) : (
-        <h1 className="no-item-text">No reviews</h1>
+        <h1 className="no-item-text">Loading...</h1>
       )}
     </Box>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Tooltip, Avatar, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -10,13 +10,14 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
   const toast = useToast();
   const createdAt = review?.createdAt;
   const timeAgo = createdAt ? moment(createdAt).fromNow() : "Unknown";
+  const [loading, setLoading] = useState(false);
 
-  
   const { user } = useAuthState();
-  console.log(review.doctor)
+  console.log(review.doctor);
   const handleDelete = async () => {
     const token = user?.jwt;
     if (!token) return;
+    setLoading(true);
     const { data } = await axios.delete(
       `${process.env.REACT_APP_API_URL}/api/v1/review/${review._id}`,
       {
@@ -38,6 +39,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
         position: "top",
       });
     }
+    setLoading(false);
   };
   return (
     <Box
@@ -64,7 +66,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
           Mr. {review?.doctor?.name || "Unknown User"}
         </h4>
       </Box>
-      <Box width={'70%'}>
+      <Box width={"70%"}>
         <h2 style={{ fontSize: "clamp(15px,4vw,20px)" }}>
           <b>Review:</b> {review?.text}
         </h2>
@@ -72,9 +74,18 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
           <b>Time:</b> {timeAgo ? timeAgo : "Unknown"}
         </h2>
 
-          <button className="rejectBtn rounded-btn" onClick={handleDelete} style={{marginTop:"40px"}}>
-            Delete
-          </button>
+        <button
+          className="rejectBtn rounded-btn"
+          onClick={handleDelete}
+          style={{
+            marginTop: "40px",
+            background: loading && "gray",
+            borderColor: loading && "gray",
+          }}
+          disabled={loading}
+        >
+          {!loading ? "Delete" : "Wait..."}
+        </button>
       </Box>
     </Box>
   );
