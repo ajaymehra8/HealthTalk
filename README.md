@@ -4,7 +4,7 @@
 This is the website which connect user and doctor , to provide facility to book your appoinment with doctor from your home with our website.
 
 
-## Image of Website
+## Home page of Website
 
 ![App Screenshot](https://github.com/ajaymehra8/HealthTalk/blob/main/thumbnail/home.jpg?text=App+Screenshot+Here)
 
