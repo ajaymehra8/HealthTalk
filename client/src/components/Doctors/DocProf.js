@@ -110,22 +110,16 @@ const DocProf = () => {
                     Speciality
                   </h1>
                   <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                    Gynaecologist
+                    {doctor?.specialization}
                   </li>
                 </ul>
                 <ul>
                   <h1 style={{ fontSize: "17px", fontWeight: "500" }}>
                     Other treatment areas
                   </h1>
-                  <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                    Gynaecologist
-                  </li>
-                  <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                    Infertility Specialist
-                  </li>
-                  <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                    General and Laparoscopic Surgeon
-                  </li>
+                  {doctor?.treatmentArea?.map(ta=>  <li style={{ fontSize: "12px", marginLeft: "25px" }}>
+                  {ta}
+                  </li>)}
                 </ul>
                 <ul>
                   <h1 style={{ fontSize: "17px", fontWeight: "500" }}>
@@ -158,7 +152,7 @@ const DocProf = () => {
                     Past Experience
                   </h1>
                   <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                    Owner at Khandeparkar Hospital
+                    {doctor?.pastExperience}
                   </li>
                 </ul>
               </Box>

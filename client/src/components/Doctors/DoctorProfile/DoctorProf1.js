@@ -83,7 +83,7 @@ const DoctorProf1 = ({ doctor }) => {
             doctor?.name.slice(1).toLowerCase()}
         </h1>
         <h3 style={{ color: "#78be20", fontWeight: "500" }}>
-          Gynaecologist . 46 Years Exp.
+          {doctor?.specialization} . {doctor?.experience} Years Exp.
         </h3>
         <h3
           style={{
