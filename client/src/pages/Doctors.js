@@ -1,12 +1,16 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DoctorCard from "../components/Doctors/DoctorCard";
-import { useAuthState } from "../context/AuthProvider";
 
 const Doctors = ({ id,doctors }) => {
 
- 
+  const getSingleDoctor = async (id) => {
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/v1/user/${id}`
+    );
+    return data.doctor;
+  };
 
   return (
     <Box
@@ -50,6 +54,8 @@ const Doctors = ({ id,doctors }) => {
               <DoctorCard
                 key={d._id}
                 doctor={d}
+                handleFunction={() => getSingleDoctor(d._id)}
+ 
               />
             ))}
           </SimpleGrid>

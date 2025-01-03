@@ -36,7 +36,13 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "doctor", "admin"],
     default: "user",
   },
-  specialization: [
+  specialization: {
+    type: String,
+    required: function () {
+      return this.role === "doctor"; // Specialization is required for doctors
+    },
+  },
+  treatmentArea: [
     {
       type: String,
       required: function () {
@@ -44,10 +50,10 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
-  degree: {
+  pastExperienc: {
     type: String,
     required: function () {
-      return this.role === "doctor"; // degree is required for doctors
+      return this.role === "doctor"; // Specialization is required for doctors
     },
   },
   clinicLocation: {
@@ -139,7 +145,7 @@ userSchema.post("findOne", async function (doc) {
     doc.avgRating =
       doc.reviews.reduce((acc, review) => acc + review.rating, 0) /
       doc.reviews.length;
-  } else if(doc) {
+  } else if (doc) {
     doc.nRating = 0;
     doc.avgRating = 0;
   }
@@ -153,7 +159,7 @@ userSchema.post("find", async function (docs) {
       doc.avgRating =
         doc.reviews.reduce((acc, review) => acc + review.rating, 0) /
         doc.reviews.length;
-    } else if(doc){
+    } else if (doc) {
       doc.nRating = 0;
       doc.avgRating = 0;
     }

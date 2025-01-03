@@ -6,10 +6,8 @@ import {
   Image,
   Stack,
   Heading,
-  Text,
   Button,
   Box,
-  ButtonGroup,
 } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
 
@@ -17,8 +15,11 @@ import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor, handleFunction }) => {
   const navigate = useNavigate();
+  const [loading,setLoading]=useState(false);
   const handleViewProfile = async () => {
+    setLoading(true);
     const doctorProf = await handleFunction(); // Assume this function fetches the doctor's profile data
+    setLoading(false);
     navigate("/doctor-profile", { state: { user: doctorProf } }); // Pass the profile data using `state`
   };
   return (
@@ -28,6 +29,9 @@ const DoctorCard = ({ doctor, handleFunction }) => {
           src={doctor?.image}
           alt="Green double couch with wooden legs"
           borderRadius="lg"
+          w={['100%', '100%', '100%']}
+          h={['250px', '250px', '200px']}
+
         />
         <Stack mt="3" spacing=".2">
           <Heading size="md">Dr. {doctor?.name}</Heading>
@@ -59,17 +63,19 @@ const DoctorCard = ({ doctor, handleFunction }) => {
         <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
           <Button
             variant="solid"
-            background={"#78be20"}
+            background={!loading?"#78be20":"gray"}
             color={"white"}
             w={"clamp(100px,20%,200px)"}
             onClick={handleViewProfile}
+            disabled={loading}
+            cursor={loading&&"not-allowed"}
             letterSpacing={"1px"}
             _hover={{
-              background: "green",
-              color: "white",
+              background: !loading&&"green",
+              color: !loading&&"white",
             }}
           >
-            View
+            {!loading?"View":"Wait..."}
           </Button>
           <HStack spacing={1}>
             {[1, 2, 3, 4, 5].map((index) => (
