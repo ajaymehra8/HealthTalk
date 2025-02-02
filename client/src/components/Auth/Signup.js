@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../Api/Auth";
 import axios from "axios";
+import { useAuthState } from "../../context/AuthProvider";
 import Sidebar from "./Sidebar";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -12,6 +14,7 @@ const Signup = () => {
   const [btnState, setBtnState] = useState(1);
   const [otp, setOtp] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { user, setUser } = useAuthState();
   const toast = useToast();
   const navigate = useNavigate();
   window.onpopstate = () => {
@@ -21,6 +24,38 @@ const Signup = () => {
       navigate("/");
     }
   };
+  
+  const responseGoogle = async (authResult) => {
+    try {
+      if (authResult?.code) {
+        const result = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/google-auth?code=${authResult?.code}`
+        );
+        if(result.data.success){
+          const obj = { ...result?.data?.user, jwt: result?.data?.token };
+          const user = JSON.stringify(obj);
+          localStorage.setItem("userInfo", user);
+          setUser(obj);
+          toast({
+            title: "Login successfully",
+            status: "success",
+            isClosable: true,
+            duration: 5000,
+            position: "top",
+          });
+          navigate("/");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
+  const googleLoginHandle = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: "auth-code",
+  });
 const emailPlaceholderText =
     useBreakpointValue({
       lg: "Enter your email",
@@ -142,6 +177,7 @@ const emailPlaceholderText =
           });
         } else {
           const obj = { ...data.user, jwt: data.token };
+          setUser(obj);
           const user = JSON.stringify(obj);
           localStorage.setItem("userInfo", user);
           toast({
@@ -232,7 +268,7 @@ const emailPlaceholderText =
                   borderRadius={"10px"}
                   border={"1px solid black"}
                   width={"clamp(150px,90%,1000px)"}
-                  onClick={() => console.log("clicked")}
+                  onClick={googleLoginHandle}
                   fontSize={"clamp(15px,3vw,20px)"}
                   bg={"white"}
                 >
@@ -244,21 +280,7 @@ const emailPlaceholderText =
                   />{" "}
                   Google
                 </Button>
-                <Button
-                  p={"10px"}
-                  borderRadius={"10px"}
-                  border={"1px solid black"}
-                  width={"clamp(150px,90%,1000px)"}
-                  onClick={() => console.log("clicked")}
-                  fontSize={"clamp(15px,3vw,20px)"}
-                  bg={"white"}
-                >
-                  <i
-                    className="bi bi-facebook"
-                    style={{ color: "#0c69ff", marginRight: "5px" }}
-                  ></i>{" "}
-                  Facebook
-                </Button>
+                
                 <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
         <Input
           type="email"

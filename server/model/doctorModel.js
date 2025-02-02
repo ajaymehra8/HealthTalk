@@ -1,44 +1,59 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  specialization: [
+  specialization: {
+    type: String,
+  },
+  treatmentArea: [
     {
       type: String,
-      required: true
+      required: function () {
+        return this.role === "doctor";
+      },
     },
   ],
   degree: {
     type: String,
-    required:true
+    required: true,
   },
   clinicLocation: {
     type: String,
-    required:true
+    required: true,
   },
   clinicFee: {
     type: Number,
-    required:true
+    required: true,
   },
   onlineFee: {
     type: Number,
-    required: true
+    required: true,
   },
- education: {
+  education: {
     type: String,
-    required:true
+    required: true,
   },
-  description:{
-    type:String,
-    required:true
+  description: {
+    type: String,
+    required: true,
   },
-  user:{
-    type:mongoose.Schema.ObjectId,
-    required:true,
-    unique:[true,"You can only apply once"],
-    ref:'User'
-  }
+  pastExperience: {
+    type: String,
+    required: function () {
+      return this.role === "doctor";
+    },
+  },
+  experience: {
+    type: String,
+    required: function () {
+      return this.role === "doctor";
+    },
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    unique: [true, "You can only apply once"],
+    ref: "User",
+  },
 });
-
-
 
 module.exports = mongoose.model("DoctorInfo", userSchema);

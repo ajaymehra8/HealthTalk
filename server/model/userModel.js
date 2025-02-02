@@ -28,50 +28,52 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     minLength: [6, "Password must have at least 6 characters"],
-    required: [true, "You need to create a password"],
     select: false,
+  },
+  specialization: {
+    type: [String],
   },
   role: {
     type: String,
     enum: ["user", "doctor", "admin"],
     default: "user",
   },
-  specialization: {
-    type: String,
-    required: function () {
-      return this.role === "doctor"; // Specialization is required for doctors
-    },
-  },
   treatmentArea: [
     {
       type: String,
       required: function () {
-        return this.role === "doctor"; // Specialization is required for doctors
+        return this.role === "doctor"; 
       },
     },
   ],
-  pastExperienc: {
+  pastExperience: {
     type: String,
     required: function () {
-      return this.role === "doctor"; // Specialization is required for doctors
-    },
+      return this.role === "doctor"; 
   },
+},
+experience:{
+  type: String,
+  required: function () {
+    return this.role === "doctor"; 
+},
+},
   clinicLocation: {
     type: String,
     required: function () {
-      return this.role === "doctor"; // Specialization is required for doctors
+      return this.role === "doctor"; 
     },
   },
   clinicFee: {
     type: Number,
     required: function () {
-      return this.role === "doctor"; // Specialization is required for doctors
+      return this.role === "doctor"; 
     },
   },
   onlineFee: {
     type: Number,
     required: function () {
-      return this.role === "doctor"; // Specialization is required for doctors
+      return this.role === "doctor"; 
     },
   },
   reqs: [{ type: mongoose.Schema.ObjectId, ref: "DoctorInfo" }],
@@ -110,7 +112,7 @@ const userSchema = new mongoose.Schema({
   avgRating: {
     type: Number,
     default: 0,
-  },
+  }
 });
 
 // Virtual field for reviews

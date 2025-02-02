@@ -6,6 +6,8 @@ const cors=require('cors');
 const errorMiddleware = require("./middlewares/error-middleware");
 const bookingRouter=require("./routes/bookingRoutes");
 const reportRouter=require("./routes/reportRoutes");
+const bookingController = require("./controller/bookingController");
+
 require("dotenv").config();
 
 const app=express();
@@ -16,6 +18,12 @@ app.use(cors({
 
 
 db();
+
+app.post(
+    "/api/v1/booking/webhook",
+    express.raw({ type: "application/json" }),
+    bookingController.webhook
+  );
 
 app.use(express.json());
 

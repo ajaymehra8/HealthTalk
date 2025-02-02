@@ -59,11 +59,17 @@ const DocProf = () => {
           w={"90%"}
           display={"flex"}
           justifyContent={"space-between"}
-          flexDirection={{base:"column",md:"column",lg:"row"}}
+          flexDirection={{ base: "column", md: "column", lg: "row" }}
           alignItems={"start"}
           padding={"10px 0"}
         >
-          <Box w={{lg:"40%",base:"clamp(300px,100%,2000px)",md:"clamp(410px,100%,2000px)"}}>
+          <Box
+            w={{
+              lg: "40%",
+              base: "clamp(300px,100%,2000px)",
+              md: "clamp(410px,100%,2000px)",
+            }}
+          >
             <Box>
               <h4 style={{ fontSize: "20px", fontWeight: "bold" }}>
                 Personal Statement
@@ -117,9 +123,11 @@ const DocProf = () => {
                   <h1 style={{ fontSize: "17px", fontWeight: "500" }}>
                     Other treatment areas
                   </h1>
-                  {doctor?.treatmentArea?.map(ta=>  <li style={{ fontSize: "12px", marginLeft: "25px" }}>
-                  {ta}
-                  </li>)}
+                  {doctor?.treatmentArea?.map((ta) => (
+                    <li style={{ fontSize: "12px", marginLeft: "25px" }}>
+                      {ta}
+                    </li>
+                  ))}
                 </ul>
                 <ul>
                   <h1 style={{ fontSize: "17px", fontWeight: "500" }}>
@@ -132,18 +140,7 @@ const DocProf = () => {
                       width: "80%",
                     }}
                   >
-                    MBBS , Topiwala National Medical College & BYL Nair
-                    Charitable Hospital , 1978
-                  </li>
-                  <li
-                    style={{
-                      fontSize: "12px",
-                      marginLeft: "25px",
-                      width: "80%",
-                    }}
-                  >
-                    MD - Obstetrics & Gynaecology , Topiwala National Medical
-                    College & BYL Nair Charitable Hospital , 1984{" "}
+                    {doctor?.education}
                   </li>
                 </ul>
 
@@ -169,8 +166,9 @@ const DocProf = () => {
                 mt={"10px"}
               >
                 <p>
-                  {doctor?.clinicLocation? doctor?.clinicLocation:
-                    "No-157, Bhagya Lakshmi, Sir Balchandra Road, Raja Shivaji Vidyalaya, Landmark : Near Podar College of Commerce."}
+                  {doctor?.clinicLocation
+                    ? doctor?.clinicLocation
+                    : "No-157, Bhagya Lakshmi, Sir Balchandra Road, Raja Shivaji Vidyalaya, Landmark : Near Podar College of Commerce."}
                 </p>
               </Box>
             </Box>
@@ -179,13 +177,17 @@ const DocProf = () => {
           {doctor?.role === "doctor" ? (
             <Box
               bg={"white"}
-              w={{sm:"clamp(360px,100%,2000px)",md:"clamp(360px,100%,2000px)",lg:"50%"}}
+              w={{
+                sm: "clamp(360px,100%,2000px)",
+                md: "clamp(360px,100%,2000px)",
+                lg: "50%",
+              }}
               p={4}
               borderRadius={"lg"}
               borderWidth={"1px"}
               color="black"
               border={"1px solid gray"}
-              mt={{base:"50px",md:"50px",lg:"0"}}
+              mt={{ base: "50px", md: "50px", lg: "0" }}
             >
               <Tabs variant={"line"}>
                 <TabList mb={"1em"}>
@@ -223,23 +225,27 @@ const DocProf = () => {
                 </TabPanels>
               </Tabs>
             </Box>
-          ):(
-            <Box
-            w="50%"
-            
-          >
-            <h1 style={{ fontSize: "20px", fontWeight: "bold",marginBottom:'10px' }}>User Degree</h1>
-          <iframe
-            src={doctor?.degree}
-            style={{
-              width: '100%',
-              height: '600px',
-
-            
-            }}
-            title="PDF Viewer"
-          />
-          </Box>)}
+          ) : (
+            <Box w="50%">
+              <h1
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  marginBottom: "10px",
+                }}
+              >
+                User Degree
+              </h1>
+              <iframe
+                src={doctor?.degree}
+                style={{
+                  width: "100%",
+                  height: "600px",
+                }}
+                title="PDF Viewer"
+              />
+            </Box>
+          )}
         </Box>
       </Box>
       <Footer />

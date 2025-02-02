@@ -1,6 +1,7 @@
 const User = require("../model/userModel");
 const storage = require("../config/firebase");
-
+const Reqs=require("../model/doctorModel");
+const Appoinment=require("../model/bookingModel");
 exports.getAllDoctors = async (req, res) => {
   const keyword = req.query.search
     ? { name: { $regex: req.query.search, $options: "i" } }
@@ -91,3 +92,48 @@ exports.updateUser = async (req, res) => {
     user: updatedUser,
   });
 };
+
+exports.getReqs = async (req, res) => {
+  try {
+    console.log("wrk");
+    const reqs=await Reqs.find({}).populate({
+      path:"user",
+      select:"-password -__v"
+    });
+    console.log(reqs);
+    res.status(200).json({
+      success:true,
+      message: "Request fetched successfully",
+      reqs,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Unknown problem occurs",
+    });
+  }
+};
+
+exports.getWebsiteDetails=async(req,res)=>{
+  console.log("calling")
+  try{
+    const doctors=await User.find({role:"doctor"});
+    const users=await User.find({role:"user"});
+    const totalUsers=await User.find();
+    const appoinments=await Appoinment.find();
+    res.status(200).json({
+      success:true,
+      doctors:doctors.length,
+      users:users.length,
+      totalUsers:totalUsers.length,
+      appoinments:appoinments.length
+    });
+  }catch(err){
+    console.log(err);
+    res.status(500).json({
+      success:false,
+      message:"Internal server error"
+    })
+  }
+}
