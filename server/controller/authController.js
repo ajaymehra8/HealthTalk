@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 const DoctorInfo = require("../model/doctorModel");
 const crypto = require("crypto");
 const Email = require("../utils/email");
-
+const {oauth2client}=require("../config/googleOauth")
+const axios=require('axios');
+require("dotenv").config();
 /* SOME HELPER FUNCTIONS USED IN CONTROLLER */
 const dns = require("dns");
 
@@ -83,7 +85,7 @@ exports.sendOtp = async (req, res, next) => {
     }
     const user = await User.findOne({ email });
     if (user) {
-     return res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "User with this email already exist",
       });
@@ -126,7 +128,9 @@ exports.verifyOtp = async (req, res, next) => {
         .json({ success: false, message: "OTP has expired" });
     }
     if (otp !== otpS) {
-      return res.status(400).json({ success: false, message: "Invalid OTP, Please try again" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid OTP, Please try again" });
     }
 
     return res
@@ -167,9 +171,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("login");
   let user = await User.findOne({ email }).select("-__v +password");
-  console.log(user);
   if (!user) {
     return res.status(400).json({
       success: false,
@@ -180,13 +182,9 @@ exports.login = async (req, res) => {
   try {
     if (await user.isCorrectPassword(password)) {
       if (user.role === "admin") {
-        user = await User.findById(user._id)
-          .select("-password ")
-          .populate({
-            path: "reqs",
-            populate: { path: "user" }, // This will populate the user inside each req
-          });
+        user = await User.findById(user._id).select("-password -reqs");
       } else if (user.role === "doctor") {
+        await User.findById(user._id).select("-password ");
       } else user = await User.findById(user._id).select("-password ");
       return res.status(200).json({
         success: true,
@@ -266,18 +264,19 @@ exports.isAdmin = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
+  } else if (req?.cookies?.jwt) {
+    token = req?.cookies?.jwt;
   }
-
+  console.log(token);
   if (!token) {
-    res.status(401).json({
+    return res.status(401).json({
       success: false,
       message: "You are not logged in , Please login!",
     });
   }
 
   // 2) Validate token / Verification of token
+
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
   // 3) Check if user still exist
@@ -307,26 +306,46 @@ exports.isAdmin = async (req, res, next) => {
 
 exports.sendReqToBecomeDoctor = async (req, res, next) => {
   try {
-    const user = req.user;
+    let user = req.user;
     const {
       education,
       experience,
+      pastExperience,
       description,
       clinicLocation,
       specialization,
+      treatmentArea,
       clinicFee,
       onlineFee,
     } = req.body;
+    let parsedTreatmentArea;
+    try {
+      parsedTreatmentArea = JSON.parse(treatmentArea);
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid treatment areas format. Expected an array.",
+      });
+    }
+    if (!Array.isArray(parsedTreatmentArea)) {
+      return res.status(400).json({
+        success: false,
+        message: "Treatment areas must be an array.",
+      });
+    }
     const fields = {
       education,
       experience,
       description,
       clinicLocation,
+      treatmentArea: parsedTreatmentArea,
       specialization,
       clinicFee,
       onlineFee,
+      pastExperience,
       user: user._id,
     };
+
     if (req.file) {
       fields.degree = req.file.fileName;
     }
@@ -350,6 +369,8 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
 
     // Push the user ID into the admin's reqs array
     admin.reqs.push(userDocs._id); // Assuming user is an object and _id is the user ID
+    user = await User.findById(user._id);
+
     user.status = "In process";
     await user.save();
     // Optionally, you can also save the admin's updated document
@@ -359,65 +380,109 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Your request send to admin successfully, wait for verification",
+      user,
     });
   } catch (error) {
     // Handle errors and send a response
+    console.log("here there");
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
 exports.updateStatusByAdmin = async (req, res, next) => {
-  const { userId, status, reqId } = req.body;
-  const admin = req.user;
-  if (status === "Rejected") {
-    await DoctorInfo.findByIdAndDelete(reqId);
-    await User.findByIdAndUpdate(userId, { status: null }, { new: true });
-    //SEND MESSAGE TO USER THAT HIS APPLICATION IS REJECTED
-    return res.status(200).json({
-      success: true,
-      message: "Application rejected successfully",
-    });
-  }
-  if (status == "Accepted") {
-    const extraInfos = await DoctorInfo.findById(reqId);
-    const {
-      specialization,
-      degree,
-      clinicFee,
-      clinicLocation,
-      education,
-      description,
-      onlineFee,
-    } = extraInfos;
-    await User.findByIdAndUpdate(
-      userId,
-      {
+  try {
+    const { userId, status, reqId } = req.body;
+    const admin = req.user;
+    console.log(status);
+    if (status === "Rejected") {
+      await User.findByIdAndUpdate(userId, { status: null }, { new: true });
+      await DoctorInfo.findByIdAndDelete(reqId);
+
+      //SEND MESSAGE TO USER THAT HIS APPLICATION IS REJECTED
+      return res.status(200).json({
+        success: true,
+        message: "Application rejected successfully",
+      });
+    }
+    if (status == "Accepted") {
+      const extraInfos = await DoctorInfo.findById(reqId);
+      const {
         specialization,
         degree,
         clinicFee,
         clinicLocation,
-        onlineFee,
         education,
         description,
-        role: "doctor",
-      },
-      { new: true }
-    );
-    // SEND MESSAGE TO USER THAT NOW HE IS DOCTOR
+        onlineFee,
+      } = extraInfos;
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          specialization,
+          degree,
+          clinicFee,
+          clinicLocation,
+          onlineFee,
+          education,
+          description,
+          role: "doctor",
+          status: null,
+        },
+        { new: true }
+      );
+      // SEND MESSAGE TO USER THAT NOW HE IS DOCTOR
 
-    //Here i want to update admin
-    // Remove the reqId from the admin's reqs array
-    await User.findByIdAndUpdate(
-      admin._id,
-      { $pull: { reqs: reqId } }, // This removes the reqId from the reqs array
-      { new: true }
+      //Here i want to update admin
+      // Remove the reqId from the admin's reqs array
+      await User.findByIdAndUpdate(
+        admin._id,
+        { $pull: { reqs: reqId } }, // This removes the reqId from the reqs array
+        { new: true }
+      );
+      await DoctorInfo.findByIdAndDelete(reqId);
+      //SEND MESSAGE TO USER THAT NOW HE IS A DOCTOR
+      return res.status(200).json({
+        success: true,
+        message: "Application accepted and user updated to doctor",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+// GOOGLE AUTHENTICATION
+exports.googleLogin = async (req, res) => {
+  try {
+    const { code } = req.query;
+    const googleRes = await oauth2client.getToken(code);
+    oauth2client.setCredentials(googleRes.tokens);
+
+    const userRes = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
     );
-    await DoctorInfo.findByIdAndDelete(reqId);
-    //SEND MESSAGE TO USER THAT NOW HE IS A DOCTOR
-    return res.status(200).json({
-      success: true,
-      message: "Application accepted and user updated to doctor",
+    const {email,name,picture}=userRes.data;
+    let user=await User.findOne({email});
+    if(!user){
+      user=await User.create({email,name,image:picture});
+    }
+    const token=await createToken(user._id);
+    res.status(201).json({
+      success:true,
+      user,
+      jwt,
+      message:'Login successfully'
+    }
+    )
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
     });
   }
 };

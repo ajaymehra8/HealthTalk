@@ -12,13 +12,15 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { login } from "../../Api/Auth";
 import { useAuthState } from "../../context/AuthProvider";
 import Sidebar from "./Sidebar";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const { user, setUser } = useAuthState();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +28,37 @@ const Login = () => {
   window.onpopstate = () => {
     navigate("/");
   };
-
+  const responseGoogle = async (authResult) => {
+    try {
+      if (authResult?.code) {
+        const result = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/google-auth?code=${authResult?.code}`
+        );
+        if(result.data.success){
+          const obj = { ...result?.data?.user, jwt: result?.data?.token };
+          const user = JSON.stringify(obj);
+          localStorage.setItem("userInfo", user);
+          setUser(obj);
+          toast({
+            title: "Login successfully",
+            status: "success",
+            isClosable: true,
+            duration: 5000,
+            position: "top",
+          });
+          navigate("/");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
+  const googleLoginHandle = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: "auth-code",
+  });
   const emailPlaceholderText =
     useBreakpointValue({
       lg: "Enter your email",
@@ -77,13 +109,12 @@ const Login = () => {
       });
     }
     setLoading(false);
-
   };
   return (
     <Box
-    height={"100vh"}
-    className="loginBox"
-    w={"100vw"}
+      height={"100vh"}
+      className="loginBox"
+      w={"100vw"}
       background={"#fff"}
       display={"flex"}
       alignItems={"center"}
@@ -143,7 +174,7 @@ const Login = () => {
           borderRadius={"10px"}
           border={"1px solid black"}
           width={"clamp(150px,90%,1000px)"}
-          onClick={() => console.log("clicked")}
+          onClick={googleLoginHandle}
           fontSize={"clamp(15px,3vw,20px)"}
           bg={"white"}
         >
@@ -155,21 +186,7 @@ const Login = () => {
           />{" "}
           Google
         </Button>
-        <Button
-          p={"10px"}
-          borderRadius={"10px"}
-          border={"1px solid black"}
-          width={"clamp(150px,90%,1000px)"}
-          onClick={() => console.log("clicked")}
-          fontSize={"clamp(15px,3vw,20px)"}
-          bg={"white"}
-        >
-          <i
-            className="bi bi-facebook"
-            style={{ color: "#0c69ff", marginRight: "5px" }}
-          ></i>{" "}
-          Facebook
-        </Button>
+        
         <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
         <Input
           type="email"
@@ -193,6 +210,8 @@ const Login = () => {
             setEmail(e.target.value);
           }}
           bg={"white"}
+          autoComplete="email"
+          name="email"
         />
         <InputGroup width={"clamp(150px,90%,1000px)"}>
           <Input
@@ -233,17 +252,17 @@ const Login = () => {
 
         <button
           className="authBtn"
-          onClick={handleSubmit}
+          onClick={!loading ? handleSubmit : undefined}
           style={{
             minWidth: "80px",
             marginTop: "30px",
-            background:loading&&"gray",
-            disabled:{loading},
-            cursor:loading&&"not-allowed",
-            borderColor:loading&&"gray"
+            background: loading && "gray",
+            disabled: { loading },
+            cursor: loading && "not-allowed",
+            borderColor: loading && "gray",
           }}
         >
-         {!loading?"Log in":"Wait..."}
+          {!loading ? "Log in" : "Wait..."}
         </button>
       </Box>
       <Sidebar />

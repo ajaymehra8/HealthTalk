@@ -1,6 +1,7 @@
 const authController = require("../controller/authController");
 const userController = require("../controller/userController");
 const User = require("../model/userModel");
+const passport = require("passport");
 const express = require("express");
 const {
   uploadUserPhoto,
@@ -11,11 +12,24 @@ const {
 } = require("../middlewares/file");
 const router = express.Router();
 
-router.route("/otp-verification").get(authController.sendOtp).post(authController.verifyOtp);
+//  GOOGLE AUTH
+router.get("/google-auth", authController.googleLogin);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/login",
+    successRedirect: "http://localhost:3000",
+  }),
+ 
+);
+
+router
+  .route("/otp-verification")
+  .get(authController.sendOtp)
+  .post(authController.verifyOtp);
 router.route("/signup").post(authController.signup);
 router.route("/login").post(authController.login);
-
-router.route("/:userId").get(userController.getSingleDoctor);
 
 router
   .route("/")
@@ -50,9 +64,17 @@ router.post(
   authController.isAdmin,
   authController.updateStatusByAdmin
 );
+router.get(
+  "/get-website-details",
+  authController.isAdmin,
+  userController.getWebsiteDetails
+);
+router.get("/request", authController.isAdmin, userController.getReqs);
+
+router.route("/:userId").get(userController.getSingleDoctor);
 
 router.delete("/delete-all", async (req, res) => {
-  await user.deleteMany({});
+  await User.deleteMany({});
   res.send("deleted");
 });
 module.exports = router;

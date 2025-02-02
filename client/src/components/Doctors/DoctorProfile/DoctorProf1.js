@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Avatar,
-  Tooltip,
-  useToast,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Tooltip, useToast, useDisclosure } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 import axios from "axios";
 import ReportModal from "../../Report/ReportModal";
@@ -114,10 +108,15 @@ const DoctorProf1 = ({ doctor }) => {
         </div>
         <button
           className="homePageBtn"
-          style={{ marginTop: "0", borderRadius: "10px",background:loading&&"gray",cursor:loading&&"not-allowed" }}
+          style={{
+            marginTop: "0",
+            borderRadius: "10px",
+            background: loading && "gray",
+            cursor: loading && "not-allowed",
+          }}
           onClick={bookAppoinment}
         >
-          {!loading?"Book Appointment":"Wait..."}
+          {!loading ? "Book Appointment" : "Wait..."}
         </button>
         <div
           style={{

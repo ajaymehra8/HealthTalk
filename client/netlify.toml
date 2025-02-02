@@ -1,0 +1,9 @@
+[build]
+  base = "client"        # Specifies the subdirectory containing frontend
+  command = "npm run build"  # Command to build React app
+  publish = "client/build"   # Folder to deploy
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

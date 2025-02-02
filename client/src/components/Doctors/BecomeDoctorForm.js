@@ -1,25 +1,52 @@
-import { Box, Input, Button, Text,useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Input, Button, Text, useToast } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useAuthState } from "../../context/AuthProvider";
 
 const BecomeDoctorForm = () => {
+  const { user,setUser } = useAuthState();
+
   // State for input values
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
   const [education, setEducation] = useState("");
-  const [experience, setExperience] = useState("");
+  const [pastExperience, setPastExperience] = useState("");
   const [description, setDescription] = useState("");
   const [clinicLocation, setClinicLocation] = useState("");
-  const [speciality, setSpeciality] = useState("");
+  const [treatmentArea, settreatmentArea] = useState([]);
+  const [currentArea, setCurrentArea] = useState("");
   const [clinicFee, setClinicFee] = useState("");
+  const [specialization,setSpecialization] = useState("");
+  const [experienceYear,setExperienceYear]=useState(0);
+
   const [onlineFee, setOnlineFee] = useState("");
   const [pdfFile, setPdfFile] = useState(null); // For the PDF file
   const [fileName, setFileName] = useState("No file chosen");
-  const { user } = useAuthState();
-  const toast=useToast();
+const navigate=useNavigate();
+  useEffect(()=>{
+setName(user?.name);
+setEmail(user?.email);
+  },[user]);
+  const toast = useToast();
+  const handleKeydown = (event) => {
+    if (event.key === "Enter" && currentArea.trim() !== "") {
+      if (treatmentArea.length > 5) {
+        toast({
+          title: "You can add only 5 treatment area",
+          status: "warning",
+          position: "top",
+          duration: 5000,
+        });
+        return;
+      }
+      settreatmentArea((prevtreatmentArea) => [...prevtreatmentArea, currentArea]);
+      console.log(treatmentArea);
+      setCurrentArea("");
+    }
+  };
   const handleChange = (event) => {
     const newValue = event.target.value;
     if (newValue === "" || /^[0-9]+$/.test(newValue)) {
@@ -54,51 +81,59 @@ const BecomeDoctorForm = () => {
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     // You can send the form data, including the PDF file, to the backend here
     const formData = new FormData();
+    console.log(treatmentArea);
     formData.append("name", name);
     formData.append("email", email);
     formData.append("education", education);
-    formData.append("experience", experience);
+    formData.append("experience", experienceYear);
+    formData.append("pastExperience", pastExperience);
+
     formData.append("description", description);
     formData.append("clinicLocation", clinicLocation);
-    formData.append("speciality", speciality);
+    formData.append("specialization", specialization);
+
+    formData.append("treatmentArea", JSON.stringify(treatmentArea));
     formData.append("clinicFee", clinicFee);
     formData.append("onlineFee", onlineFee);
     formData.append("degree", pdfFile); // Attach the PDF file
-    try{
-    const token = user?.jwt;
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/user/requestToBecomeDoctor`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "authorization": `Bearer ${token}`,
-        },
+    try {
+      const token = user?.jwt;
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/requestToBecomeDoctor`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (data.success) {
+        toast({
+          title: data.message,
+          status: "success",
+          isClosable: true,
+          duration: 5000,
+          position: "top",
+        });
+        const updatedUser = { ...data.user, jwt: token };
+        setUser(updatedUser); // Update state
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser)); // Sync local storage
+        navigate("/my-profile/my-info");
+      } else {
+        toast({
+          title: data.message,
+          description: data.subMessage || "Please try again later.",
+          status: "warning",
+          isClosable: true,
+          duration: 5000,
+          position: "top",
+        });
       }
-    );
-if(data.success){
-  toast({
-    title: data.message,
-    status: "success",
-    isClosable: true,
-    duration: 5000,
-    position: "top",
-  });
-}else{
-  toast({
-    title: data.message,
-    description: data.subMessage||"Please try again later.",
-    status: "warning",
-    isClosable: true,
-    duration: 5000,
-    position: "top",
-  });
-}
-  }
-    catch(err){
+    } catch (err) {
       toast({
         title: err.response.data.message,
         description: "Please try again later.",
@@ -188,8 +223,17 @@ if(data.success){
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
-            value={experience}
-            onChange={(e) => setExperience(e.target.value)}
+            value={pastExperience}
+            onChange={(e) => setPastExperience(e.target.value)}
+          />
+           <Input
+            type="text"
+            placeholder="Enter your specialization"
+            bg={"white"}
+            p={"5px"}
+            fontSize={"18px"}
+            value={specialization}
+            onChange={(e) => setSpecialization(e.target.value)}
           />
           <Input
             type="text"
@@ -209,15 +253,42 @@ if(data.success){
             value={clinicLocation}
             onChange={(e) => setClinicLocation(e.target.value)}
           />
-          <Input
-            type="text"
-            placeholder="Enter your speciality"
-            bg={"white"}
-            p={"5px"}
-            fontSize={"18px"}
-            value={speciality}
-            onChange={(e) => setSpeciality(e.target.value)}
-          />
+          <Box width={"100%"}>
+            <Input
+              type="text"
+              placeholder="Enter your other treatment areas"
+              bg={"white"}
+              p={"5px"}
+              fontSize={"18px"}
+              value={currentArea}
+              onChange={(e) => setCurrentArea(e.target.value)}
+              onKeyDown={handleKeydown}
+              width={"100%"}
+            />
+            <Box
+              display={"flex"}
+              gap={"10px"}
+              width={"100%"}
+              flexWrap={"wrap"}
+              marginTop={"10px"}
+            >
+              {treatmentArea?.length > 0 &&
+                treatmentArea?.map((s) => {
+                  return (
+                    <Box
+                      padding={"5px"}
+                      bg={"#79bc43"}
+                      borderRadius={"5px"}
+                      color={"white"}
+                      cursor={'pointer'}
+                    >
+                      {s}
+                    </Box>
+                  );
+                })}
+            </Box>
+          </Box>
+
           <Input
             type="text"
             value={clinicFee}
@@ -236,6 +307,28 @@ if(data.success){
             p={"5px"}
             fontSize={"18px"}
           />
+            <Input
+  type="number"
+  value={experienceYear}
+  onChange={(e) => {
+    let value = parseInt(e.target.value, 10);
+    // Ensure the value stays within the range
+    if (value < 2) {
+      value = 2;
+    } else if (value > 25) {
+      value = 25;
+    }
+    setExperienceYear(value);
+  }}
+  placeholder="Enter years of your experience (2-25)"
+  bg={"white"}
+  p={"5px"}
+  fontSize={"18px"}
+  min={2}
+  max={25}
+/>
+
+        
           <Box display={"flex"} gap={"20px"} alignItems={"center"} w={"100%"}>
             <Button
               as="label"

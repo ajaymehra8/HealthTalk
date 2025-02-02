@@ -12,13 +12,14 @@ import Appoinments from "../Doctors/Appoinments/Appoinments";
 import Reviews from "./Reviews/Reviews";
 import DoctorReviews from "../Doctors/Reviews/DoctorReviews";
 import Earning from "../Doctors/Earning/Earning";
+import WebInfo from "../Admin/adminPageComponent/WebInfo";
 
 const UserInfo = () => {
   const { user } = useAuthState();
 
   const [imageSrc, setImageSrc] = useState(user?.image);
   const [imageFile, setImageFile] = useState(null);
-console.log(user?.role)
+  console.log("working");
   return (
     <>
       <Navbar />
@@ -29,8 +30,7 @@ console.log(user?.role)
         justifyContent={"center"}
         w={"100%"}
         height={{ base: "auto", md: "80vh" }}
-        mt={{lg:"87px",base:"0"}}
-        
+        mt={{ lg: "87px", base: "0" }}
       >
         <ProfSideBar
           imageSrc={imageSrc}
@@ -41,33 +41,40 @@ console.log(user?.role)
         <Box
           w={"80%"}
           background={"linear-gradient(to right,#6b707a, #393f4d)"}
-          height={{md:"92.8vh",base:"93.5vh"}}
+          height={{ md: "92.8vh", base: "93.5vh" }}
           display={"flex"}
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
           sx={{
-            '@media (max-width: 950px)': {
-              width: "100%"
-    
+            "@media (max-width: 950px)": {
+              width: "100%",
             },
-          }}        >
+          }}
+        >
           <Routes>
             <Route
               path="my-info"
               element={
                 user?.role === "doctor" ? (
                   <DoctorInfo image={imageFile} />
-                ) : (
+                ) : user?.role === "user" ? (
                   <UserInfoCard image={imageFile} />
+                ) : (
+                  <WebInfo />
                 )
               }
             />
             <Route path="approvals" element={<Approvals />} />
             <Route path="your-appoinment" element={<UserAppoinments />} />
             <Route path="appoinments" element={<Appoinments />} />
-            <Route path="your-reviews" element={!(user?.role==="doctor")?<Reviews/>:<DoctorReviews/>}/>
-<Route path="earning" element={<Earning/>}/>
+            <Route
+              path="your-reviews"
+              element={
+                !(user?.role === "doctor") ? <Reviews /> : <DoctorReviews />
+              }
+            />
+            <Route path="earning" element={<Earning />} />
             <Route path="/" element={<Navigate to="my-info" replace />} />{" "}
             {/* Default option */}
           </Routes>

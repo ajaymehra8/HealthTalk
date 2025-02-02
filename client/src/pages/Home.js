@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback } from "react";
 import { Box } from "@chakra-ui/react";
 import { useAuthState } from "../context/AuthProvider";
 import Signup from "../components/Auth/Signup";
@@ -12,29 +12,23 @@ import { Link } from "react-scroll";
 import Loading from "../components/Loading";
 
 const Home = () => {
-const {mainLoading,setMainLoading}=useAuthState();
   const [doctors, setDoctors] = useState(null);
 
- const getDoctor = async () => {
+  const getDoctor = useCallback(async () => {
     try {
-      setMainLoading(true); // Set main loading to true
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/v1/user`
       );
       setDoctors(data.doctors);
     } catch (error) {
       console.error("Failed to fetch doctors:", error);
-    } finally {
-      setMainLoading(false); // Set main loading to false in the end
     }
-  };
+  }, []);
 
   useEffect(() => {
     getDoctor(); // Fetch data on component mount
   }, []); // Dependency array ensures it runs only once
-if(mainLoading){
-  return <Loading/>;
-}
+
   return (
     <>
       <Navbar />
@@ -62,16 +56,16 @@ if(mainLoading){
             Guiding you to a<span style={{ color: "#78be20" }}> stronger</span>{" "}
             organization with better patient outcomes
           </h1>
-          <Box marginTop={'30px'}>
-          <Link
-            className="homePageBtn"
-            to="doctors"
-            smooth={true}
-            duration={500}
-          >
-            Explore Now
-          </Link>
-        </Box>
+          <Box marginTop={"30px"}>
+            <Link
+              className="homePageBtn"
+              to="doctors"
+              smooth={true}
+              duration={500}
+            >
+              Explore Now
+            </Link>
+          </Box>
         </Box>
         <img
           src="../images/doctorHomeImg.png"
@@ -85,7 +79,7 @@ if(mainLoading){
           </h1>
         </div>
       </Box>
-      <Doctors id="doctors" doctors={doctors}/>
+      <Doctors id="doctors" doctors={doctors} />
       <Testimonial />
       <Footer />
     </>
