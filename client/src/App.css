@@ -274,7 +274,6 @@ body{
   .homePageMain {
     justify-content: start !important;
     gap: 30px;
-    height: 110vh !important;
     flex-direction: column-reverse;
   }
   .homeTextBox {
@@ -322,8 +321,6 @@ body{
     gap:15px
   }
   .homePageMain {
-    height: 85vh !important;
-    padding-bottom: 0 !important;
     gap: 45px;
   }
 

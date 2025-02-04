@@ -46,7 +46,7 @@ const Doctors = ({ id,doctors }) => {
             With Popular Doctors
           </h5>
           <SimpleGrid
-            columns={{ sm: 2, md: 3, lg: 4 }}
+            columns={{ base: 1, md: 3, lg: 4 }}
             spacing="40px"
             p={"20px 0"}
           >

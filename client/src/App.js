@@ -38,9 +38,9 @@ const GoogleAuthWrapperForSignUp=()=>{
       <Route path="/login" element={<GoogleAuthWrapper />} />
       <Route path="/signup" element={<GoogleAuthWrapperForSignUp/>} />
       <Route path="/my-profile/*" element={<UserInfo />} />
-      <Route path="/doctor-profile" element={<DocProf />} />
+      <Route path="/doctor-profile" element={(user?.role==="user" || user?.role==="admin")&&<DocProf />} />
       <Route path="/doctor/review" element={<Review />} />
-      <Route path="/doctor/form" element={<BecomeDoctorForm />} />
+      <Route path="/doctor/form" element={user?.role==="user"&&<BecomeDoctorForm />} />
     </Routes>
   );
 }

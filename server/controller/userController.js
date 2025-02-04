@@ -122,12 +122,14 @@ exports.getWebsiteDetails=async(req,res)=>{
     const users=await User.find({role:"user"});
     const totalUsers=await User.find();
     const appoinments=await Appoinment.find();
+    const doneAppoinments=await Appoinment.find({payment:true});
     res.status(200).json({
       success:true,
       doctors:doctors.length,
       users:users.length,
       totalUsers:totalUsers.length,
-      appoinments:appoinments.length
+      appoinments:appoinments.length,
+      payment:doneAppoinments?.length
     });
   }catch(err){
     console.log(err);
