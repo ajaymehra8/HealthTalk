@@ -26,7 +26,7 @@ const DoctorReviews = () => {
       console.log(data.reviews);
     }
     setLoading(false);
-  }, [reviews]);
+  }, [user]);
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);

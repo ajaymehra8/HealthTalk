@@ -92,7 +92,6 @@ const BecomeDoctorForm = () => {
       !description ||
       !clinicLocation ||
       !treatmentArea.length ||
-      !currentArea ||
       !clinicFee ||
       !specialization ||
       !experienceYear ||

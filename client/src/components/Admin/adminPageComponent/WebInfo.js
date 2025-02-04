@@ -8,6 +8,8 @@ const WebInfo = () => {
   const [doctorCount,setDoctorCount]=useState(0);
   const [appoinmentsCount,setAppoinmentsCount]=useState(0);
   const [userCount,setUserCount]=useState(0);
+  const [payment,setPayment]=useState(0);
+
   const {user}=useAuthState();
 
   const fetchDetails=useCallback(async()=>{
@@ -21,7 +23,10 @@ const {data}=await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user/get-w
 if(data.success){
   setAppoinmentsCount(data?.appoinments);
   setDoctorCount(data?.doctors);
+  console.log(data?.users);
   setUserCount(data?.users);
+  setPayment(data?.payment);
+
 }
     }catch(err){
       console.log(err);
@@ -45,10 +50,10 @@ if(data.success){
     >
       {/* Card Boxes */}
       {[ 
-        { title: "Total Doctors", count: doctorCount, graph: <LineGraph /> },
-        { title: "Total Users", count: userCount, graph: <BarGraph /> },
-        { title: "Appointments", count: appoinmentsCount, graph: <BarGraph /> },
-        { title: "Total Payment", count: appoinmentsCount, graph: <BarGraph /> },
+        { tag:<i class="bi bi-people-fill"></i>,title: "Total Doctors", count: doctorCount, graph: <LineGraph /> },
+        { tag:<i class="bi bi-people-fill"></i>,title: "Total Users", count: userCount, graph: <BarGraph /> },
+        { tag:<i class="bi bi-bookmark-plus-fill"></i>,title: "Appointments", count: appoinmentsCount, graph: <BarGraph /> },
+        { tag:<i class="bi bi-currency-rupee"></i>,title: "Total Payment", count: payment, graph: <BarGraph /> },
        
 
 
@@ -63,8 +68,8 @@ if(data.success){
           p="20px 10px"
           
         >
-          <Text fontSize="clamp(20px,5vw,30px)" fontWeight={400}>
-            {item.title} : <span style={{ fontWeight: 500 }}>{item.count}</span>
+          <Text fontSize="clamp(20px,5vw,25px)" fontWeight={400}>
+       {item.tag}     {item.title} : <span style={{ fontWeight: 500 }}>{item.count}</span>
           </Text>
           {item.graph}
         </Box>
