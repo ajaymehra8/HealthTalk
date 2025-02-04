@@ -394,7 +394,7 @@ const emailPlaceholderText =
 
         <button
           className="authBtn"
-          onClick={handleSubmit}
+          onClick={!loading?handleSubmit:undefined}
           disabled={loading}
           style={{
             alignSelf: "flex-start",

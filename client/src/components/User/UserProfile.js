@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, position } from "@chakra-ui/react";
 import { useAuthState } from "../../context/AuthProvider";
 import Navbar from "../Navbar";
 import UserInfoCard from "./UserInfoCard";
@@ -28,9 +28,7 @@ const UserInfo = () => {
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
-        w={"100%"}
-        height={{ base: "auto", md: "80vh" }}
-        mt={{ lg: "87px", base: "0" }}
+        w={"100vw"}
       >
         <ProfSideBar
           imageSrc={imageSrc}
@@ -39,16 +37,23 @@ const UserInfo = () => {
           setImageFile={setImageFile}
         />
         <Box
-          w={"80%"}
+          w={{lg:"80%",sm:"100%"}}
+          ml={{lg:'250px'}}
           background={"linear-gradient(to right,#6b707a, #393f4d)"}
-          height={{ md: "92.8vh", base: "93.5vh" }}
+          boxSizing={"border-box"}
+          minH={'100vh'}
+          height={"auto"}
           display={"flex"}
+          pt={'70px'}
+          pb={'17px'}
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
+          overflow={"hidden"}
           sx={{
             "@media (max-width: 950px)": {
               width: "100%",
+              marginLeft:0,
             },
           }}
         >

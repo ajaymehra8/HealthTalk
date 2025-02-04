@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { NavLink, Link } from "react-router-dom";
 
 const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
-  const { user,show,setShow } = useAuthState();
+  const { user, show, setShow } = useAuthState();
   const navigate = useNavigate();
-  
+
   const fileInputRef = useRef(null); // Create a reference for the input
 
   // Handle file input change
@@ -32,46 +32,53 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
   const handleApplication = async () => {
     navigate("/doctor/form");
   };
-  const changeShow=()=>{
+  const changeShow = () => {
     setShow(false);
-  }
+  };
   return (
     <>
       <div
         className="usResBtn"
-        style={{ position: "absolute", left: !show ? "-40px" : "clamp(100px, 50%, 260px)" }}
+        style={{
+          position: "absolute",
+          left: !show ? "-40px" : "clamp(100px, 50%, 260px)",
+        }}
         onClick={() => {
           setShow(!show);
         }}
       ></div>
       <Box
         className="userCard"
-        w={"20%"}
+        w={"250px"}
         flexDir={"column"}
-        minH={"92.8vh"}
+        minH={"100vh"}
         borderRight={"2px solid white"}
         boxShadow="5px 0 25px -10px rgba(0, 0, 0, 0.5)" // Shadow on the right side
-        position={{ sm: "absolute", md: "inherit" }}
-        left={!show ? "-60%" : "0"}
+        position={{ base: "absolute", md: "fixed" }}
+        left={{base:!show ? "-80%" : "0",lg:0}}
+        
+        top={{md:'0'}}
+        pt={"70px"}
+        z-index={1000}
         sx={{
           "@media(max-width:950px)": {
             width: "clamp(200px,60%,300px)",
             position: "absolute",
-            top: "5%",
-            minH: "60vh",
-            height: "75vh",
+            maxHeight:"1000px",
+minHeight:"40px",
+            height: "90vh",
             border: "none",
-            borderRadius:"0 0 30px"
+            borderRadius: "0 0 30px",
           },
           "@media(max-width:500px)": {
-            
-            minH: "60vh",
-            height: "60vh",
-            
+            top:0,
+            maxHeight:"800px",
+            minHeight:"300px",
+            height: "85vh",
           },
         }}
       >
-        <Box className="flexBox" flexDir={"column"} gap={"10px"}>
+        <Box className="flexBox" flexDir={"column"} gap={"10px"} right={0}>
           <div
             style={{
               position: "relative",
@@ -163,7 +170,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="bi bi-star-fill profIcon"></i> Reviews
                     </NavLink>
@@ -175,7 +181,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="fas fa-user-md profIcon"></i> Appointed
                       Doctors
@@ -216,7 +221,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="bi bi-info-circle-fill profIcon"></i> Your
                       Info
@@ -230,7 +234,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="bi bi-person-plus-fill profIcon"></i>{" "}
                       Pending Approvals
@@ -259,7 +262,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="bi bi-info-circle-fill profIcon"></i> Your
                       Info
@@ -273,7 +275,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="bi bi-person-plus-fill profIcon"></i>{" "}
                       Pending Appoinments
@@ -287,7 +288,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i class="bi bi-star-fill"></i> My Reviews
                     </NavLink>
@@ -300,7 +300,6 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
                         isActive ? "active-link profLi" : "profLi"
                       }
                       onClick={changeShow}
-
                     >
                       <i className="fas fa-user-md profIcon"></i> Earning
                     </NavLink>

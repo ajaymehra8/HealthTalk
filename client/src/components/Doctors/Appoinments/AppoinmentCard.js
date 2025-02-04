@@ -194,7 +194,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
           </button>
 
           {!appoinmentf?.time && (
-            <button className="rejectBtn" onClick={cancelAppoinment}>
+            <button className="rejectBtn" onClick={!rejectLoading?cancelAppoinment:undefined}>
               {!rejectLoading ? "Cancel" : "Wait..."}
             </button>
           )}

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Box, Tooltip, Avatar, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -8,7 +8,7 @@ import { useAuthState } from "../../../context/AuthProvider";
 const DocReviewCard = ({ review, setReviews, reviews }) => {
   const navigate = useNavigate();
   const toast = useToast();
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const createdAt = review?.createdAt;
   const timeAgo = createdAt ? moment(createdAt).fromNow() : "Unknown";
   const { user } = useAuthState();
@@ -72,9 +72,13 @@ const DocReviewCard = ({ review, setReviews, reviews }) => {
           <b>Time:</b> {timeAgo ? timeAgo : "Unknown"}
         </h2>
 
-          <button className="rejectBtn rounded-btn" onClick={handleDelete} style={{marginTop:"40px",background:loading&&"gray"}}>
-          {!loading?"Delete":"Wait..."}
-          </button>
+        <button
+          className="rejectBtn rounded-btn"
+          onClick={!loading?handleDelete:undefined}
+          style={{ marginTop: "40px", background: loading && "gray" }}
+        >
+          {!loading ? "Delete" : "Wait..."}
+        </button>
       </Box>
     </Box>
   );

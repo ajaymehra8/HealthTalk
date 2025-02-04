@@ -474,7 +474,7 @@ exports.googleLogin = async (req, res) => {
     res.status(201).json({
       success:true,
       user,
-      jwt,
+      token,
       message:'Login successfully'
     }
     )

@@ -1,13 +1,12 @@
 import { Box, Input, Button, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar";
-import Footer from "../Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "../../context/AuthProvider";
 
 const BecomeDoctorForm = () => {
-  const { user,setUser } = useAuthState();
+  const { user, setUser } = useAuthState();
 
   // State for input values
   const [name, setName] = useState();
@@ -18,18 +17,18 @@ const BecomeDoctorForm = () => {
   const [clinicLocation, setClinicLocation] = useState("");
   const [treatmentArea, settreatmentArea] = useState([]);
   const [currentArea, setCurrentArea] = useState("");
-  const [clinicFee, setClinicFee] = useState("");
-  const [specialization,setSpecialization] = useState("");
-  const [experienceYear,setExperienceYear]=useState(0);
+  const [clinicFee, setClinicFee] = useState(0);
+  const [specialization, setSpecialization] = useState("");
+  const [experienceYear, setExperienceYear] = useState(0);
 
   const [onlineFee, setOnlineFee] = useState("");
   const [pdfFile, setPdfFile] = useState(null); // For the PDF file
   const [fileName, setFileName] = useState("No file chosen");
-const navigate=useNavigate();
-  useEffect(()=>{
-setName(user?.name);
-setEmail(user?.email);
-  },[user]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    setName(user?.name);
+    setEmail(user?.email);
+  }, [user]);
   const toast = useToast();
   const handleKeydown = (event) => {
     if (event.key === "Enter" && currentArea.trim() !== "") {
@@ -38,37 +37,39 @@ setEmail(user?.email);
           title: "You can add only 5 treatment area",
           status: "warning",
           position: "top",
+          isClosable:true,
           duration: 5000,
         });
         return;
       }
-      settreatmentArea((prevtreatmentArea) => [...prevtreatmentArea, currentArea]);
+      settreatmentArea((prevtreatmentArea) => [
+        ...prevtreatmentArea,
+        currentArea,
+      ]);
       console.log(treatmentArea);
       setCurrentArea("");
     }
   };
   const handleChange = (event) => {
-    const newValue = event.target.value;
-    if (newValue === "" || /^[0-9]+$/.test(newValue)) {
-      const numericValue = parseInt(newValue, 10);
-      if (numericValue <= 5000) {
-        setClinicFee(newValue);
-      } else if (newValue === "") {
-        setClinicFee("");
-      }
+    let value = parseInt(event.target.value, 10);
+    // Ensure the value stays within the range
+    if (value < 1) {
+      value = 1;
+    } else if (value > 30) {
+      value = 30;
     }
+    setClinicFee(value);
   };
 
   const handleOnlineFeeChange = (event) => {
-    const newValue = event.target.value;
-    if (newValue === "" || /^[0-9]+$/.test(newValue)) {
-      const numericValue = parseInt(newValue, 10);
-      if (numericValue <= 5000) {
-        setOnlineFee(newValue);
-      } else if (newValue === "") {
-        setOnlineFee("");
-      }
+    let value = parseInt(event.target.value, 10);
+    // Ensure the value stays within the range
+    if (value < 1) {
+      value = 1;
+    } else if (value > 10) {
+      value = 10;
     }
+    setOnlineFee(value);
   };
 
   const handleFileChange = (event) => {
@@ -83,6 +84,31 @@ setEmail(user?.email);
 
   const handleSubmit = async () => {
     // You can send the form data, including the PDF file, to the backend here
+    if (
+      !name ||
+      !email ||
+      !education ||
+      !pastExperience ||
+      !description ||
+      !clinicLocation ||
+      !treatmentArea.length ||
+      !currentArea ||
+      !clinicFee ||
+      !specialization ||
+      !experienceYear ||
+      !onlineFee ||
+      !pdfFile
+    ) {
+      toast({
+        title: "Required fields missing",
+        description: "Please fill out all required fields.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position:'top'
+      });
+      return;
+    }
     const formData = new FormData();
     console.log(treatmentArea);
     formData.append("name", name);
@@ -149,17 +175,17 @@ setEmail(user?.email);
     <>
       <Navbar />
       <Box
-        minH={"85vh"}
+        minH={"100vh"}
         w={"100vw"}
-        pt={"80px"}
+        pt={'55px'}
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
+        bg={'linear-gradient(to right, #393f4d, #6b707a)'}
       >
         <Box
-          w={"50%"}
-          h={"70vh"}
-          bg={"gray"}
+          w={"clamp(300px,70vw,1000px)"}
+          h={"80vh"}
           display={"flex"}
           flexDirection={"column"}
           alignItems={"start"}
@@ -167,27 +193,18 @@ setEmail(user?.email);
           p={"20px"}
           borderRadius={"15px"}
           gap={"25px"}
-          background={"linear-gradient(to right,#6b707a, #6b707a)"}
+          background={"white"}
           overflowY={"scroll"}
+          boxShadow={'1px 1px 10px gray'}
           css={{
             scrollBehavior: "smooth",
             "&::-webkit-scrollbar": {
-              width: "8px",
+              width: "0",
             },
-            "&::-webkit-scrollbar-track": {
-              background: "white",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "gray",
-              borderRadius: "10px",
-              minHeight: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              background: "#555",
-            },
+            
           }}
         >
-          <h1 style={{ fontSize: "27px", fontWeight: "500", color: "white" }}>
+          <h1 style={{ fontSize: "27px", fontWeight: "500", color: "black" }}>
             Enter Your Info
           </h1>
           <Input
@@ -226,7 +243,7 @@ setEmail(user?.email);
             value={pastExperience}
             onChange={(e) => setPastExperience(e.target.value)}
           />
-           <Input
+          <Input
             type="text"
             placeholder="Enter your specialization"
             bg={"white"}
@@ -256,7 +273,7 @@ setEmail(user?.email);
           <Box width={"100%"}>
             <Input
               type="text"
-              placeholder="Enter your other treatment areas"
+              placeholder="Enter your other treatment areas (Press enter after writing one area)"
               bg={"white"}
               p={"5px"}
               fontSize={"18px"}
@@ -280,7 +297,7 @@ setEmail(user?.email);
                       bg={"#79bc43"}
                       borderRadius={"5px"}
                       color={"white"}
-                      cursor={'pointer'}
+                      cursor={"pointer"}
                     >
                       {s}
                     </Box>
@@ -290,45 +307,44 @@ setEmail(user?.email);
           </Box>
 
           <Input
-            type="text"
-            value={clinicFee}
+            type="number"
+            value={clinicFee===0?null:clinicFee}
             onChange={handleChange}
-            placeholder="Enter your clinic fee"
+            placeholder="Enter your clinic fee in dollors (1-30)"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
           />
           <Input
-            type="text"
-            value={onlineFee}
+            type="number"
+            value={onlineFee===0?null:onlineFee}
             onChange={handleOnlineFeeChange}
-            placeholder="Enter your online fee"
+            placeholder="Enter your online fee in dollors (1-10)"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
           />
-            <Input
-  type="number"
-  value={experienceYear}
-  onChange={(e) => {
-    let value = parseInt(e.target.value, 10);
-    // Ensure the value stays within the range
-    if (value < 2) {
-      value = 2;
-    } else if (value > 25) {
-      value = 25;
-    }
-    setExperienceYear(value);
-  }}
-  placeholder="Enter years of your experience (2-25)"
-  bg={"white"}
-  p={"5px"}
-  fontSize={"18px"}
-  min={2}
-  max={25}
-/>
+          <Input
+            type="number"
+            value={experienceYear===0?null:experienceYear}
+            onChange={(e) => {
+              let value = parseInt(e.target.value, 10);
+              // Ensure the value stays within the range
+              if (value < 2) {
+                value = 2;
+              } else if (value > 25) {
+                value = 25;
+              }
+              setExperienceYear(value);
+            }}
+            placeholder="Enter years of your experience (2-25)"
+            bg={"white"}
+            p={"5px"}
+            fontSize={"18px"}
+            min={2}
+            max={25}
+          />
 
-        
           <Box display={"flex"} gap={"20px"} alignItems={"center"} w={"100%"}>
             <Button
               as="label"
@@ -346,7 +362,7 @@ setEmail(user?.email);
                 display="none"
               />
             </Button>
-            <Text color={"white"} fontWeight={"500"}>
+            <Text color={"black"} fontWeight={"500"}>
               {fileName}
             </Text>
           </Box>
@@ -364,7 +380,6 @@ setEmail(user?.email);
           </Button>
         </Box>
       </Box>
-      <Footer />
     </>
   );
 };

@@ -38,7 +38,7 @@ fetchReqs();
       alignItems={"start"}
       justifyContent={"start"}
       w={"clamp(400px,80%,1000px)"}
-      minH={"84vh"}
+      minH={"85vh"}
       maxH={"85vh"}
       p={"20px"}
       pt={"40px"}

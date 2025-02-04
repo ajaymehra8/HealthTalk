@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -8,7 +7,6 @@ const AuthProvider = ({ children }) => {
   const [show,setShow]=useState(false);
   const [headers, setHeaders] = useState(null);
   const [mainLoading,setMainLoading]=useState(false);
-  const navigate = useNavigate();
 
   const loadUserFromLocalStorage = () => {
     const userInfo = localStorage.getItem("userInfo");

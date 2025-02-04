@@ -66,7 +66,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
             background={!loading?"#78be20":"gray"}
             color={"white"}
             w={"clamp(100px,20%,200px)"}
-            onClick={handleViewProfile}
+            onClick={!loading?handleViewProfile:undefined}
             disabled={loading}
             cursor={loading&&"not-allowed"}
             letterSpacing={"1px"}

@@ -1,102 +1,75 @@
-import React, { useState, useCallback, useEffect } from "react";
-import axios from "axios";
-import { Box, Text, useToast } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
+import LineGraph from "../../graph/LineGraph";
+import BarGraph from "../../graph/BarGraph";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "../../../context/AuthProvider";
-
+import axios from 'axios';
 const WebInfo = () => {
-  const { user } = useAuthState();
-  const [doctorCount, setDoctorCount] = useState();
-  const [userCount, setUserCount] = useState();
-  const [appoinmentsCount, setAppoinmentCount] = useState();
-  const toast = useToast();
-  const getDetails = useCallback(async () => {
-    try {
-      if (!user) {
-        return;
-      }
-      const token = user?.jwt;
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/get-website-details`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(data);
-      if (data?.success) {
-        setDoctorCount(data?.doctors);
-        setUserCount(data?.users);
-        setAppoinmentCount(data?.appoinments);
-      } else {
-        toast({
-          title: data?.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        });
-      }
-    } catch (err) {
-      toast({
-        title: err.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      return;
+  const [doctorCount,setDoctorCount]=useState(0);
+  const [appoinmentsCount,setAppoinmentsCount]=useState(0);
+  const [userCount,setUserCount]=useState(0);
+  const {user}=useAuthState();
+
+  const fetchDetails=useCallback(async()=>{
+    try{
+    const token=user?.jwt;
+    if(!token) return;
+const {data}=await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user/get-website-details`,{
+  headers:{
+  'authorization':`Bearer ${token}`,
+}});
+if(data.success){
+  setAppoinmentsCount(data?.appoinments);
+  setDoctorCount(data?.doctors);
+  setUserCount(data?.users);
+}
+    }catch(err){
+      console.log(err);
+      alert(err.message);
     }
-  }, [user]);
-  useEffect(() => {
-    getDetails();
-  }, [getDetails]);
+  },[user]);
+
+  useEffect(()=>{
+ fetchDetails();
+  },[fetchDetails]);
+
   return (
-    <Box
-      display={"flex"}
-      gap={"30px"}
-      width={"100%"}
-      height={"80%"}
-      justifyContent={"space-evenly"}
+    <Flex
+      gap="30px"
+      width="100%"
+      h={'auto'}
+      justifyContent="center"
+      alignItems={"center"}
+      flexWrap="wrap" // Enables wrapping for responsiveness
+      pb={'6px'}
     >
-      <Box
-        width={"27%"}
-        height={"50%"}
-        bg={"white"}
-        borderRadius={"20px"}
-        color={"black"}
-        p={"20px 10px"}
-      >
-        <Text fontSize={"clamp(20px,5vw,30px)"} fontWeight={400}>
-          Total Doctors : <span style={{ fontWeight: 500 }}>{doctorCount}</span>
-        </Text>
-      </Box>
-      <Box
-        width={"27%"}
-        height={"50%"}
-        bg={"white"}
-        borderRadius={"20px"}
-        color={"black"}
-        p={"20px 10px"}
-      >
-        <Text fontSize={"clamp(20px,5vw,30px)"} fontWeight={400}>
-          Total Users :<span style={{ fontWeight: 500 }}>{userCount}</span>
-        </Text>
-      </Box>
-      <Box
-        width={"27%"}
-        height={"50%"}
-        bg={"white"}
-        borderRadius={"20px"}
-        color={"black"}
-        p={"20px 10px"}
-      >
-        <Text fontSize={"clamp(20px,5vw,30px)"} fontWeight={400}>
-          Appoinments :
-          <span style={{ fontWeight: 500 }}>{appoinmentsCount}</span>
-        </Text>
-      </Box>
-    </Box>
+      {/* Card Boxes */}
+      {[ 
+        { title: "Total Doctors", count: doctorCount, graph: <LineGraph /> },
+        { title: "Total Users", count: userCount, graph: <BarGraph /> },
+        { title: "Appointments", count: appoinmentsCount, graph: <BarGraph /> },
+        { title: "Total Payment", count: appoinmentsCount, graph: <BarGraph /> },
+       
+
+
+      ].map((item, index) => (
+        <Box
+          key={index}
+          width={["clamp(250px,80%,300px)", "clamp(250px,45%,300px)", "clamp(250px,30%,300px)"]} // 1 box in small, 2 in medium, 3 in large screens
+          height="230px"
+          bg="white"
+          borderRadius="20px"
+          color="black"
+          p="20px 10px"
+          
+        >
+          <Text fontSize="clamp(20px,5vw,30px)" fontWeight={400}>
+            {item.title} : <span style={{ fontWeight: 500 }}>{item.count}</span>
+          </Text>
+          {item.graph}
+        </Box>
+      ))}
+    </Flex>
   );
 };
 
