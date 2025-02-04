@@ -161,7 +161,8 @@ const DoctorInfo = ({ image }) => {
           background: loading && "gray",
           borderColor: loading && "gray",
         }}
-        onClick={handleChanges}
+        onClick={!loading?handleChanges:undefined}
+        disabled={loading}
       >
         {!loading ? "Apply Changes" : "Updating..."}
       </button>

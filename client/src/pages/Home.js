@@ -1,15 +1,11 @@
 import React, { useEffect, useState,useCallback } from "react";
 import { Box } from "@chakra-ui/react";
-import { useAuthState } from "../context/AuthProvider";
-import Signup from "../components/Auth/Signup";
 import axios from "axios";
-import DocProf from "../components/Doctors/DocProf";
 import Navbar from "../components/Navbar";
 import Doctors from "./Doctors";
 import Testimonial from "./Testimonial";
 import Footer from "../components/Footer";
 import { Link } from "react-scroll";
-import Loading from "../components/Loading";
 
 const Home = () => {
   const [doctors, setDoctors] = useState(null);
@@ -27,7 +23,7 @@ const Home = () => {
 
   useEffect(() => {
     getDoctor(); // Fetch data on component mount
-  }, []); // Dependency array ensures it runs only once
+  }, [getDoctor]); // Dependency array ensures it runs only once
 
   return (
     <>

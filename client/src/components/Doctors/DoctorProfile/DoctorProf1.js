@@ -114,7 +114,7 @@ const DoctorProf1 = ({ doctor }) => {
             background: loading && "gray",
             cursor: loading && "not-allowed",
           }}
-          onClick={bookAppoinment}
+          onClick={!loading?bookAppoinment:undefined}
         >
           {!loading ? "Book Appointment" : "Wait..."}
         </button>

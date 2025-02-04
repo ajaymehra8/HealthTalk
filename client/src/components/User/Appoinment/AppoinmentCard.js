@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Avatar, Tooltip, useToast } from "@chakra-ui/react";
+import React from "react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
@@ -9,8 +8,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
   const { user } = useAuthState();
-  const [selectedDate, setSelectedDate] = useState(null);
-  const navigate = useNavigate();
   const toast = useToast();
   
   console.log(appoinment?.doctor);

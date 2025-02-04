@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Box, Tooltip, Avatar, useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Box, useToast } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
 import { useAuthState } from "../../../context/AuthProvider";
 
 const ReviewCard = ({ review, setReviews, reviews }) => {
-  const navigate = useNavigate();
   const toast = useToast();
   const createdAt = review?.createdAt;
   const timeAgo = createdAt ? moment(createdAt).fromNow() : "Unknown";
@@ -76,7 +74,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
 
         <button
           className="rejectBtn rounded-btn"
-          onClick={handleDelete}
+          onClick={!loading?handleDelete:undefined}
           style={{
             marginTop: "40px",
             background: loading && "gray",

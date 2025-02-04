@@ -10,13 +10,14 @@ const UserAppoinments = () => {
   const { user } = useAuthState();
   const token = user?.jwt;
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization: `Bearer ${token}`,
-  };
+
 
   const getAppoinments = useCallback(async () => {
     if (!token) return;
+    const headers = {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    };
     setLoading(true);
     const { data } = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/booking/get-user-appoinments`,

@@ -1,3 +1,12 @@
+*{
+  margin:0;
+  padding:0
+}
+body{
+  margin:0;
+  padding:0;
+}
+
 /* NAVBAR STYLE */
 .logo {
   font-size: clamp(25px, 5vw, 30px);
@@ -96,7 +105,6 @@
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  width: clamp(200px, 50vw, 800px);
   padding: 20px 0;
   background: linear-gradient(to right, #393f4d, #6b707a);
   color: rgb(223, 214, 214);

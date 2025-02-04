@@ -92,7 +92,7 @@ function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={handleReport}
+              onClick={!loading?handleReport:undefined}
               background={loading && "gray"}
               disabled={loading}
             >

@@ -92,10 +92,10 @@ const ReqCard = ({ req, setReqs }) => {
         <h2 style={{ fontSize: "20px" }}>{req.user?.name}</h2>
       </Box>
       <div className="reqButtons">
-        <button className="acceptBtn" onClick={handleAccept}>
+        <button className="acceptBtn" onClick={!acceptLoading?handleAccept:undefined}>
           {!acceptLoading ? "Accept" : "Accepting"}
         </button>
-        <button className="rejectBtn" onClick={handleReject}>
+        <button className="rejectBtn" onClick={!rejectLoading?handleReject:undefined}>
           {!rejectLoading ? "Reject" : "Rejecting"}
         </button>
         <Tooltip label="View Profile" placement="bottom">
