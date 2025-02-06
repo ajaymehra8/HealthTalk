@@ -21,7 +21,6 @@ const Approvals = () => {
   
       if (data.success) {
         setReqs(data?.reqs);
-        console.log(reqs);
       }
     } catch (error) {
       console.error("Error fetching requests:", error.response?.data || error.message);
@@ -33,27 +32,24 @@ fetchReqs();
   },[user])
   return (
     <Box
-      display={"flex"}
-      flexDir={"column"}
-      alignItems={"start"}
-      justifyContent={"start"}
-      w={"clamp(400px,80%,1000px)"}
-      minH={"85vh"}
-      maxH={"85vh"}
-      p={"20px"}
-      pt={"40px"}
-      bg={"white"}
-      borderRadius={"10px"}
-      pb={"30px"}
-      boxShadow={"1px 1px 10px 4px #686d77"}
-      overflowY={"auto"}
-      gap={"20px"}
-      sx={{
-        "@media(max-width:500px)": {
-          maxHeight: "63vh",
-          minHeight: "63vh",
-        },
-      }}
+    display={"flex"}
+    flexDir={"column"}
+    alignItems={"start"}
+    justifyContent={"start"}
+    w={"clamp(320px,90%,1000px)"}
+    minH={"85vh"}
+    height={'auto'}
+          p={"2px 20px"}
+          pt={'10px'}
+          pb={'1vh'}
+    bg={"white"}
+    borderRadius={"10px"}
+    boxShadow={"1px 1px 10px 4px #686d77"}
+    sx={{
+      "@media(max-width:500px)":{
+        minHeight:"63vh",
+      },
+    }}
     >
       {reqs?.length > 0 ? (
         reqs?.map((req) => <ReqCard req={req} setReqs={setReqs}/>)

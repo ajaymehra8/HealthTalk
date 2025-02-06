@@ -25,7 +25,6 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    console.log(`Selected date for ${appoinmentf?.user?.name}:`, date);
   };
 
   const cancelAppoinment = async () => {
@@ -158,7 +157,7 @@ const AppoinmentCard = ({ appoinment, appoinments, setAppoinments }) => {
         width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
-        <img src={appoinmentf?.user?.image} alt="" className="rectangle-img" />
+        <img src={appoinmentf?.user?.image} alt="" className="rectangle-img" style={{height:"clamp(150px,5vh,200px)"}}/>
         <h4 style={{ alignSelf: "center" }}>
           Mr. {appoinmentf?.user?.name || "Unknown User"}
         </h4>

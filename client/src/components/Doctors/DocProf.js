@@ -56,8 +56,8 @@ const DocProf = () => {
       >
         <DoctorProf1 doctor={doctor} />
         <Box
-          w={"90%"}
-          display={"flex"}
+      width={"clamp(340px,102%,1150px)"}
+      display={"flex"}
           justifyContent={"space-between"}
           flexDirection={{ base: "column", md: "column", lg: "row" }}
           alignItems={"start"}
@@ -66,7 +66,7 @@ const DocProf = () => {
           <Box
             w={{
               lg: "40%",
-              base: "clamp(300px,100%,2000px)",
+              base: "clamp(300px,100%,1150px)",
               md: "clamp(410px,100%,2000px)",
             }}
           >
@@ -178,8 +178,8 @@ const DocProf = () => {
             <Box
               bg={"white"}
               w={{
-                sm: "clamp(360px,100%,2000px)",
-                md: "clamp(360px,100%,2000px)",
+                sm: "clamp(360px,100%,1000px)",
+                md: "clamp(360px,100%,1000px)",
                 lg: "50%",
               }}
               p={4}

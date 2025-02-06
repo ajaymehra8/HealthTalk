@@ -1,9 +1,9 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const BookingModel = require("../model/bookingModel");
-
+const User = require("../model/userModel");
 const updateBooking = async (appoinmentId) => {
   try {
-    console.log(appoinmentId);
+ 
     // Update booking record
     const booking = await BookingModel.findByIdAndUpdate(
       appoinmentId,
@@ -64,20 +64,41 @@ exports.getAppoinmentsForDoctor = async (req, res, next) => {
     next(err);
   }
 };
+// GET COMPLETED APPOINMENTS
+exports.getDoneAppoinmentForDoctor = async (req, res, next) => {
+  try {
+    const id = req.user._id;
+    const appoinments = await BookingModel.find({ doctor: id, payment: true })
+      .populate({
+        path: "user",
+        select: "email name image  -_id",
+      })
+      .sort({ updatedAt: 1 });
+     
+    const doctor = await User.findById(id);
+    const totalIncome = appoinments * doctor?.clinicFee;
+    res.status(200).json({
+      totalIncome,
+      appoinments,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 // FUNCTION FOR CREATING CHECKOUT SESSION
 exports.createCheckout = async (req, res, next) => {
   const { doctor, appoinmentId } = req.body;
 
   try {
     // Validate doctor details
-    if (!doctor || !doctor.name) {
+    if (!doctor || !doctor.name || !doctor.clinicFee) {
       return res.status(400).json({
         message: "Doctor details are missing or incomplete.",
       });
     }
 
     // Fallback for missing onlineFee
-    const onlineFee = doctor.onlineFee || 1000;
+    const onlineFee = doctor.clinicFee;
 
     // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -95,10 +116,10 @@ exports.createCheckout = async (req, res, next) => {
           quantity: 1, // Single charge
         },
       ],
-      
+
       mode: "payment",
-      success_url: "http://localhost:3000/my-profile/your-appoinment", // Corrected to use http
-      cancel_url: "http://localhost:3000/my-profile/your-appoinment",
+      success_url: "https://healthtalk.onrender.com/my-profile/your-appoinment", // Corrected to use http
+      cancel_url: "https://healthtalk.onrender.com/my-profile/your-appoinment",
       metadata: {
         appointmentId: appoinmentId,
       },
@@ -135,16 +156,13 @@ exports.webhook = (request, response) => {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
-  console.log("working");
   // Handle the event
   switch (event.type) {
     case "checkout.session.completed":
       const paymentIntentSucceeded = event.data.object;
-      console.log("payment succeed");
       let session = event.data.object;
-      console.log(session);
-      console.log(session.metadata.appoinmentId);
-      updateBooking(session.metadata.appoinmentId);
+      
+      updateBooking(session.metadata.appointmentId);
       // Then define and call a function to handle the event payment_intent.succeeded
       break;
     // ... handle other event types

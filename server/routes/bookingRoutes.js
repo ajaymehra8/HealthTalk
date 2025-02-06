@@ -8,13 +8,11 @@ Router.post(
     express.raw({ type: "application/json" }),
     bookingController.webhook
   );
- Router.delete('/delete-booking',async (req,res)=>{
-await bookintModel.deleteMany();
-console.log("deleted");
- }) 
+ 
 Router.use(authController.isProtect);
 Router.post("/create-booking", bookingController.createBooking);
 Router.post("/create-checkout-session", bookingController.createCheckout);
+Router.get("/get-done-bookings",bookingController.getDoneAppoinmentForDoctor);
 
 Router.post("/cancel-appoinment", bookingController.cancelAppoinment);
 

@@ -95,12 +95,10 @@ exports.updateUser = async (req, res) => {
 
 exports.getReqs = async (req, res) => {
   try {
-    console.log("wrk");
     const reqs=await Reqs.find({}).populate({
       path:"user",
       select:"-password -__v"
     });
-    console.log(reqs);
     res.status(200).json({
       success:true,
       message: "Request fetched successfully",
@@ -116,7 +114,6 @@ exports.getReqs = async (req, res) => {
 };
 
 exports.getWebsiteDetails=async(req,res)=>{
-  console.log("calling")
   try{
     const doctors=await User.find({role:"doctor"});
     const users=await User.find({role:"user"});

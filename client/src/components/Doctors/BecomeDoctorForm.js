@@ -46,7 +46,6 @@ const BecomeDoctorForm = () => {
         ...prevtreatmentArea,
         currentArea,
       ]);
-      console.log(treatmentArea);
       setCurrentArea("");
     }
   };
