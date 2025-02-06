@@ -277,7 +277,7 @@ body{
     flex-direction: column-reverse;
   }
   .homeTextBox {
-    width: clamp(380px, 80vw, 800px) !important;
+    width: clamp(330px, 80vw, 800px) !important;
   }
   .homeFoot {
     display: none !important;

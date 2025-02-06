@@ -11,7 +11,6 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuthState();
-  console.log(review.doctor);
   const handleDelete = async () => {
     const token = user?.jwt;
     if (!token) return;

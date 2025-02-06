@@ -59,7 +59,7 @@ const DocReviewCard = ({ review, setReviews, reviews }) => {
         width={"25%"}
         alignItems={"center"}
       >
-        <img src={review?.user?.image} alt="" className="rectangle-img" />
+        <img src={review?.user?.image} alt="" className="rectangle-img" style={{height:"clamp(130px,10vh,200px)"}}/>
         <h4 style={{ alignSelf: "center" }}>
           Mr. {review?.user?.name || "Unknown User"}
         </h4>

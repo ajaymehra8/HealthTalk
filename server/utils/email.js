@@ -24,7 +24,6 @@ module.exports = class Email {
 
   async send(subject, message, email = this.to) {
     // 1) Define the email options
-    console.log(email);
     const mailOptions = {
       from: this.from,
       to: email,

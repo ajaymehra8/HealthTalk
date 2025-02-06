@@ -23,7 +23,6 @@ const {data}=await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user/get-w
 if(data.success){
   setAppoinmentsCount(data?.appoinments);
   setDoctorCount(data?.doctors);
-  console.log(data?.users);
   setUserCount(data?.users);
   setPayment(data?.payment);
 

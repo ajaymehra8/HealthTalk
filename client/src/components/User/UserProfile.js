@@ -19,7 +19,6 @@ const UserInfo = () => {
 
   const [imageSrc, setImageSrc] = useState(user?.image);
   const [imageFile, setImageFile] = useState(null);
-  console.log("working");
   return (
     <>
       <Navbar />

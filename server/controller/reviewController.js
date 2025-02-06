@@ -5,8 +5,7 @@ exports.createReview = async (req, res, next) => {
   const user = req.user._id;
   const { text, rating } = req.body;
   let review = await Review.findOne({ user, doctor: id });
-  console.log(review);
-  console.log(review);
+  
   if (review) {
     res.status(200).json({
       success: false,
@@ -25,7 +24,6 @@ exports.createReview = async (req, res, next) => {
 
 exports.getAllReviews = async (req, res, next) => {
   const { id } = req.params;
-  console.log("hello");
   const reviews = await Review.find({ doctor: id }).sort({ createdAt: -1 });
   res.status(200).json({
     success: true,
@@ -47,7 +45,6 @@ exports.getUserReview = async (req, res, next) => {
     path: populate,
     select: "-password -__v",
   }).sort({createdAt:-1});
-  console.log(reviews,"review")
   res.status(200).json({ success: true, reviews });
 };
 exports.deleteReview = async (req, res, next) => {

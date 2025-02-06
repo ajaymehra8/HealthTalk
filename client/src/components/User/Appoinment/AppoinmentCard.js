@@ -10,7 +10,6 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
   const { user } = useAuthState();
   const toast = useToast();
   
-  console.log(appoinment?.doctor);
 
   const handlePayment = async () => {
     const stripe = await loadStripe(
@@ -94,14 +93,13 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
         width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
-        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" />
+        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" style={{height:'clmap(100px,20vh,300px)'}}/>
         <h4 style={{ alignSelf: "center" }}>
           Mr. {appoinment?.doctor?.name || "Unknown User"}
         </h4>
       </Box>
       <Box>
-        <h2>Mode: {appoinment?.mode || "Offline"}</h2>
-        <h2>Location: {appoinment?.doctor?.clinicLocation||"Delhi"}</h2>
+        
         <Box>
           <h2>Time of Appoinment:</h2>
           <DatePicker
@@ -123,7 +121,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
         >
           <button className="acceptBtn" onClick={!appoinment?.payment?handlePayment:undefined}>
             {!appoinment?.payment
-              ? `Pay $${appoinment.doctor?.onlineFee || "1000"}`
+              ? `Pay $${appoinment.doctor?.clinicFee}`
               : "Payment Done"}
           </button>
          {!appoinment?.payment&& <button className="rejectBtn" onClick={handleDelete}>

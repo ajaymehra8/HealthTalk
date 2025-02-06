@@ -5,7 +5,6 @@ import axios from "axios";
 import ReportModal from "../../Report/ReportModal";
 const DoctorProf1 = ({ doctor }) => {
   const { user } = useAuthState();
-  console.log(doctor?._id);
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -47,14 +46,16 @@ const DoctorProf1 = ({ doctor }) => {
   };
   return (
     <Box
-      width={"clamp(400px,90%,2000px)"}
+      width={"clamp(342px,102%,1150px)"}
       minH={"150px"}
+      overflow={"hidden"}
+      height={"auto"}
       border={".5px solid gray"}
       borderRadius={"20px"}
       display={"flex"}
       alignItems={"center"}
       justifyContent={"start"}
-      gap={"clamp(5px,5%,500px)"}
+      gap={{md:"30px"}}
       p={"10px 15px"}
       bg={"#ffffff"}
       position={"relative"}
@@ -82,7 +83,6 @@ const DoctorProf1 = ({ doctor }) => {
         <h3
           style={{
             color: "gray",
-            width: "90%",
             fontSize: "16px",
             letterSpacing: "1px",
           }}
@@ -95,7 +95,8 @@ const DoctorProf1 = ({ doctor }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            width: "210px",
+            flexWrap: "wrap",
+            width: "clamp(150px,80%,210px)",
             padding: "10px 0",
           }}
         >
@@ -106,19 +107,22 @@ const DoctorProf1 = ({ doctor }) => {
             ₹ <b>{doctor?.onlineFee ? doctor?.onlineFee : "300"}</b> online
           </p>
         </div>
-        <button
-          className="homePageBtn"
-          style={{
-            marginTop: "0",
-            borderRadius: "10px",
-            background: loading && "gray",
-            cursor: loading && "not-allowed",
-          }}
-          onClick={!loading?bookAppoinment:undefined}
-        >
-          {!loading ? "Book Appointment" : "Wait..."}
-        </button>
-        <div
+        {!(user?.role === "admin") && (
+          <button
+            className="homePageBtn"
+            style={{
+              marginTop: "0",
+              borderRadius: "10px",
+              background: loading && "gray",
+              cursor: loading && "not-allowed",
+            }}
+            onClick={!loading ? bookAppoinment : undefined}
+          >
+            {!loading ? "Book Appointment" : "Wait..."}
+          </button>
+        )}
+        <Box
+          paddingRight={{ md: "2vw" }}
           style={{
             display: "flex",
             alignItems: "center",
@@ -126,10 +130,10 @@ const DoctorProf1 = ({ doctor }) => {
             width: "50px",
             position: "absolute",
             top: "10px",
-            right: "5px",
+            right: "-11px",
           }}
         >
-          {user?.role === "user" && (
+          {!(user?.role === "admin") && (
             <Tooltip label="Report" aria-label="A tooltip" placement="top">
               <button
                 onClick={onOpen}
@@ -145,7 +149,7 @@ const DoctorProf1 = ({ doctor }) => {
             onOpen={onOpen}
             doctorId={doctor?._id}
           />
-        </div>
+        </Box>
       </Box>
     </Box>
   );
