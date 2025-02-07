@@ -234,7 +234,10 @@ exports.isProtect = async (req, res, next) => {
   // 3) Check if user still exist
   const user = await User.findById(decoded.id);
   if (!user) {
-    return next(new AppError("The user is no longer exists", 401));
+    return res.status(401).json({
+      success:false,
+      message:"User does not exists now"
+    });
   }
 
   // 4) Check if the user changed the password after the JWT was issued
@@ -282,11 +285,17 @@ exports.isAdmin = async (req, res, next) => {
   // 3) Check if user still exist
   const user = await User.findById(decoded.id);
   if (!user) {
-    return next(new AppError("The user is no longer exists", 401));
+    return res.status(401).json({
+      success:false,
+      message:"The user is no longer exists"
+    });
   }
   // 4) Check user is admin or not
   if (!user.role === "admin") {
-    return next(new AppError("The user is not admin", 400));
+    return res.status(401).json({
+      success:false,
+      message:"The user is not admin"
+    });
   }
   // 5) Check if the user changed the password after the JWT was issued
   // if (user.checkPasswordIsChanged(decoded.iat)) {
