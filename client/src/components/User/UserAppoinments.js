@@ -51,6 +51,7 @@ const UserAppoinments = () => {
     sx={{
       "@media(max-width:500px)":{
         minHeight:"63vh",
+        maxHeight:"63vh"
       },
     }}
     >
