@@ -60,7 +60,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
       >
         <img src={review?.doctor?.image} alt="" className="rectangle-img" style={{
           width:"100%",
-          height:"25vh"
+          height:'clmap(100px,20vh,300px)'
         }}/>
         <h4 style={{ alignSelf: "center" }}>
           Mr. {review?.doctor?.name || "Unknown User"}

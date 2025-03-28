@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Box, Avatar } from "@chakra-ui/react";
 import { useAuthState } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
   const { user, show, setShow } = useAuthState();
@@ -91,7 +91,7 @@ minHeight:"40px",
               size={"2xl"}
               onClick={handleAvatarClick} // Avatar click handler
               cursor="pointer" // Show pointer cursor to indicate it's clickable
-                
+
             />
 
             <Box
