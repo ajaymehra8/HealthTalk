@@ -30,6 +30,7 @@ const Home = () => {
       <Navbar />
       <Box
         height={"auto"}
+        minH={"90vh"}
         w={"100vw"}
         background={"linear-gradient(to right, #393f4d, #6b707a)"}
         display={"flex"}

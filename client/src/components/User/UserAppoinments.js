@@ -38,7 +38,9 @@ const UserAppoinments = () => {
     justifyContent={"start"}
     w={"clamp(320px,90%,1000px)"}
     minH={"85vh"}
+    maxH={"85vh"}
     height={'auto'}
+    overflowY={"auto"}
     gap={'20px'}
           p={"2px 20px"}
           pt={'10px'}

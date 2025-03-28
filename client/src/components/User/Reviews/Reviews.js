@@ -38,6 +38,9 @@ const Reviews = () => {
     justifyContent={"start"}
     w={"clamp(320px,90%,1000px)"}
     minH={"85vh"}
+    maxH={"85vh"}
+    gap={"30px"}
+overflowY={"auto"}
     height={'auto'}
           p={"2px 20px"}
           pt={'10px'}

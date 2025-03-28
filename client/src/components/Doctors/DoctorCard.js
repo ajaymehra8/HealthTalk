@@ -27,7 +27,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
       <CardBody>
         <Image
           src={doctor?.image}
-          alt="Green double couch with wooden legs"
+          alt="Doctor image"
           borderRadius="lg"
           w={['100%', '100%', '100%']}
           h={['250px', '250px', '200px']}

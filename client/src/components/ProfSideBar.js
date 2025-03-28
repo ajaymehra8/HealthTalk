@@ -49,8 +49,8 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
       ></div>
       <Box
         className="userCard"
-        w={"250px"}
         flexDir={"column"}
+        w={"22%"}
         minH={"100vh"}
         borderRight={"2px solid white"}
         boxShadow="5px 0 25px -10px rgba(0, 0, 0, 0.5)" // Shadow on the right side
@@ -91,11 +91,7 @@ minHeight:"40px",
               size={"2xl"}
               onClick={handleAvatarClick} // Avatar click handler
               cursor="pointer" // Show pointer cursor to indicate it's clickable
-              sx={{
-                "@media(max-width:950px)": {
-                  width: "100%",
-                },
-              }}
+                
             />
 
             <Box
@@ -112,7 +108,6 @@ minHeight:"40px",
               transition="opacity 0.3s ease, transform 0.3s ease" // Smooth animation
               transform="scale(0.9)" // Start smaller for animation effect
               style={{
-                // Add hover effect using parent
                 pointerEvents: "none",
               }}
               className="hoverBox"
