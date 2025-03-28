@@ -55,7 +55,7 @@ const DoctorProf1 = ({ doctor }) => {
       display={"flex"}
       alignItems={"center"}
       justifyContent={"start"}
-      gap={{md:"30px"}}
+      gap={{ sm: "20px", md: "30px" }}
       p={"10px 15px"}
       bg={"#ffffff"}
       position={"relative"}
@@ -63,7 +63,12 @@ const DoctorProf1 = ({ doctor }) => {
       <img
         src={doctor?.image}
         alt=""
-        style={{ width: "clamp(150px,18%,500px)", borderRadius: "20px" }}
+        style={{
+          width: "clamp(140px,18%,500px)",
+          borderRadius: "20px",
+          height: "clamp(150px,80vh,190px)",
+          marginRight: "10px",
+        }}
       />
       <Box>
         <h1

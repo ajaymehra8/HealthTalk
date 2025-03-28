@@ -26,7 +26,7 @@ const UserInfo = () => {
       <Box
         display={"flex"}
         alignItems={"center"}
-        justifyContent={"center"}
+        justifyContent={"space-between"}
         w={"100vw"}
       >
         <ProfSideBar
@@ -36,8 +36,8 @@ const UserInfo = () => {
           setImageFile={setImageFile}
         />
         <Box
-          w={{lg:"80%",sm:"100%"}}
-          ml={{lg:'250px'}}
+          w={{lg:"78%",base:"100%"}}
+          ml={{lg:'22%',base:"0"}}
           background={"linear-gradient(to right,#6b707a, #393f4d)"}
           boxSizing={"border-box"}
           minH={'100vh'}
@@ -49,12 +49,7 @@ const UserInfo = () => {
           alignItems={"center"}
           justifyContent={"center"}
           overflow={"hidden"}
-          sx={{
-            "@media (max-width: 950px)": {
-              width: "100%",
-              marginLeft:0,
-            },
-          }}
+         
         >
           <Routes>
             <Route
