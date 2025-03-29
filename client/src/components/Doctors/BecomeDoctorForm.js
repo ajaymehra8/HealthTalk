@@ -336,6 +336,7 @@ let firstTime=true;
       <Box
         minH={"100vh"}
         w={"100vw"}
+        
         pt={"55px"}
         display={"flex"}
         alignItems={"center"}
@@ -344,7 +345,8 @@ let firstTime=true;
       >
         <Box
           w={"clamp(340px,95vw,1000px)"}
-          h={"80vh"}
+          minH={"85vh"}
+          maxH={"85vh"}
           display={"flex"}
           flexDirection={"column"}
           alignItems={"start"}
@@ -355,12 +357,17 @@ let firstTime=true;
           background={"white"}
           overflowY={"scroll"}
           boxShadow={"1px 1px 10px gray"}
-          css={{
+          sx={{
+            "@media(max-width:500px)":{
+              minHeight:"63vh",
+              maxHeight:"63vh"
+            },
             scrollBehavior: "smooth",
             "&::-webkit-scrollbar": {
               width: "0",
             },
           }}
+          
         >
           <h1 style={{ fontSize: "27px", fontWeight: "500", color: "black" }}>
             Enter Your Info
