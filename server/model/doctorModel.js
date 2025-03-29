@@ -37,10 +37,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  onlineFee: {
-    type: Number,
-    required: true,
-  },
+  
   education: {
     type: String,
     required: true,

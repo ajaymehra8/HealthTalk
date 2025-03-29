@@ -89,12 +89,7 @@ clinicLocation: {
       return this.role === "doctor"; 
     },
   },
-  onlineFee: {
-    type: Number,
-    required: function () {
-      return this.role === "doctor"; 
-    },
-  },
+ 
   reqs: [{ type: mongoose.Schema.ObjectId, ref: "DoctorInfo" }],
   status: {
     type: String,

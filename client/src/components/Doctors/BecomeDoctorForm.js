@@ -25,7 +25,6 @@ const BecomeDoctorForm = () => {
   const [specialization, setSpecialization] = useState("");
   const [experienceYear, setExperienceYear] = useState(0);
 
-  const [onlineFee, setOnlineFee] = useState("");
   const [pdfFile, setPdfFile] = useState(null); // For the PDF file
   const [fileName, setFileName] = useState("No file chosen");
 
@@ -92,16 +91,7 @@ const BecomeDoctorForm = () => {
     setClinicFee(value);
   };
 
-  const handleOnlineFeeChange = (event) => {
-    let value = parseInt(event.target.value, 10);
-    // Ensure the value stays within the range
-    if (value < 1) {
-      value = 1;
-    } else if (value > 10) {
-      value = 10;
-    }
-    setOnlineFee(value);
-  };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -126,7 +116,6 @@ const BecomeDoctorForm = () => {
       !clinicFee ||
       !specialization ||
       !experienceYear ||
-      !onlineFee ||
       !pdfFile
     ) {
       toast({
@@ -161,7 +150,6 @@ const BecomeDoctorForm = () => {
 
     formData.append("treatmentArea", JSON.stringify(treatmentArea));
     formData.append("clinicFee", clinicFee);
-    formData.append("onlineFee", onlineFee);
     formData.append("degree", pdfFile); // Attach the PDF file
     try {
       const token = user?.jwt;
@@ -482,15 +470,7 @@ const BecomeDoctorForm = () => {
             p={"5px"}
             fontSize={"18px"}
           />
-          <Input
-            type="number"
-            value={onlineFee === 0 ? null : onlineFee}
-            onChange={handleOnlineFeeChange}
-            placeholder="Enter your online fee in dollors (1-10)"
-            bg={"white"}
-            p={"5px"}
-            fontSize={"18px"}
-          />
+          
           <Input
             type="number"
             value={experienceYear === 0 ? null : experienceYear}

@@ -108,9 +108,7 @@ const DoctorProf1 = ({ doctor }) => {
           <p>
             ₹ <b>{doctor?.clinicFee ? doctor?.clinicFee : "2,000"}</b> at clinic
           </p>
-          <p>
-            ₹ <b>{doctor?.onlineFee ? doctor?.onlineFee : "300"}</b> online
-          </p>
+        
         </div>
         {!(user?.role === "admin") && (
           <button
