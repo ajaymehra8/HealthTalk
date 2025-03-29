@@ -1,16 +1,79 @@
 const User = require("../model/userModel");
 const storage = require("../config/firebase");
-const Reqs=require("../model/doctorModel");
-const Appoinment=require("../model/bookingModel");
+const Reqs = require("../model/doctorModel");
+const Appoinment = require("../model/bookingModel");
 exports.getAllDoctors = async (req, res) => {
   const keyword = req.query.search
     ? { name: { $regex: req.query.search, $options: "i" } }
     : {};
+  const filter = req.query.filter;
 
-  const doctors = await User.find({ role: "doctor", ...keyword })
-    .limit(14)
-    .select("-__v")
-    .populate({ path: "reviews", options: { sort: { createdAt: -1 } } });
+  let doctors = [];
+  if (filter === "rating") {
+    doctors = await User.aggregate([
+      { $match: { role: "doctor", ...keyword } },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "doctor",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: {
+              if: { $gt: [{ $size: "$reviews" }, 0] },
+              then: { $avg: "$reviews.rating" },
+              else: 0,
+            },
+          },
+          nRating: { $size: "$reviews" }, // Count the number of reviews
+        },
+      },
+      { $sort: { avgRating: -1 } }, // Sort by avgRating descending
+      { $limit: 14 }, // Limit to 14 doctors
+      {
+        $project: {
+          __v: 0,
+          reviews: 0, // Optionally exclude reviews if not needed
+        },
+      },
+    ]);
+
+    console.log(doctors[0]);
+  } else if (filter === "price") {
+    doctors = await User.find({ role: "doctor", ...keyword })
+      .sort({ clinicFee: 1 })
+      .limit(14)
+      .select("-__v")
+      .populate({ path: "reviews", options: { sort: { createdAt: -1 } } });
+  } else if (filter === "location") {
+    const lat = parseFloat(req.query.lat);
+    const lng = parseFloat(req.query.lng);
+    doctors = await User.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [lng, lat] },
+          distanceField: "distance",
+          spherical: true,
+          maxDistance: 5000, // 5km radius (adjust as needed)
+        },
+      },
+      { $match: { role: "doctor", ...keyword } },
+      { $limit: 14 },
+      { $project: { __v: 0 } },
+    ]);
+  } else {
+    doctors = await User.find({ role: "doctor", ...keyword })
+      .sort({ nRating: -1 })
+      .limit(14)
+      .select("-__v")
+      .populate({ path: "reviews", options: { sort: { createdAt: -1 } } });
+
+    console.log(doctors[0]);
+  }
   res.status(200).json({
     success: true,
     length: doctors.length,
@@ -95,12 +158,12 @@ exports.updateUser = async (req, res) => {
 
 exports.getReqs = async (req, res) => {
   try {
-    const reqs=await Reqs.find({}).populate({
-      path:"user",
-      select:"-password -__v"
+    const reqs = await Reqs.find({}).populate({
+      path: "user",
+      select: "-password -__v",
     });
     res.status(200).json({
-      success:true,
+      success: true,
       message: "Request fetched successfully",
       reqs,
     });
@@ -113,26 +176,26 @@ exports.getReqs = async (req, res) => {
   }
 };
 
-exports.getWebsiteDetails=async(req,res)=>{
-  try{
-    const doctors=await User.find({role:"doctor"});
-    const users=await User.find({role:"user"});
-    const totalUsers=await User.find();
-    const appoinments=await Appoinment.find();
-    const doneAppoinments=await Appoinment.find({payment:true});
+exports.getWebsiteDetails = async (req, res) => {
+  try {
+    const doctors = await User.find({ role: "doctor" });
+    const users = await User.find({ role: "user" });
+    const totalUsers = await User.find();
+    const appoinments = await Appoinment.find();
+    const doneAppoinments = await Appoinment.find({ payment: true });
     res.status(200).json({
-      success:true,
-      doctors:doctors.length,
-      users:users.length,
-      totalUsers:totalUsers.length,
-      appoinments:appoinments.length,
-      payment:doneAppoinments?.length
+      success: true,
+      doctors: doctors.length,
+      users: users.length,
+      totalUsers: totalUsers.length,
+      appoinments: appoinments.length,
+      payment: doneAppoinments?.length,
     });
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(500).json({
-      success:false,
-      message:"Internal server error"
-    })
+      success: false,
+      message: "Internal server error",
+    });
   }
-}
+};

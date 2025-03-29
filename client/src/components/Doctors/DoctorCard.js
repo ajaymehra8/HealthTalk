@@ -14,7 +14,6 @@ import { HStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor, handleFunction }) => {
-  console.log(doctor);
   const navigate = useNavigate();
   const [loading,setLoading]=useState(false);
   const handleViewProfile = async () => {
