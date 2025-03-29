@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-scroll";
 
 const Home = () => {
-  const [doctors, setDoctors] = useState(null);
+  const [doctors, setDoctors] = useState([]);
 
   const getDoctor = useCallback(async () => {
     try {
@@ -26,7 +26,7 @@ const Home = () => {
   }, [getDoctor]); // Dependency array ensures it runs only once
 
   return (
-    <>
+    <Box display={"flex"} alignItems={"center"} justifyContent={"center"} flexDir={"column"}>
       <Navbar />
       <Box
         height={"auto"}
@@ -76,10 +76,10 @@ const Home = () => {
           </h1>
         </div>
       </Box>
-      <Doctors id="doctors" doctors={doctors} />
+      <Doctors id="doctors" doctors={doctors} setDoctors={setDoctors}/>
       <Testimonial />
       <Footer />
-    </>
+    </Box>
   );
 };
 
