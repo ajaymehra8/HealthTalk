@@ -17,7 +17,7 @@ const BecomeDoctorForm = () => {
   const [pastExperience, setPastExperience] = useState("");
   const [description, setDescription] = useState("");
   const [clinicLocation, setClinicLocation] = useState("");
-  const [clinicCoordinates,setClinicCoordinates]=useState({});
+  const [clinicCoordinates, setClinicCoordinates] = useState({});
 
   const [treatmentArea, settreatmentArea] = useState([]);
   const [currentArea, setCurrentArea] = useState("");
@@ -40,7 +40,8 @@ const BecomeDoctorForm = () => {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current, // Use ref instead of ID
-      style: "https://maps.geoapify.com/v1/styles/osm-carto/style.json?apiKey=17bcdbc86fda4dfca3ad3328a4ebb4d8", // Style URL
+      style:
+        "https://maps.geoapify.com/v1/styles/osm-carto/style.json?apiKey=17bcdbc86fda4dfca3ad3328a4ebb4d8", // Style URL
       center: [77.1025, 28.7041], // New Delhi, India [lng, lat]
       zoom: 0,
     });
@@ -73,9 +74,13 @@ const BecomeDoctorForm = () => {
         });
         return;
       }
+      const current={
+        name:currentArea,
+        id:treatmentArea.length>0?treatmentArea.length-1+1:0,
+      }
       settreatmentArea((prevtreatmentArea) => [
         ...prevtreatmentArea,
-        currentArea,
+        current,
       ]);
       setCurrentArea("");
     }
@@ -90,8 +95,6 @@ const BecomeDoctorForm = () => {
     }
     setClinicFee(value);
   };
-
-  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -203,22 +206,27 @@ const BecomeDoctorForm = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-  
+
           // Store coordinates separately
           setClinicCoordinates({ lat: latitude, lng: longitude });
-  
+
           // Reverse Geocoding to get location name
           const apiKey = "17bcdbc86fda4dfca3ad3328a4ebb4d8";
           const geocodeUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${apiKey}`;
-  
+
           try {
             const response = await fetch(geocodeUrl);
             const data = await response.json();
-            
+
             if (data.features.length > 0) {
               const properties = data.features[0].properties;
               console.log(properties);
-              const colony = properties.name||properties.hamlet||properties.address_line1 || properties.neighbourhood || "Unknown Colony";
+              const colony =
+                properties.name ||
+                properties.hamlet ||
+                properties.address_line1 ||
+                properties.neighbourhood ||
+                "Unknown Colony";
               const city = properties.city || "Unknown City";
               setClinicLocation(`${colony}, ${city}`); // Store formatted location
             } else {
@@ -228,15 +236,15 @@ const BecomeDoctorForm = () => {
             console.error("Geocoding error:", error);
             setClinicLocation("Location not found");
           }
-  
+
           // Remove old marker if it exists
           if (marker.current) marker.current.remove();
-  
+
           // Add new marker
           marker.current = new maplibregl.Marker()
             .setLngLat([longitude, latitude])
             .addTo(map.current);
-  
+
           // Move map to user's location
           map.current.flyTo({
             center: [longitude, latitude],
@@ -249,7 +257,8 @@ const BecomeDoctorForm = () => {
             toast({
               title: "Location Permission Denied",
               position: "top",
-              description: "Please enable location services in your browser settings.",
+              description:
+                "Please enable location services in your browser settings.",
               status: "error",
               duration: 5000,
               isClosable: true,
@@ -263,23 +272,28 @@ const BecomeDoctorForm = () => {
       alert("Geolocation is not supported by your browser.");
     }
   };
-  
+
   //  clickable location
   const updateLocation = async (latitude, longitude) => {
     setClinicCoordinates({ lat: latitude, lng: longitude });
-  
+
     // Reverse Geocoding to get Subcity, City
     const apiKey = "17bcdbc86fda4dfca3ad3328a4ebb4d8";
     const geocodeUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${apiKey}`;
-  
+
     try {
       const response = await fetch(geocodeUrl);
       const data = await response.json();
-  
+
       if (data.features.length > 0) {
         const properties = data.features[0].properties;
         console.log(properties);
-        const subcity =properties.name||properties.hamlet||properties.address_line1 || properties.neighbourhood || "Unknown Colony";;
+        const subcity =
+          properties.name ||
+          properties.hamlet ||
+          properties.address_line1 ||
+          properties.neighbourhood ||
+          "Unknown Colony";
         const city = properties.city || "Unknown City";
         setClinicLocation(`${subcity}, ${city}`);
       } else {
@@ -289,15 +303,15 @@ const BecomeDoctorForm = () => {
       console.error("Geocoding error:", error);
       setClinicLocation("Location not found");
     }
-  
+
     // Remove old marker if it exists
     if (marker.current) marker.current.remove();
-  
+
     // Add new marker at the clicked location
     marker.current = new maplibregl.Marker()
       .setLngLat([longitude, latitude])
       .addTo(map.current);
-  
+
     // Move map to the new location
     map.current.flyTo({
       center: [longitude, latitude],
@@ -305,7 +319,7 @@ const BecomeDoctorForm = () => {
       speed: 1,
     });
   };
-  
+
   // Add click event on the map
   useEffect(() => {
     if (map.current) {
@@ -315,7 +329,7 @@ const BecomeDoctorForm = () => {
       });
     }
   }, []);
-
+let firstTime=true;
   return (
     <>
       <Navbar />
@@ -329,7 +343,7 @@ const BecomeDoctorForm = () => {
         bg={"linear-gradient(to right, #393f4d, #6b707a)"}
       >
         <Box
-          w={"clamp(300px,70vw,1000px)"}
+          w={"clamp(340px,95vw,1000px)"}
           h={"80vh"}
           display={"flex"}
           flexDirection={"column"}
@@ -433,7 +447,23 @@ const BecomeDoctorForm = () => {
               p={"5px"}
               fontSize={"18px"}
               value={currentArea}
-              onChange={(e) => setCurrentArea(e.target.value)}
+              onChange={(e) => {
+                if(e.target.value.length>15){
+                  if(firstTime){
+                  toast({
+                    title: "Treatment area length must be less than 15 words",
+                    status: "warning",
+                    position: "top",
+                    isClosable: true,
+                    duration: 5000,
+                    max:2
+                  });
+                firstTime=false;}
+                  return;
+                }
+                firstTime=true;
+                setCurrentArea(e.target.value)
+              }}
               onKeyDown={handleKeydown}
               width={"100%"}
             />
@@ -445,7 +475,7 @@ const BecomeDoctorForm = () => {
               marginTop={"10px"}
             >
               {treatmentArea?.length > 0 &&
-                treatmentArea?.map((s) => {
+                treatmentArea?.map((s, ind) => {
                   return (
                     <Box
                       padding={"5px"}
@@ -453,8 +483,27 @@ const BecomeDoctorForm = () => {
                       borderRadius={"5px"}
                       color={"white"}
                       cursor={"pointer"}
+                      key={s.id}
+                      boxSizing="border-box"
                     >
-                      {s}
+                      {s.name}
+                      <button
+                        style={{
+                          marginLeft: "20px",
+                          borderRadius: "50%",
+                          padding: "2px 5px",
+                          background: "white",
+                          color: "black",
+                          fontSize: "10px",
+                          textAlign:"center"
+                        }}
+                        title="Remove this area"
+                        onClick={()=>{
+                          settreatmentArea(prevArea=>prevArea.filter(area=>area.id!==s.id));
+                        }}
+                      >
+                        X
+                      </button>
                     </Box>
                   );
                 })}
@@ -470,7 +519,7 @@ const BecomeDoctorForm = () => {
             p={"5px"}
             fontSize={"18px"}
           />
-          
+
           <Input
             type="number"
             value={experienceYear === 0 ? null : experienceYear}
