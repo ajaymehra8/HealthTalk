@@ -58,12 +58,31 @@ experience:{
     return this.role === "doctor"; 
 },
 },
-  clinicLocation: {
-    type: String,
-    required: function () {
-      return this.role === "doctor"; 
+clinicLocation: {
+  type: {
+    name: String,
+    coordinates: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        validate: {
+          validator: function (v) {
+            return this.role !== "doctor" || (Array.isArray(v) && v.length === 2);
+          },
+          message: "Coordinates must contain exactly [longitude, latitude] for doctors",
+        },
+      },
     },
   },
+  required: function () {
+    return this.role === "doctor";
+  },
+},
+
   clinicFee: {
     type: Number,
     required: function () {
@@ -124,6 +143,13 @@ userSchema.virtual("reviews", {
 userSchema.set("toJSON", { virtuals: true });
 userSchema.set("toObject", { virtuals: true });
 
+userSchema.pre("save", function (next) {
+  if (this.role !== "doctor") {
+    this.clinicLocation = undefined; // Remove location if not a doctor
+  }
+  next();
+});
+
 // Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -167,5 +193,7 @@ userSchema.post("find", async function (docs) {
     }
   });
 });
+
+userSchema.index({ "clinicLocation.coordinates": "2dsphere" });
 
 module.exports = mongoose.model("User", userSchema);

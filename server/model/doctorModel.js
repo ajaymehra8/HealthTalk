@@ -17,8 +17,21 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   clinicLocation: {
-    type: String,
-    required: true,
+    name: {
+      type: String,
+      required: true
+    },
+    coordinates: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        required: true
+      }
+    }
   },
   clinicFee: {
     type: Number,
@@ -55,5 +68,8 @@ const userSchema = new mongoose.Schema({
     ref: "User",
   },
 });
+
+userSchema.index({ "clinicLocation.coordinates": "2dsphere" });
+
 
 module.exports = mongoose.model("DoctorInfo", userSchema);

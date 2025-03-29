@@ -14,6 +14,7 @@ import { HStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor, handleFunction }) => {
+  console.log(doctor);
   const navigate = useNavigate();
   const [loading,setLoading]=useState(false);
   const handleViewProfile = async () => {
@@ -55,7 +56,7 @@ const DoctorCard = ({ doctor, handleFunction }) => {
           </div>
           <p style={{ fontSize: "17px", fontWeight: "500" }}>
             <i class="bi bi-geo-alt"></i>{" "}
-            {doctor?.clinicLocation ? doctor?.clinicLocation : "Delhi, India"}
+            {doctor?.clinicLocation ? doctor?.clinicLocation?.name : "Delhi, India"}
           </p>
         </Stack>
       </CardBody>

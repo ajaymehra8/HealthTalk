@@ -167,7 +167,7 @@ const DocProf = () => {
               >
                 <p>
                   {doctor?.clinicLocation
-                    ? doctor?.clinicLocation
+                    ? doctor?.clinicLocation?.name
                     : "No-157, Bhagya Lakshmi, Sir Balchandra Road, Raja Shivaji Vidyalaya, Landmark : Near Podar College of Commerce."}
                 </p>
               </Box>
@@ -189,41 +189,28 @@ const DocProf = () => {
               border={"1px solid gray"}
               mt={{ base: "50px", md: "50px", lg: "0" }}
             >
-              <Tabs variant={"line"}>
-                <TabList mb={"1em"}>
-                  <Tab
-                    width={"50%"}
-                    _selected={{
-                      color: "#78be20",
-                      fontWeight: "500",
-                      borderColor: "#78be20", // Match the line color with text color
-                    }}
-                    fontWeight={"500"}
-                  >
-                    Reviews
-                  </Tab>
-                  <Tab
-                    width={"50%"}
-                    _selected={{
-                      color: "#78be20",
-                      fontWeight: "500",
-                      borderColor: "#78be20", // Match the line color with text color
-                    }}
-                    fontWeight={"500"}
-                  >
-                    Services
-                  </Tab>
-                </TabList>
+             <Tabs variant="line" width="100%">
+  <TabList width="100%" display="flex" justifyContent="center">
+    <Tab
+      width="100%" // Make the tab full width
+      _selected={{
+        color: "#78be20",
+        fontWeight: "500",
+        borderColor: "#78be20",
+      }}
+      fontWeight="500"
+    >
+      Reviews
+    </Tab>
+  </TabList>
 
-                <TabPanels flex={1} overflow={"auto"}>
-                  <TabPanel>
-                    <ReviewPanel doctor={doctor} />
-                  </TabPanel>
-                  <TabPanel>
-                    <ServicePanel doctor={doctor} />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
+  <TabPanels width="100%">
+    <TabPanel width="100%">
+      <ReviewPanel doctor={doctor} />
+    </TabPanel>
+  </TabPanels>
+</Tabs>
+
             </Box>
           ) : (
             <Box w="50%">
