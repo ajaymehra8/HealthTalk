@@ -58,7 +58,12 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
         width={"clamp(190px,25%,1000px)"}
         alignItems={"center"}
       >
-        <img src={review?.doctor?.image} alt="" className="rectangle-img" style={{width:"100%",height:"clamp(100px,25vh,340px)"}}/>
+        <img
+          src={review?.doctor?.image}
+          alt=""
+          className="rectangle-img"
+          style={{  height:'clmap(100px,20vh,300px)' }}
+        />
         <h4 style={{ alignSelf: "center" }}>
           Mr. {review?.doctor?.name || "Unknown User"}
         </h4>
@@ -73,7 +78,7 @@ const ReviewCard = ({ review, setReviews, reviews }) => {
 
         <button
           className="rejectBtn rounded-btn"
-          onClick={!loading?handleDelete:undefined}
+          onClick={!loading ? handleDelete : undefined}
           style={{
             marginTop: "40px",
             background: loading && "gray",
