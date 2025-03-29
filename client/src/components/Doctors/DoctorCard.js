@@ -47,11 +47,9 @@ const DoctorCard = ({ doctor, handleFunction }) => {
             }}
           >
             <p>
-              ₹ <b>{doctor?.clinicFee ? doctor?.clinicFee : "2,000"}</b> at clinic
+              $ <b>{doctor?.clinicFee ? doctor?.clinicFee : "2,000"}</b> at clinic
             </p>
-            <p>
-              ₹ <b>{doctor?.onlineFee ? doctor?.onlineFee : "300"}</b> online
-            </p>
+           
           </div>
           <p style={{ fontSize: "17px", fontWeight: "500" }}>
             <i class="bi bi-geo-alt"></i>{" "}

@@ -97,8 +97,8 @@ exports.createCheckout = async (req, res, next) => {
       });
     }
 
-    // Fallback for missing onlineFee
-    const onlineFee = doctor.clinicFee;
+    // Fallback for missing clinicFee
+    const clinicFee = doctor.clinicFee;
 
     // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -111,7 +111,7 @@ exports.createCheckout = async (req, res, next) => {
             product_data: {
               name: doctor.name, // Doctor's name
             },
-            unit_amount: Math.round(onlineFee * 100), // Fee in cents
+            unit_amount: Math.round(clinicFee * 100), // Fee in cents
           },
           quantity: 1, // Single charge
         },

@@ -106,7 +106,7 @@ exports.getSingleDoctor = async (req, res, next) => {
 // }
 
 exports.updateDoctor = async (req, res) => {
-  const { name, description, education, clinicFee, onlineFee } = req.body;
+  const { name, description, education, clinicFee  } = req.body;
 
   const field = Object.fromEntries(
     Object.entries({
@@ -114,7 +114,6 @@ exports.updateDoctor = async (req, res) => {
       description,
       education,
       clinicFee,
-      onlineFee,
     }).filter(
       ([_, value]) => value !== undefined && value !== null && value !== ""
     )

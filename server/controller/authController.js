@@ -326,7 +326,6 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
       specialization,
       treatmentArea,
       clinicFee,
-      onlineFee,
     } = req.body;
     let parsedTreatmentArea;
     try {
@@ -351,7 +350,6 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
       treatmentArea: parsedTreatmentArea,
       specialization,
       clinicFee,
-      onlineFee,
       pastExperience,
       user: user._id,
     };
@@ -424,7 +422,6 @@ exports.updateStatusByAdmin = async (req, res, next) => {
         clinicLocation,
         education,
         description,
-        onlineFee,
       } = extraInfos;
       await User.findByIdAndUpdate(
         userId,
@@ -433,7 +430,6 @@ exports.updateStatusByAdmin = async (req, res, next) => {
           degree,
           clinicFee,
           clinicLocation,
-          onlineFee,
           education,
           description,
           role: "doctor",
@@ -464,6 +460,7 @@ exports.updateStatusByAdmin = async (req, res, next) => {
       message: "Internal server error",
     });
   }
+
 };
 // GOOGLE AUTHENTICATION
 exports.googleLogin = async (req, res) => {
