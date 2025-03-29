@@ -1,20 +1,24 @@
-import { Box, Input, Button, Text, useToast } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Box, Input, Button, Text, useToast, Flex } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "../../context/AuthProvider";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 const BecomeDoctorForm = () => {
   const { user, setUser } = useAuthState();
 
   // State for input values
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [education, setEducation] = useState("");
   const [pastExperience, setPastExperience] = useState("");
   const [description, setDescription] = useState("");
   const [clinicLocation, setClinicLocation] = useState("");
+  const [clinicCoordinates,setClinicCoordinates]=useState({});
+
   const [treatmentArea, settreatmentArea] = useState([]);
   const [currentArea, setCurrentArea] = useState("");
   const [clinicFee, setClinicFee] = useState(0);
@@ -24,10 +28,38 @@ const BecomeDoctorForm = () => {
   const [onlineFee, setOnlineFee] = useState("");
   const [pdfFile, setPdfFile] = useState(null); // For the PDF file
   const [fileName, setFileName] = useState("No file chosen");
+
+  const marker = useRef(null);
+  const map = useRef(null);
+
   const navigate = useNavigate();
+
+  const mapContainer = useRef(null); // Use a ref to access the div
+
   useEffect(() => {
-    setName(user?.name);
-    setEmail(user?.email);
+    if (!mapContainer.current) return; // Ensure the container exists
+
+    map.current = new maplibregl.Map({
+      container: mapContainer.current, // Use ref instead of ID
+      style: "https://maps.geoapify.com/v1/styles/osm-carto/style.json?apiKey=17bcdbc86fda4dfca3ad3328a4ebb4d8", // Style URL
+      center: [77.1025, 28.7041], // New Delhi, India [lng, lat]
+      zoom: 0,
+    });
+    map.current.on("load", () => {
+      map.current.flyTo({
+        center: [77.1025, 28.7041], // Target location
+        zoom: 4, // Zoom-in level
+        speed: 0.8, // Animation speed (lower is slower)
+        curve: 1.5, // Smoothness of the transition
+        essential: true, // Ensures animation works smoothly
+      });
+    });
+    return () => map.current.remove(); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    setName(user?.name || "");
+    setEmail(user?.email || "");
   }, [user]);
   const toast = useToast();
   const handleKeydown = (event) => {
@@ -37,7 +69,7 @@ const BecomeDoctorForm = () => {
           title: "You can add only 5 treatment area",
           status: "warning",
           position: "top",
-          isClosable:true,
+          isClosable: true,
           duration: 5000,
         });
         return;
@@ -103,7 +135,7 @@ const BecomeDoctorForm = () => {
         status: "error",
         duration: 3000,
         isClosable: true,
-        position:'top'
+        position: "top",
       });
       return;
     }
@@ -116,7 +148,15 @@ const BecomeDoctorForm = () => {
     formData.append("pastExperience", pastExperience);
 
     formData.append("description", description);
-    formData.append("clinicLocation", clinicLocation);
+    const locationForDb = {
+      name: clinicLocation, // Subcity, City format
+      coordinates: {
+        type: "Point",
+        coordinates: [clinicCoordinates?.lng, clinicCoordinates?.lat], // [longitude, latitude]
+      },
+    };
+
+    formData.append("clinicLocation", JSON.stringify(locationForDb));
     formData.append("specialization", specialization);
 
     formData.append("treatmentArea", JSON.stringify(treatmentArea));
@@ -169,17 +209,136 @@ const BecomeDoctorForm = () => {
     }
   };
 
+  //  get location function
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+  
+          // Store coordinates separately
+          setClinicCoordinates({ lat: latitude, lng: longitude });
+  
+          // Reverse Geocoding to get location name
+          const apiKey = "17bcdbc86fda4dfca3ad3328a4ebb4d8";
+          const geocodeUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${apiKey}`;
+  
+          try {
+            const response = await fetch(geocodeUrl);
+            const data = await response.json();
+            
+            if (data.features.length > 0) {
+              const properties = data.features[0].properties;
+              console.log(properties);
+              const colony = properties.name||properties.hamlet||properties.address_line1 || properties.neighbourhood || "Unknown Colony";
+              const city = properties.city || "Unknown City";
+              setClinicLocation(`${colony}, ${city}`); // Store formatted location
+            } else {
+              setClinicLocation("Unknown location");
+            }
+          } catch (error) {
+            console.error("Geocoding error:", error);
+            setClinicLocation("Location not found");
+          }
+  
+          // Remove old marker if it exists
+          if (marker.current) marker.current.remove();
+  
+          // Add new marker
+          marker.current = new maplibregl.Marker()
+            .setLngLat([longitude, latitude])
+            .addTo(map.current);
+  
+          // Move map to user's location
+          map.current.flyTo({
+            center: [longitude, latitude],
+            zoom: 14,
+            speed: 1,
+          });
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            toast({
+              title: "Location Permission Denied",
+              position: "top",
+              description: "Please enable location services in your browser settings.",
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+            });
+          } else {
+            alert("Unable to fetch location. Try again later.");
+          }
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
+  
+  //  clickable location
+  const updateLocation = async (latitude, longitude) => {
+    setClinicCoordinates({ lat: latitude, lng: longitude });
+  
+    // Reverse Geocoding to get Subcity, City
+    const apiKey = "17bcdbc86fda4dfca3ad3328a4ebb4d8";
+    const geocodeUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${apiKey}`;
+  
+    try {
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+  
+      if (data.features.length > 0) {
+        const properties = data.features[0].properties;
+        console.log(properties);
+        const subcity =properties.name||properties.hamlet||properties.address_line1 || properties.neighbourhood || "Unknown Colony";;
+        const city = properties.city || "Unknown City";
+        setClinicLocation(`${subcity}, ${city}`);
+      } else {
+        setClinicLocation("Unknown Location");
+      }
+    } catch (error) {
+      console.error("Geocoding error:", error);
+      setClinicLocation("Location not found");
+    }
+  
+    // Remove old marker if it exists
+    if (marker.current) marker.current.remove();
+  
+    // Add new marker at the clicked location
+    marker.current = new maplibregl.Marker()
+      .setLngLat([longitude, latitude])
+      .addTo(map.current);
+  
+    // Move map to the new location
+    map.current.flyTo({
+      center: [longitude, latitude],
+      zoom: 14,
+      speed: 1,
+    });
+  };
+  
+  // Add click event on the map
+  useEffect(() => {
+    if (map.current) {
+      map.current.on("click", (e) => {
+        const { lng, lat } = e.lngLat;
+        updateLocation(lat, lng);
+      });
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
       <Box
         minH={"100vh"}
         w={"100vw"}
-        pt={'55px'}
+        pt={"55px"}
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
-        bg={'linear-gradient(to right, #393f4d, #6b707a)'}
+        bg={"linear-gradient(to right, #393f4d, #6b707a)"}
       >
         <Box
           w={"clamp(300px,70vw,1000px)"}
@@ -193,13 +352,12 @@ const BecomeDoctorForm = () => {
           gap={"25px"}
           background={"white"}
           overflowY={"scroll"}
-          boxShadow={'1px 1px 10px gray'}
+          boxShadow={"1px 1px 10px gray"}
           css={{
             scrollBehavior: "smooth",
             "&::-webkit-scrollbar": {
               width: "0",
             },
-            
           }}
         >
           <h1 style={{ fontSize: "27px", fontWeight: "500", color: "black" }}>
@@ -259,15 +417,26 @@ const BecomeDoctorForm = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Input
-            type="text"
-            placeholder="Enter your clinic location"
-            bg={"white"}
-            p={"5px"}
-            fontSize={"18px"}
-            value={clinicLocation}
-            onChange={(e) => setClinicLocation(e.target.value)}
-          />
+          <Flex gap={2} mb={3} width={"100%"}>
+            <Input
+              type="text"
+              placeholder="Choose your location from map"
+              bg="white"
+              p="5px"
+              readOnly
+              fontSize="18px"
+              value={clinicLocation}
+              onChange={(e) => setClinicLocation(e.target.value)}
+            />
+            <Button colorScheme="blue" onClick={getLocation} minW={"110px"}>
+              Your Location
+            </Button>
+          </Flex>
+          <div
+            ref={mapContainer}
+            style={{ height: "80vh", width: "100%", minHeight: "300px" }}
+          ></div>
+
           <Box width={"100%"}>
             <Input
               type="text"
@@ -306,7 +475,7 @@ const BecomeDoctorForm = () => {
 
           <Input
             type="number"
-            value={clinicFee===0?null:clinicFee}
+            value={clinicFee === 0 ? null : clinicFee}
             onChange={handleChange}
             placeholder="Enter your clinic fee in dollors (1-30)"
             bg={"white"}
@@ -315,7 +484,7 @@ const BecomeDoctorForm = () => {
           />
           <Input
             type="number"
-            value={onlineFee===0?null:onlineFee}
+            value={onlineFee === 0 ? null : onlineFee}
             onChange={handleOnlineFeeChange}
             placeholder="Enter your online fee in dollors (1-10)"
             bg={"white"}
@@ -324,7 +493,7 @@ const BecomeDoctorForm = () => {
           />
           <Input
             type="number"
-            value={experienceYear===0?null:experienceYear}
+            value={experienceYear === 0 ? null : experienceYear}
             onChange={(e) => {
               let value = parseInt(e.target.value, 10);
               // Ensure the value stays within the range

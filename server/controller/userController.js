@@ -8,7 +8,7 @@ exports.getAllDoctors = async (req, res) => {
     : {};
 
   const doctors = await User.find({ role: "doctor", ...keyword })
-    .limit(12)
+    .limit(14)
     .select("-__v")
     .populate({ path: "reviews", options: { sort: { createdAt: -1 } } });
   res.status(200).json({

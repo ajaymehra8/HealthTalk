@@ -25,7 +25,7 @@ const ReviewPanel = ({ doctor }) => {
         display={"flex"}
         flexDir={"column"}
         gap={"20px"}
-        overflowY={"scroll"}
+        overflowY={"auto"}
         height={"200px"}
         paddingTop={"20px"}
       >

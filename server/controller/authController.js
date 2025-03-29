@@ -347,7 +347,7 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
       education,
       experience,
       description,
-      clinicLocation,
+      clinicLocation:JSON.parse(clinicLocation),
       treatmentArea: parsedTreatmentArea,
       specialization,
       clinicFee,
