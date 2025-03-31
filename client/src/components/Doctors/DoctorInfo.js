@@ -110,10 +110,9 @@ const DoctorInfo = ({ image }) => {
         duration: 5000,
         position: "top",
       });
-      const obj = { ...data.user, jwt: token };
-      const user = JSON.stringify(obj);
-      setUser(user);
-      localStorage.setItem("userInfo", user);
+      const updatedUser = { ...data.user, jwt: token };
+        setUser(updatedUser); // Update state
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser)); // Sync local storage
     }
     setLoading(false);
   };
@@ -159,8 +158,8 @@ const DoctorInfo = ({ image }) => {
         justifyContent={"center"}
         gap={"20px"}
       >
-        {allInfo?.map((info) => (
-          <InfoBox info={info} setShowBtn={setShowBtn} />
+        {allInfo?.map((info,ind) => (
+          <InfoBox info={info} setShowBtn={setShowBtn} key={ind}/>
         ))}
       </Box>
       <button
