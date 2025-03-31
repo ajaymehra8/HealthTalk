@@ -13,6 +13,8 @@ import Reviews from "./Reviews/Reviews";
 import DoctorReviews from "../Doctors/Reviews/DoctorReviews";
 import Earning from "../Doctors/Earning/Earning";
 import WebInfo from "../Admin/adminPageComponent/WebInfo";
+import AdminReports from "../Admin/AdminReports";
+import AllDoctors from "../Admin/AllDoctors";
 
 const UserInfo = () => {
   const { user } = useAuthState();
@@ -65,10 +67,13 @@ const UserInfo = () => {
               }
             />
             <Route path="approvals" element={<Approvals />} />
-            <Route path="your-appoinment" element={<UserAppoinments />} />
+            <Route path="reports" element={<AdminReports />} />
+            <Route path="all-doctors" element={<AllDoctors />} />
+
+            <Route path="my-appoinment" element={<UserAppoinments />} />
             <Route path="appoinments" element={<Appoinments />} />
             <Route
-              path="your-reviews"
+              path="my-reviews"
               element={
                 !(user?.role === "doctor") ? <Reviews /> : <DoctorReviews />
               }

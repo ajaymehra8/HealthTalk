@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
-import { Box } from "@chakra-ui/react";
+import { Box,useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "../../context/AuthProvider";
 import axios from "axios";
@@ -13,7 +13,12 @@ const Review = () => {
   const {user}=useAuthState();
   const [loading,setLoading]=useState(false);
   const doctor = state?.user; // Access the user data from the state
+  const toast=useToast();
   const navigate=useNavigate();
+  if(!doctor){
+    navigate('/my-info');
+    return;
+  }
   const handleApplication=()=>{
     navigate('/doctor/form');
   }
@@ -32,10 +37,22 @@ const Review = () => {
       }
     );
     if(data.success){
-      alert("Review submitted");
-      navigate('/');
+      toast({
+        title: data.message,
+        status: "success",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      });
+      navigate('/my-profile/my-reviews');
     }else{
-      alert(data.message)
+      toast({
+        title: data.message,
+        status: "error",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      });
     }
     setLoading(false);
   }
@@ -99,7 +116,7 @@ const Review = () => {
               ))}
             </Box>
             <p style={{ marginBottom: "10px" }}>
-              Tell us about you experience with Dr. Shubhada Sanjiv Khandeparkar
+              Tell us about you experience with Dr. {doctor?.name}
             </p>
             <textarea
               style={{

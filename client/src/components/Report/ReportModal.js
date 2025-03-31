@@ -20,15 +20,38 @@ function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
   const toast = useToast();
   const handleReport = async () => {
     const token = user?.jwt;
-    if (!token) {
+    if (!user) {
+      toast({
+        title: "Please logged in first",
+        status: "warning",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      });
       return;
     }
+    if (!token) {
+
+      return;
+    }
+
     setLoading(true);
     try {
       const headers = {
         "Content-Type": "application/json",
         authorization: `Bearer ${token}`,
       };
+      if (report.length <= 3) {
+        toast({
+          title: "Write a valid report",
+          status: "warning",
+          isClosable: true,
+          duration: 5000,
+          position: "top",
+        });
+        setLoading(false);
+        return;
+      }
       const body = {
         report,
         doctorId: doctorId,
@@ -90,11 +113,16 @@ function ReportModal({ isOpen, onOpen, onClose, doctorId }) {
           </ModalBody>
           <ModalFooter>
             <Button
-              colorScheme="blue"
               mr={3}
-              onClick={!loading?handleReport:undefined}
-              background={loading && "gray"}
+              onClick={!loading ? handleReport : undefined}
+              background={loading ? "gray" : "#3182ce"}
               disabled={loading}
+              cursor={loading ? "disabled" : "pointer"}
+              color={"white"}
+              _hover={{
+                bg: loading ? "gray" : "#3182ce",
+                cursor: loading ? "disabled" : "pointer",
+              }}
             >
               {!loading ? "Report" : "Wait..."}
             </Button>

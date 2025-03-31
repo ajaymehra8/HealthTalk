@@ -18,7 +18,7 @@ Router.post("/cancel-appoinment", bookingController.cancelAppoinment);
 
 Router.get("/get-user-appoinments", bookingController.getAppoinmentsForUser);
 Router.get(
-  "/get-doctor-appoinments",
+  "/get-doctor-appoinments/:doctor",
   bookingController.getAppoinmentsForDoctor
 );
 Router.post("/set-appoinment", bookingController.setAppoinmentByDoctor);

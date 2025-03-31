@@ -93,7 +93,7 @@ const AppoinmentCard = ({ appoinment, setAppoinments, appoinments }) => {
         width={"clamp(190px,25%,200px)"}
         alignItems={"center"}
       >
-        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" style={{height:'clmap(100px,20vh,300px)'}}/>
+        <img src={appoinment?.doctor?.image} alt="" className="rectangle-img" style={{height:'clamp(100px,20vh,300px)',width:"100%"}}/>
         <h4 style={{ alignSelf: "center" }}>
           Mr. {appoinment?.doctor?.name || "Unknown User"}
         </h4>

@@ -5,7 +5,7 @@ import ReqCard from "../Approval/ReqCard";
 import axios from 'axios';
 const Approvals = () => {
   const { user } = useAuthState();
-  const [reqs,setReqs]=useState(null);
+  const [reqs,setReqs]=useState([]);
   const fetchReqs = async () => {
     const token = user?.jwt;
   
@@ -51,6 +51,11 @@ fetchReqs();
       },
     }}
     >
+      {reqs?.length > 0 && (
+        <h1 className="page-head" style={{ marginBottom: "5px" }}>
+          All Requests
+        </h1>
+      )}
       {reqs?.length > 0 ? (
         reqs?.map((req) => <ReqCard req={req} setReqs={setReqs}/>)
       ) : (

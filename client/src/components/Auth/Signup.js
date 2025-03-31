@@ -1,4 +1,4 @@
-import { Box, Button, Input, useToast,useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Input, useToast,useBreakpointValue, InputGroup, InputRightElement } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../Api/Auth";
@@ -14,7 +14,9 @@ const Signup = () => {
   const [btnState, setBtnState] = useState(1);
   const [otp, setOtp] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { user, setUser } = useAuthState();
+  const { setUser } = useAuthState();
+    const [showPass, setShowPass] = useState(false);
+  
   const toast = useToast();
   const navigate = useNavigate();
   window.onpopstate = () => {
@@ -368,27 +370,45 @@ const emailPlaceholderText =
                 boxShadow: "none !important",
               }}
             />
-            <Input
-              type="password"
-              placeholder={passwordPlaceholderText}
-              p="10px"
-              borderRadius="10px"
-              border={"1px solid black"}
-              outline="none"
-              width={"clamp(150px,90%,1000px)"}
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              minW="80px"
-              bg="white"
-              fontSize="20px"
-              _hover={{
-                border: "1px solid black",
+           <InputGroup width={"clamp(150px,90%,1000px)"}>
+          <Input
+            type={!showPass ? "password" : "text"}
+            placeholder={passwordPlaceholderText}
+            p={"10px"}
+            borderRadius={"10px"}
+            border={"1px solid black"}
+            outline={"none"}
+            width={"100%"}
+            maxLength={28}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fontSize={"clamp(15px,3vw,20px)"}
+            bg={"white"}
+            _hover={{
+              border: "1px solid black",
+            }}
+            _focus={{
+              border: "1px solid black !important",
+              boxShadow: "none !important",
+            }}
+          />
+          <InputRightElement width="4.5rem">
+            <button
+              style={{
+                background: "white",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "blue",
+                zIndex:3,
+                
               }}
-              _focus={{
-                border: "1px solid black !important",
-                boxShadow: "none !important",
-              }}
-            />
+              onClick={() => setShowPass(!showPass)}
+            >
+              {!showPass ? "Show" : "Hide"}
+            </button>
+          </InputRightElement>
+        </InputGroup>
           </>
         )}
 

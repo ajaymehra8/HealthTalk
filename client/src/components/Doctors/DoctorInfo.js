@@ -123,8 +123,10 @@ const DoctorInfo = ({ image }) => {
     flexDir={"column"}
     alignItems={"start"}
     justifyContent={"start"}
+    overflowY={"auto"}
     w={"clamp(320px,90%,1000px)"}
-    minH={"45vh"}
+    minH={"85vh"}
+    maxH={"85vh"}
     height={'auto'}
           p={"2px 20px"}
           pt={'10px'}
@@ -135,6 +137,7 @@ const DoctorInfo = ({ image }) => {
     sx={{
       "@media(max-width:500px)":{
         minHeight:"63vh",
+        maxHeight:"63vh"
       },
     }}
     >

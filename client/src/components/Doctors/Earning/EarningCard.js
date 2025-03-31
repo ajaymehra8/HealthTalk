@@ -22,20 +22,20 @@ const EarningCard = ({appoinment}) => {
     >
       <Box
         display={"flex"}
-        width={"30%"}
+        width={"40%"}
         gap={"10px"}
         justifyContent={"space-evenly"}
         alignItems={"center"}
       >
         <Avatar size="md" name={appoinment?.user?.name} src={appoinment?.user?.image} />
-        <Box>
+        <Box width={"100%"}>
         <h2 style={{ fontSize: "15px" }}>Mr. {appoinment?.user?.name}</h2>
         <h2 style={{ fontSize: "15px" }}><b>Email:</b> {appoinment?.user?.email}</h2>
         
         </Box>
       </Box>
 
-      <div className="reqButtons" style={{gap:"35px",justifyContent:"center"}}>
+      <div className="reqButtons" style={{gap:"35px",justifyContent:"center",width:"30%"}}>
         <button className="acceptBtn">
           + ${user?.clinicFee}
         </button>

@@ -36,6 +36,7 @@ const DoctorReviews = () => {
     justifyContent={"start"}
     w={"clamp(320px,90%,1000px)"}
     minH={"85vh"}
+    maxH={"85vh"}
     height={'auto'}
           p={"2px 20px"}
           pt={'10px'}
@@ -46,6 +47,7 @@ const DoctorReviews = () => {
     sx={{
       "@media(max-width:500px)":{
         minHeight:"63vh",
+        maxHeight:"63vh"
       },
     }}
     >

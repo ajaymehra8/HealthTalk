@@ -222,7 +222,6 @@ exports.isProtect = async (req, res, next) => {
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token, "token");
   if (!token) {
     res.status(401).json({
       success: false,
@@ -271,7 +270,6 @@ exports.isAdmin = async (req, res, next) => {
   } else if (req?.cookies?.jwt) {
     token = req?.cookies?.jwt;
   }
-  console.log(token);
   if (!token) {
     return res.status(401).json({
       success: false,
@@ -392,7 +390,6 @@ exports.sendReqToBecomeDoctor = async (req, res, next) => {
     });
   } catch (error) {
     // Handle errors and send a response
-    console.log("here there");
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -402,7 +399,6 @@ exports.updateStatusByAdmin = async (req, res, next) => {
   try {
     const { userId, status, reqId } = req.body;
     const admin = req.user;
-    console.log(status);
     if (status === "Rejected") {
       await User.findByIdAndUpdate(userId, { status: null }, { new: true });
       await DoctorInfo.findByIdAndDelete(reqId);

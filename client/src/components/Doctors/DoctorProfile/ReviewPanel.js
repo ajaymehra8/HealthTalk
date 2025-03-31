@@ -11,7 +11,9 @@ const ReviewPanel = ({ doctor }) => {
   return (
     <Box
       background={"#f1f1f1"}
-      width={"clamP(200px,77vw,520px)"}
+width={"100%"}
+minW={"280px"}
+
       display={"flex"}
       alignItems={"start"}
       justifyContent={"center"}
@@ -19,7 +21,8 @@ const ReviewPanel = ({ doctor }) => {
       borderRadius={"10px"}
     >
       <Box
-        width={"clamp(200px,80vw,520px)"}
+        width={"100%"}
+        minW={"280px"}
         mb={"20px"}
         p={"0 5px"}
         display={"flex"}
@@ -45,6 +48,15 @@ const ReviewPanel = ({ doctor }) => {
           className="homePageBtn"
           style={{ marginTop: "0", borderRadius: "10px" }}
           onClick={() => {
+            if(user?.role!=="user"){
+              return toast({
+                title:"You are not allowed to do this action.",
+                status: "error",
+                isClosable: true,
+                duration: 5000,
+                position: "top",
+              });
+            }
             if(!user){
               return toast({
                 title:"You are not logged in",
@@ -52,7 +64,7 @@ const ReviewPanel = ({ doctor }) => {
                 isClosable: true,
                 duration: 5000,
                 position: "top",
-              })
+              });
             }
             navigate("/doctor/review", { state: { user: doctor } });
           }}

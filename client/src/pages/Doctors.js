@@ -20,13 +20,11 @@ const Doctors = ({ id, doctors,setDoctors }) => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/v1/user/?filter=${queryName}`
       );
-      console.log(data);
       setDoctors(data.doctors);
     }else{
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/v1/user`
         );  
-        console.log(data);
         setDoctors(data.doctors);
       }
    
@@ -61,7 +59,6 @@ const Doctors = ({ id, doctors,setDoctors }) => {
     setLoadingText("No clinic available near you.");
 
   }
-          console.log(data);
           setDoctors(data.doctors);
 
         },
@@ -75,7 +72,6 @@ const Doctors = ({ id, doctors,setDoctors }) => {
   };
   
 const setFilter=(e)=>{
-  console.log(e.target.value);
   if(e.target.value==="rating"){
 fetchDoctors("rating");
   }else if(e.target.value==="price"){
