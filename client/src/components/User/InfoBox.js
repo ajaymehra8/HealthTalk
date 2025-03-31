@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 
-const InfoBox = ({ info, setShowBtn }) => {
+const InfoBox = ({ info}) => {
   const [edit, setEdit] = useState(false);
   const [expand, setExpand] = useState(false);
   const contentRef = useRef(null);
@@ -9,20 +9,22 @@ const InfoBox = ({ info, setShowBtn }) => {
   useEffect(() => {
     if (edit && contentRef.current) {
       const element = contentRef.current;
+      element.focus(); // Focus on the contentEditable element
+      
       const range = document.createRange();
       const selection = window.getSelection();
 
-      // Set the caret at the end of the content
+      // Move the caret to the end of the content
       range.selectNodeContents(element);
-      range.collapse(false); // false = end of the range
+      range.collapse(false);
       selection.removeAllRanges();
       selection.addRange(range);
     }
   }, [edit]);
 
   const handleInput = (e) => {
-    const newValue = e.target.textContent; // Get the updated value from contentEditable
-    info?.handleFunction(newValue); // Update the parent state
+    const newValue = e.target.textContent;
+    info?.handleFunction(newValue);
   };
 
   return (
@@ -36,47 +38,51 @@ const InfoBox = ({ info, setShowBtn }) => {
       p={"5px 5px 10px 5px"}
     >
       <h1 style={{ fontSize: "17px", width: "25%" }}>{info?.title}</h1>
-      <Box
-        w={"64%"}
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"start"}
-      >
-        <h1
-          ref={contentRef}
-          style={{
-            fontSize: "18px",
-            color: info?.color ? "black" : "gray",
-            outline: "none",
-          }}
-          contentEditable={edit}
-          onInput={handleInput} // Use onInput instead of onChange
-        >
-          {!edit
-            ? info.title === "Description"
-              ? !expand
-                ? info.value.slice(0, 80) + "..."
-                : info.value
-              : info.value
-            : ""}
-          {info.title === "Description" && (
-            <span
-              style={{ color: "blue", cursor: "pointer" }}
-              onClick={() => setExpand(!expand)}
-            >
-              {" "}
-              read {expand?"less":"more"}
-            </span>
-          )}
-        </h1>
+      <Box w={"64%"} display={"flex"} alignItems={"center"} justifyContent={"start"}>
+      <h1
+  ref={contentRef}
+  style={{
+    fontSize: "18px",
+    color: info?.color ? "black" : "gray",
+    outline: "none",
+  }}
+  contentEditable={edit}
+  suppressContentEditableWarning={true}
+  onInput={handleInput}
+>
+  {!edit ? (
+    info.title === "Description" ? (
+      info.value.length > 80 ? (
+        expand ? info.value : info.value.slice(0, 80) + "..."
+      ) : (
+        info.value
+      )
+    ) : (
+      info.value
+    )
+  ) : (
+    info.value // Show the value while editing
+  )}
+</h1>
+
+{info.title === "Description" && info.value.length > 80 && !edit && (
+  <span
+    style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
+    onClick={() => setExpand(!expand)}
+  >
+    read {expand ? "less" : "more"}
+  </span>
+)}
+
       </Box>
       {info.title !== "Email" && (
         <button
           style={{ color: "blue" }}
-          onClick={(e) => {
-            if (edit === true) {
+          onClick={() => {
+            if (edit) {
               info?.handleFunction("");
             }
+            
             setEdit(!edit);
           }}
         >
