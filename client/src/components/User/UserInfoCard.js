@@ -11,24 +11,8 @@ const UserInfoCard = ({ image }) => {
   const [age, setAge] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [showBtn, setShowBtn] = useState(false);
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
-
-  // Sync user from localStorage during initialization
-  const setUserInLocalStorage = useCallback(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) {
-      setUser(userInfo);
-    }
-  }, [setUser]);
-
-  useEffect(() => {
-    setUserInLocalStorage();
-  }, [setUserInLocalStorage]);
-
-  // Prepare the information array
-  const allInfo = [
+  const [allInfo,setAllInfo]=useState( [
     {
       title: "Name",
       value: user?.name || "Enter your name",
@@ -70,7 +54,54 @@ const UserInfoCard = ({ image }) => {
       color: Boolean(user?.weight),
       handleFunction: setWeight,
     },
-  ];
+  ]);
+  const toast = useToast();
+useEffect(()=>{
+  setAllInfo([
+    {
+      title: "Name",
+      value: user?.name || "Enter your name",
+      edit: true,
+      color: Boolean(user?.name),
+      handleFunction: setName,
+    },
+    {
+      title: "Email",
+      value: user?.email,
+      edit: false,
+      color: Boolean(user?.email),
+    },
+    {
+      title: "Blood Group",
+      value: user?.bloodGroup || "Enter your blood group",
+      edit: true,
+      color: Boolean(user?.bloodGroup),
+      handleFunction: setBloodGroup,
+    },
+    {
+      title: "Age",
+      value: user?.age || "Enter your age",
+      edit: true,
+      color: Boolean(user?.age),
+      handleFunction: setAge,
+    },
+    {
+      title: "Height",
+      value: user?.height || "Enter your height",
+      edit: true,
+      color: Boolean(user?.height),
+      handleFunction: setHeight,
+    },
+    {
+      title: "Weight",
+      value: user?.weight || "Enter your weight",
+      edit: true,
+      color: Boolean(user?.weight),
+      handleFunction: setWeight,
+    },
+  ]);
+},[user]);
+  
 
   const handleChanges = async () => {
     if (!name && !age && !weight && !bloodGroup && !height && !image) {
@@ -136,9 +167,9 @@ const UserInfoCard = ({ image }) => {
       alignItems={"start"}
       justifyContent={"start"}
       w={"clamp(320px,90%,1000px)"}
-      minH={"45vh"}
-      height={'auto'}
-            p={"2px 20px"}
+      minH={"85vh"}
+maxH={"85vh"}
+      p={"2px 20px"}
             pt={'10px'}
             pb={'1vh'}
       bg={"white"}
@@ -147,6 +178,7 @@ const UserInfoCard = ({ image }) => {
       sx={{
         "@media(max-width:500px)":{
           minHeight:"63vh",
+          maxHeight:"63vh"
         },
       }}
     >
@@ -169,7 +201,7 @@ const UserInfoCard = ({ image }) => {
         gap={"20px"}
       >
         {allInfo?.map((info, idx) => (
-          <InfoBox key={idx} info={info} setShowBtn={setShowBtn} />
+          <InfoBox key={idx} info={info} />
         ))}
       </Box>
       <button
