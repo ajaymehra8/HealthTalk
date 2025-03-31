@@ -72,7 +72,7 @@ router.get(
 router.get("/request", authController.isAdmin, userController.getReqs);
 
 router.route("/:userId").get(userController.getSingleDoctor);
-
+router.delete("/doctor/:doctor",authController.isAdmin,   userController.deleteDoctor);
 router.delete("/delete-all", async (req, res) => {
   await User.deleteMany({});
   res.send("deleted");

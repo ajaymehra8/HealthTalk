@@ -3,6 +3,7 @@ import { Box } from "@chakra-ui/react";
 
 const InfoBox = ({ info, setShowBtn }) => {
   const [edit, setEdit] = useState(false);
+  const [expand, setExpand] = useState(false);
   const contentRef = useRef(null);
 
   useEffect(() => {
@@ -51,14 +52,29 @@ const InfoBox = ({ info, setShowBtn }) => {
           contentEditable={edit}
           onInput={handleInput} // Use onInput instead of onChange
         >
-          {!edit ? info.value : ""}
+          {!edit
+            ? info.title === "Description"
+              ? !expand
+                ? info.value.slice(0, 80) + "..."
+                : info.value
+              : info.value
+            : ""}
+          {info.title === "Description" && (
+            <span
+              style={{ color: "blue", cursor: "pointer" }}
+              onClick={() => setExpand(!expand)}
+            >
+              {" "}
+              read {expand?"less":"more"}
+            </span>
+          )}
         </h1>
       </Box>
       {info.title !== "Email" && (
         <button
           style={{ color: "blue" }}
           onClick={(e) => {
-            if(edit===true){
+            if (edit === true) {
               info?.handleFunction("");
             }
             setEdit(!edit);

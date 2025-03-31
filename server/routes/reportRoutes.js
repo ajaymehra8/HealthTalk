@@ -8,5 +8,6 @@ Router.use(authoController.isProtect);
 Router.route("/")
   .post(reportController.createReport)
   .get(reportController.getAllReports);
+Router.delete("/:report",reportController.deleteReport);
 
 module.exports = Router;

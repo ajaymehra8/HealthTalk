@@ -42,7 +42,6 @@ exports.getAllDoctors = async (req, res) => {
       },
     ]);
 
-    console.log(doctors[0]);
   } else if (filter === "price") {
     doctors = await User.find({ role: "doctor", ...keyword })
       .sort({ clinicFee: 1 })
@@ -72,7 +71,6 @@ exports.getAllDoctors = async (req, res) => {
       .select("-__v")
       .populate({ path: "reviews", options: { sort: { createdAt: -1 } } });
 
-    console.log(doctors[0]);
   }
   res.status(200).json({
     success: true,
@@ -198,3 +196,30 @@ exports.getWebsiteDetails = async (req, res) => {
     });
   }
 };
+
+exports.deleteDoctor=async(req,res)=>{
+  if (req.user.role != "admin") {
+      res.status(400).json({
+        success: false,
+        message: "Reports are only available to admin",
+      });
+      return;
+    }
+    try {
+      const {doctor}=req.params;
+      if(!doctor){
+        res.status(400).json({
+          success: false,
+          message: "Select a doctor first.",
+        });
+        return;
+      }
+     await User.findByIdAndDelete(doctor);
+      res.status(200).json({
+        success: true,
+        message:"Doctor deleted successfully",
+      });
+    } catch (err) {
+      next(err);
+    }
+}

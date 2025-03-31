@@ -77,7 +77,6 @@ module.exports = class Email {
     );
   }
   async report(doctor, user) {
-    console.log(user.email,doctor?.email);
     const messageForAdmin = `
     <h4>Doctor  Dr. <b>${doctor?.name}</b> is reported by the <b>${user.name}</b></h4>
   `;

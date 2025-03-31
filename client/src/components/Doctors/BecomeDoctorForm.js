@@ -1,4 +1,4 @@
-import { Box, Input, Button, Text, useToast, Flex } from "@chakra-ui/react";
+import { Box, Input, Button, Text, useToast, Flex, Textarea } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
@@ -132,7 +132,7 @@ const BecomeDoctorForm = () => {
       return;
     }
     const formData = new FormData();
-    console.log(treatmentArea);
+
     formData.append("name", name);
     formData.append("email", email);
     formData.append("education", education);
@@ -151,7 +151,8 @@ const BecomeDoctorForm = () => {
     formData.append("clinicLocation", JSON.stringify(locationForDb));
     formData.append("specialization", specialization);
 
-    formData.append("treatmentArea", JSON.stringify(treatmentArea));
+    let currTreatmentArea=treatmentArea.map(area=>area.name);
+    formData.append("treatmentArea", JSON.stringify(currTreatmentArea));
     formData.append("clinicFee", clinicFee);
     formData.append("degree", pdfFile); // Attach the PDF file
     try {
@@ -220,7 +221,6 @@ const BecomeDoctorForm = () => {
 
             if (data.features.length > 0) {
               const properties = data.features[0].properties;
-              console.log(properties);
               const colony =
                 properties.name ||
                 properties.hamlet ||
@@ -287,7 +287,6 @@ const BecomeDoctorForm = () => {
 
       if (data.features.length > 0) {
         const properties = data.features[0].properties;
-        console.log(properties);
         const subcity =
           properties.name ||
           properties.hamlet ||
@@ -370,11 +369,11 @@ let firstTime=true;
           
         >
           <h1 style={{ fontSize: "27px", fontWeight: "500", color: "black" }}>
-            Enter Your Info
+           Enter Your Info
           </h1>
           <Input
             type="text"
-            placeholder="Enter your name"
+            placeholder="name"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
@@ -383,7 +382,7 @@ let firstTime=true;
           />
           <Input
             type="email"
-            placeholder="Enter your email"
+            placeholder="email"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
@@ -392,7 +391,7 @@ let firstTime=true;
           />
           <Input
             type="text"
-            placeholder="Enter your education"
+            placeholder="Education"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
@@ -401,7 +400,7 @@ let firstTime=true;
           />
           <Input
             type="text"
-            placeholder="Enter your experience"
+            placeholder="Experience"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
@@ -410,26 +409,27 @@ let firstTime=true;
           />
           <Input
             type="text"
-            placeholder="Enter your specialization"
+            placeholder="Specialization"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
           />
-          <Input
+          <Textarea
             type="text"
-            placeholder="Enter your description"
+            placeholder="Description"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
             value={description}
+            resize={"none"}
             onChange={(e) => setDescription(e.target.value)}
           />
           <Flex gap={2} mb={3} width={"100%"}>
             <Input
               type="text"
-              placeholder="Choose your location from map"
+              placeholder="Choose your location in map"
               bg="white"
               p="5px"
               readOnly
@@ -449,13 +449,13 @@ let firstTime=true;
           <Box width={"100%"}>
             <Input
               type="text"
-              placeholder="Enter your other treatment areas (Press enter after writing one area)"
+              placeholder="Other treatment areas (Press enter after writing one area)"
               bg={"white"}
               p={"5px"}
               fontSize={"18px"}
               value={currentArea}
               onChange={(e) => {
-                if(e.target.value.length>15){
+                if(e.target.value.length>30){
                   if(firstTime){
                   toast({
                     title: "Treatment area length must be less than 15 words",
@@ -468,6 +468,7 @@ let firstTime=true;
                 firstTime=false;}
                   return;
                 }
+                
                 firstTime=true;
                 setCurrentArea(e.target.value)
               }}
@@ -521,7 +522,7 @@ let firstTime=true;
             type="number"
             value={clinicFee === 0 ? null : clinicFee}
             onChange={handleChange}
-            placeholder="Enter your clinic fee in dollors (1-30)"
+            placeholder="Clinic fee in dollors (1-30)"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}
@@ -540,7 +541,7 @@ let firstTime=true;
               }
               setExperienceYear(value);
             }}
-            placeholder="Enter years of your experience (2-25)"
+            placeholder="Years of experience (2-25)"
             bg={"white"}
             p={"5px"}
             fontSize={"18px"}

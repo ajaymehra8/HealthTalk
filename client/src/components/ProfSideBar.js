@@ -41,7 +41,7 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
         className="usResBtn"
         style={{
           position: "absolute",
-          left: !show ? "-40px" : "clamp(100px, 50%, 260px)",
+          left: !show ? "-40px" : "clamp(220px, 50%, 260px)",
         }}
         onClick={() => {
           setShow(!show);
@@ -54,27 +54,22 @@ const ProfSideBar = ({ imageSrc, setImageSrc, imageFile, setImageFile }) => {
         minH={"100vh"}
         borderRight={"2px solid white"}
         boxShadow="5px 0 25px -10px rgba(0, 0, 0, 0.5)" // Shadow on the right side
-        position={{ base: "absolute", md: "fixed" }}
+        position={"fixed" }
         left={{base:!show ? "-80%" : "0",lg:0}}
         
-        top={{md:'0'}}
+        top={'0'}
         pt={"70px"}
         z-index={1000}
+        shadow={{base:"0px 10px 30px rgba(0, 0, 0, 0.3)",lg:"none"}}
         sx={{
           "@media(max-width:950px)": {
-            width: "clamp(200px,60%,300px)",
-            position: "absolute",
-            maxHeight:"1000px",
-minHeight:"40px",
-            height: "90vh",
+            width: "clamp(250px,60%,300px)",
+            
             border: "none",
-            borderRadius: "0 0 30px",
           },
           "@media(max-width:500px)": {
             top:0,
-            maxHeight:"800px",
-            minHeight:"300px",
-            height: "85vh",
+         
           },
         }}
       >
@@ -138,7 +133,7 @@ minHeight:"40px",
               {user?.name?.charAt(0).toUpperCase() +
                 user?.name?.slice(1).toLowerCase()}
             </h1>
-            <h1 style={{ color: "rgb(223, 214, 214)", letterSpacing: "1px" }}>
+            <h1 style={{ color: "rgb(223, 214, 214)", letterSpacing: "1px",maxWidth:"100%" }}>
               {user?.email}
             </h1>
             {user?.role === "user" && (
@@ -160,7 +155,7 @@ minHeight:"40px",
 
                   <li className="profLi">
                     <NavLink
-                      to="your-reviews"
+                      to="my-reviews"
                       className={({ isActive }) =>
                         isActive ? "active-link profLi" : "profLi"
                       }
@@ -171,7 +166,7 @@ minHeight:"40px",
                   </li>
                   <li className="profLi">
                     <NavLink
-                      to="your-appoinment"
+                      to="my-appoinment"
                       className={({ isActive }) =>
                         isActive ? "active-link profLi" : "profLi"
                       }
@@ -236,12 +231,28 @@ minHeight:"40px",
                   </li>
 
                   <li className="profLi">
+                  <NavLink
+                      to="reports"
+                      className={({ isActive }) =>
+                        isActive ? "active-link profLi" : "profLi"
+                      }
+                      onClick={changeShow}
+                    >
                     <i className="bi bi-exclamation-circle-fill profIcon"></i>{" "}
                     User Reports
+                    </NavLink>
                   </li>
 
                   <li className="profLi">
+                  <NavLink
+                      to="all-doctors"
+                      className={({ isActive }) =>
+                        isActive ? "active-link profLi" : "profLi"
+                      }
+                      onClick={changeShow}
+                    >
                     <i className="fas fa-user-md profIcon"></i> All Doctors
+                    </NavLink>
                   </li>
                 </ul>
               </>
@@ -278,7 +289,7 @@ minHeight:"40px",
 
                   <li className="profLi">
                     <NavLink
-                      to="your-reviews"
+                      to="my-reviews"
                       className={({ isActive }) =>
                         isActive ? "active-link profLi" : "profLi"
                       }

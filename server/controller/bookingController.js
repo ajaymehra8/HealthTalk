@@ -40,7 +40,7 @@ exports.getAppoinmentsForUser = async (req, res, next) => {
     const bookings = await BookingModel.find({ user: userId }).populate({
       path: "doctor",
       select: "-password",
-    });
+    }).sort({createdAt:-1});
     res.status(200).json({
       success: true,
       bookings,
@@ -50,12 +50,17 @@ exports.getAppoinmentsForUser = async (req, res, next) => {
   }
 };
 exports.getAppoinmentsForDoctor = async (req, res, next) => {
-  const userId = req.user._id;
+  let userId; 
+  if(req.params.doctor){
+    userId=req.params.doctor;
+  }else{
+    userId=req.user._id;
+  }
   try {
     const bookings = await BookingModel.find({ doctor: userId }).populate({
       path: "user",
       select: "-password",
-    });
+    }).sort({createdAt:-1});
     res.status(200).json({
       success: true,
       bookings,

@@ -236,7 +236,6 @@ body{
   height: 70px;
   width: 70px;
   position: absolute;
-  z-index: 3;
   border-radius: 50%;
   cursor: pointer;
   background: linear-gradient(to right bottom, white, black);
@@ -261,6 +260,7 @@ body{
   .userCard {
     z-index: 3;
     width: "100vw!important";
+
   }
   .profMain {
     width: "20%!important";

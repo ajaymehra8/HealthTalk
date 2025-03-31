@@ -15,6 +15,7 @@ const Navbar = () => {
     setUser(null);
   toast({
     title:"Log out successfully",
+    position:"top",
     status: "success",
     isClosable: true,
     duration: 10000,

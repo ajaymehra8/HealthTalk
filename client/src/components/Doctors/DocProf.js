@@ -16,7 +16,6 @@ import Navbar from "../Navbar";
 import DoctorProf1 from "./DoctorProfile/DoctorProf1";
 import Footer from "../Footer";
 import ReviewPanel from "./DoctorProfile/ReviewPanel";
-import ServicePanel from "./DoctorProfile/ServicePanel";
 
 const DocProf = () => {
   const { state } = useLocation(); // Get the location object which contains the state
@@ -178,9 +177,9 @@ const DocProf = () => {
             <Box
               bg={"white"}
               w={{
-                sm: "clamp(360px,100%,1000px)",
-                md: "clamp(360px,100%,1000px)",
-                lg: "50%",
+                lg: "40%",
+                base: "clamp(300px,100%,1150px)",
+                md: "clamp(410px,100%,2000px)",
               }}
               p={4}
               borderRadius={"lg"}

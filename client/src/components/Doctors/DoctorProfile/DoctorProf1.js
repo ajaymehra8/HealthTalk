@@ -3,11 +3,40 @@ import { Box, Tooltip, useToast, useDisclosure } from "@chakra-ui/react";
 import { useAuthState } from "../../../context/AuthProvider";
 import axios from "axios";
 import ReportModal from "../../Report/ReportModal";
+import { useNavigate } from "react-router-dom";
 const DoctorProf1 = ({ doctor }) => {
   const { user } = useAuthState();
   const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [loading, setLoading] = useState(false);
+const navigate=useNavigate();
+  const handleDelete = async () => {
+    const token = user?.jwt;
+    if (!token) return;
+    setLoading(true);
+    const { data } = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/api/v1/user/doctor/${doctor._id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      
+      toast({
+        title: data.message,
+        status: "success",
+        isClosable: true,
+        duration: 5000,
+        position: "top",
+      });
+      navigate("/all-doctors")
+    }
+    setLoading(false);
+  };
+
   const bookAppoinment = async () => {
     if (!user) {
       return toast({
@@ -64,9 +93,9 @@ const DoctorProf1 = ({ doctor }) => {
         src={doctor?.image}
         alt=""
         style={{
-          width: "clamp(140px,18%,500px)",
+          width: "clamp(150px,25%,250px)",
           borderRadius: "20px",
-          height: "clamp(150px,80vh,190px)",
+          height: "clamp(120px,70vh,190px)",
           marginRight: "10px",
         }}
       />
@@ -110,7 +139,7 @@ const DoctorProf1 = ({ doctor }) => {
           </p>
         
         </div>
-        {!(user?.role === "admin") && (
+        {!(user?.role === "admin") ? (
           <button
             className="homePageBtn"
             style={{
@@ -123,7 +152,17 @@ const DoctorProf1 = ({ doctor }) => {
           >
             {!loading ? "Book Appointment" : "Wait..."}
           </button>
-        )}
+        ):(<button
+          className="rejectBtn rounded-btn"
+          onClick={!loading ? handleDelete : undefined}
+          style={{
+            background: loading && "gray",
+            borderColor: loading && "gray",
+          }}
+          disabled={loading}
+        >
+          {!loading ? "Delete this doctor" : "Wait..."}
+        </button>)}
         <Box
           paddingRight={{ md: "2vw" }}
           style={{
