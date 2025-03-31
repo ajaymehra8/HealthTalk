@@ -61,18 +61,20 @@ const InfoBox = ({ info}) => {
       info.value
     )
   ) : (
-    info.value // Show the value while editing
+    info.value
+     // Show the value while editing
   )}
-</h1>
-
-{info.title === "Description" && info.value.length > 80 && !edit && (
+  {info.title === "Description" && info.value.length > 80 && !edit && (
   <span
-    style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
+    style={{ color: "blue", cursor: "pointer",marginLeft:"5px" }}
     onClick={() => setExpand(!expand)}
   >
-    read {expand ? "less" : "more"}
+     read {expand ? "less" : "more"}
   </span>
 )}
+</h1>
+
+
 
       </Box>
       {info.title !== "Email" && (
