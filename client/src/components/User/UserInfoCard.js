@@ -101,7 +101,19 @@ useEffect(()=>{
     },
   ]);
 },[user]);
-  
+  // Sync user from localStorage during initialization
+  const setUserInLocalStorage = useCallback(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo) {
+      setUser(userInfo);
+    }
+  }, [setUser]);
+
+  useEffect(() => {
+    setUserInLocalStorage();
+  }, [setUserInLocalStorage]);
+
+  // Prepare the information array
 
   const handleChanges = async () => {
     if (!name && !age && !weight && !bloodGroup && !height && !image) {

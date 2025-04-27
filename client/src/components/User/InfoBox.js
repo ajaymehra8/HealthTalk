@@ -45,6 +45,7 @@ const InfoBox = ({ info}) => {
     fontSize: "18px",
     color: info?.color ? "black" : "gray",
     outline: "none",
+    textAlign:"justify"
   }}
   contentEditable={edit}
   suppressContentEditableWarning={true}
