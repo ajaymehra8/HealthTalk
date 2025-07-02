@@ -1,5 +1,13 @@
-import { Box, Button, Input, useToast,useBreakpointValue, InputGroup, InputRightElement } from "@chakra-ui/react";
-import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Input,
+  useToast,
+  useBreakpointValue,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../Api/Auth";
 import axios from "axios";
@@ -15,8 +23,8 @@ const Signup = () => {
   const [otp, setOtp] = useState(null);
   const [loading, setLoading] = useState(false);
   const { setUser } = useAuthState();
-    const [showPass, setShowPass] = useState(false);
-  
+  const [showPass, setShowPass] = useState(false);
+  const emailRef = useRef(null);
   const toast = useToast();
   const navigate = useNavigate();
   window.onpopstate = () => {
@@ -26,14 +34,14 @@ const Signup = () => {
       navigate("/");
     }
   };
-  
+
   const responseGoogle = async (authResult) => {
     try {
       if (authResult?.code) {
         const result = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/v1/user/google-auth?code=${authResult?.code}`
         );
-        if(result.data.success){
+        if (result.data.success) {
           const obj = { ...result?.data?.user, jwt: result?.data?.token };
           const user = JSON.stringify(obj);
           localStorage.setItem("userInfo", user);
@@ -58,7 +66,7 @@ const Signup = () => {
     onError: responseGoogle,
     flow: "auth-code",
   });
-const emailPlaceholderText =
+  const emailPlaceholderText =
     useBreakpointValue({
       lg: "Enter your email",
       md: "Enter your email",
@@ -70,18 +78,24 @@ const emailPlaceholderText =
       md: "Enter your password",
       sm: "Password",
     }) || "Password";
-    const namePlaceholderText =
-        useBreakpointValue({
-          lg: "Enter your name",
-          md: "Enter your name",
-          sm: "Name",
-        }) || "Name";
-      const otpPlaceholderText =
-        useBreakpointValue({
-          lg: "Enter your otp",
-          md: "Enter your otp",
-          sm: "Enter OTP",
-        }) || "Enter OTP";
+  const namePlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your name",
+      md: "Enter your name",
+      sm: "Name",
+    }) || "Name";
+  const otpPlaceholderText =
+    useBreakpointValue({
+      lg: "Enter your otp",
+      md: "Enter your otp",
+      sm: "Enter OTP",
+    }) || "Enter OTP";
+
+    useEffect(() => {
+  if (btnState === 1) {
+    emailRef.current?.focus();
+  }
+}, [btnState]);
 
   const handleSubmit = async (e) => {
     // FOR GET OTP
@@ -122,7 +136,6 @@ const emailPlaceholderText =
         });
       }
       setLoading(false);
-
     }
     // TO VERIFY OTP
     if (e.target.innerText === "Verify OTP") {
@@ -161,7 +174,6 @@ const emailPlaceholderText =
         });
       }
       setLoading(false);
-
     }
     // when user in at SIGN UP STEP
     if (e.target.innerText === "Sign up") {
@@ -202,7 +214,6 @@ const emailPlaceholderText =
         });
       }
       setLoading(false);
-
     }
   };
 
@@ -218,7 +229,7 @@ const emailPlaceholderText =
     >
       <Box
         boxSizing="border-box"
-        w={{sm:"100%",md:"50%",lg:"30%"}}
+        w={{ sm: "100%", md: "50%", lg: "30%" }}
         display={"flex"}
         flexDir={"column"}
         className="loginModal"
@@ -245,74 +256,96 @@ const emailPlaceholderText =
           <span className="logo-span">T</span>alk
         </h1>
 
-         <h2
-                  style={{
-                    fontSize: "clamp(20px,3vw,30px)",
-                    letterSpacing: "1px",
-                    fontWeight: "400",
-                  }}
-                >
-                  Create your account
-                </h2>
-                <NavLink
-                  to={"/login"}
-                  style={{
-                    fontSize: "clamp(16px,1.5vw,20px)",
-                    fontWeight: "500",
-                    marginBottom: "20px",
-                    marginTop: "-20px",
-                  }}
-                >
-                   Have an Account? <span style={{ color: "blue" }}>Log in</span>
-                </NavLink>
-                <Button
-                  p={"10px"}
-                  borderRadius={"10px"}
-                  border={"1px solid black"}
-                  width={"clamp(150px,90%,1000px)"}
-                  onClick={googleLoginHandle}
-                  fontSize={"clamp(15px,3vw,20px)"}
-                  bg={"white"}
-                >
-                  {" "}
-                  <img
-                    src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
-                    alt=""
-                    style={{ width: "25px", marginRight: "5px" }}
-                  />{" "}
-                  Google
-                </Button>
-                
-                <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
-        <Input
-          type="email"
-          placeholder={emailPlaceholderText}
+        <h2
+          style={{
+            fontSize: "clamp(20px,3vw,30px)",
+            letterSpacing: "1px",
+            fontWeight: "400",
+          }}
+        >
+          Create your account
+        </h2>
+        <NavLink
+          to={"/login"}
+          style={{
+            fontSize: "clamp(16px,1.5vw,20px)",
+            fontWeight: "500",
+            marginBottom: "20px",
+            marginTop: "-20px",
+          }}
+        >
+          Have an Account? <span style={{ color: "blue" }}>Log in</span>
+        </NavLink>
+        <Button
           p={"10px"}
           borderRadius={"10px"}
           border={"1px solid black"}
-          outline={"none"}
           width={"clamp(150px,90%,1000px)"}
-          minW={"80px"}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
+          onClick={googleLoginHandle}
           fontSize={"clamp(15px,3vw,20px)"}
           bg={"white"}
-          disabled={btnState > 1}
-          _hover={{
-            border: "1px solid black",
-          }}
-          _focus={{
-            border: "1px solid black !important",
-            boxShadow: "none !important",
-          }}
-          _disabled={{
-            backgroundColor: "white", // Light red background
-            border: "1px solid black", // Dashed border
-            borderRadius: "10px",
-            cursor: "not-allowed", // Not allowed cursor
-            opacity: 1, // Full opacity
-          }}
-        />
+        >
+          {" "}
+          <img
+            src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+            alt=""
+            style={{ width: "25px", marginRight: "5px" }}
+          />{" "}
+          Google
+        </Button>
+
+        <h1 style={{ alignSelf: "center", marginRight: "40px" }}>Or</h1>
+        <InputGroup width={"clamp(150px,90%,1000px)"}>
+          <Input
+            type="email"
+            placeholder={emailPlaceholderText}
+            ref={emailRef}
+            p={"10px"}
+            borderRadius={"10px"}
+            border={"1px solid black"}
+            outline={"none"}
+            width={"clamp(150px,100%,1000px)"}
+            minW={"80px"}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            fontSize={"clamp(15px,3vw,20px)"}
+            bg={"white"}
+            disabled={btnState > 1}
+            _hover={{
+              border: "1px solid black",
+            }}
+            _focus={{
+              border: "1px solid black !important",
+              boxShadow: "none !important",
+            }}
+            _disabled={{
+              backgroundColor: "white", // Light red background
+              border: "1px solid black", // Dashed border
+              borderRadius: "10px",
+              cursor: "not-allowed", // Not allowed cursor
+              opacity: 1, // Full opacity
+            }}
+          />
+          {btnState > 1 && (
+            <InputRightElement width="4.5rem">
+              <button
+                style={{
+                  background: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  color: "blue",
+                  zIndex: 3,
+                }}
+                onClick={() => {
+                  setBtnState(1);
+                }}
+              >
+                Edit
+              </button>
+            </InputRightElement>
+          )}
+        </InputGroup>
 
         {btnState === 2 && (
           <Input
@@ -370,65 +403,63 @@ const emailPlaceholderText =
                 boxShadow: "none !important",
               }}
             />
-           <InputGroup width={"clamp(150px,90%,1000px)"}>
-          <Input
-            type={!showPass ? "password" : "text"}
-            placeholder={passwordPlaceholderText}
-            p={"10px"}
-            borderRadius={"10px"}
-            border={"1px solid black"}
-            outline={"none"}
-            width={"100%"}
-            maxLength={28}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fontSize={"clamp(15px,3vw,20px)"}
-            bg={"white"}
-            _hover={{
-              border: "1px solid black",
-            }}
-            _focus={{
-              border: "1px solid black !important",
-              boxShadow: "none !important",
-            }}
-          />
-          <InputRightElement width="4.5rem">
-            <button
-              style={{
-                background: "white",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "14px",
-                color: "blue",
-                zIndex:3,
-                
-              }}
-              onClick={() => setShowPass(!showPass)}
-            >
-              {!showPass ? "Show" : "Hide"}
-            </button>
-          </InputRightElement>
-        </InputGroup>
+            <InputGroup width={"clamp(150px,90%,1000px)"}>
+              <Input
+                type={!showPass ? "password" : "text"}
+                placeholder={passwordPlaceholderText}
+                p={"10px"}
+                borderRadius={"10px"}
+                border={"1px solid black"}
+                outline={"none"}
+                width={"100%"}
+                maxLength={28}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fontSize={"clamp(15px,3vw,20px)"}
+                bg={"white"}
+                _hover={{
+                  border: "1px solid black",
+                }}
+                _focus={{
+                  border: "1px solid black !important",
+                  boxShadow: "none !important",
+                }}
+              />
+              <InputRightElement width="4.5rem">
+                <button
+                  style={{
+                    background: "white",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    color: "blue",
+                    zIndex: 3,
+                  }}
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {!showPass ? "Show" : "Hide"}
+                </button>
+              </InputRightElement>
+            </InputGroup>
           </>
         )}
 
         <button
           className="authBtn"
-          onClick={!loading?handleSubmit:undefined}
+          onClick={!loading ? handleSubmit : undefined}
           disabled={loading}
           style={{
             alignSelf: "flex-start",
             minWidth: "80px",
             marginTop: "30px",
-            background:loading&&"gray",
-            borderColor:loading&&"gray",
-            cursor:loading&&"not-allowed"
-
+            background: loading && "gray",
+            borderColor: loading && "gray",
+            cursor: loading && "not-allowed",
           }}
         >
-          {btnState === 1 && (!loading?"Next":"Wait...")}
-          {btnState === 2 && (!loading?"Verify OTP":"Verifying...")}
-          {btnState === 3 && (!loading?"Sign up":"Signing...")}
+          {btnState === 1 && (!loading ? "Next" : "Wait...")}
+          {btnState === 2 && (!loading ? "Verify OTP" : "Verifying...")}
+          {btnState === 3 && (!loading ? "Sign up" : "Signing...")}
         </button>
       </Box>
       <Sidebar />

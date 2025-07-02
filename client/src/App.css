@@ -55,6 +55,7 @@ body{
   letter-spacing: 1px;
   font-weight: 500;
   transition: all 0.7s;
+  border-radius: 10px;
 }
 .homePageBtn:hover {
   cursor: pointer;

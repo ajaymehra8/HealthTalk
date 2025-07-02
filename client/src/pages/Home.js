@@ -53,9 +53,9 @@ const Home = () => {
             Guiding you to a<span style={{ color: "#78be20" }}> stronger</span>{" "}
             organization with better patient outcomes
           </h1>
-          <Box marginTop={"30px"}>
+          <Box marginTop={"25px"}>
             <Link
-              className="homePageBtn"
+               className="homePageBtn"
               to="doctors"
               smooth={true}
               duration={500}
