@@ -123,8 +123,8 @@ exports.createCheckout = async (req, res, next) => {
       ],
 
       mode: "payment",
-      success_url: "https://healthtalk.onrender.com/my-profile/your-appoinment", // Corrected to use http
-      cancel_url: "https://healthtalk.onrender.com/my-profile/your-appoinment",
+      success_url: "https://healthtalk.onrender.com/my-profile/my-appoinment", // Corrected to use http
+      cancel_url: "https://healthtalk.onrender.com/my-profile/my-appoinment",
       metadata: {
         appointmentId: appoinmentId,
       },
